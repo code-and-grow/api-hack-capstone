@@ -1,4 +1,4 @@
-// Mandatory variables
+// Startup variables
 let username = '';
 
 // Select placeholder value
@@ -8,14 +8,14 @@ function setPlaceholder(value) {
 
 // Set new placeholder value
 function renderPlaceholder(value) {
-	setTimeout(function() {setPlaceholder(value);}, 1800);
+	setTimeout(() => { setPlaceholder(value); }, 1900);
 }
 
 // Bot message
 function botMessage(text) {
 	$('#js-conversation').append(text);
 	$('.currentMessage').hide();
-	$('.currentMessage').delay(1600).show('slide', 300);
+	$('.currentMessage').delay(1500).show('slide', 400);
 	$('.currentMessage').removeClass('currentMessage');
 }
 
@@ -23,7 +23,8 @@ function botMessage(text) {
 function getUsername() {
 	let greeting = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Howdy partner! I am captain Cook and ready to help. 
+										<span class="bot-message">Howdy partner! 
+										I am captain Cook and ready to help. 
 										What is your name?</span>
 									</p>`;
 	botMessage(greeting);
@@ -36,11 +37,12 @@ function botAi(message) {
 		username = message;
 		botMessage(`<p class="currentMessage">
 									<span class="bot">Chef Cook:</span>
-									<span class="bot-message">Hello ${username}, feeling hungry eh? 
-									Just type in a meal or some of your favourite ingredients and I'll look up 
-									a few tasty recipes for you to try out.</span>
+									<span class="bot-message">Hello ${username}, 
+									feeling hungry eh? Just type in a meal or some 
+									of your favourite ingredients and I'll find  
+									some tasty recipes for you to try.</span>
 								</p>`);
-		renderPlaceholder('Type your ingredients here...')
+		renderPlaceholder('Salami, pita, cucumber, onion etc.')
 	}
 }
 
