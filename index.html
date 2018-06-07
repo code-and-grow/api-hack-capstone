@@ -3,29 +3,63 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Cpt. COOK Recipe Finder</title>
+	<title>Captain Cook's Recipe Finder</title>
 
+  <!-- Reset default styles -->
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
   <!-- Styles -->
   <link rel="stylesheet" type="text/css" href="css/main.css">
+
 </head>
 <body>
 
+	<header>
+		<h1>Talk to the Chef</h1>
+	</header>
+	
+	<main>
 
+		<section id="js-conversation">
+			
+		</section>
+		
+		<section>
+			<form id="js-user-input">
+				<fieldset>
+					<textarea id="js-user-message" type="text" name="user-message" required></textarea>
+					<br>
+					<input id="js-checkbox" type="checkbox" name="checkbox" checked>
+					<label for="checkbox">
+						Send message with Enter
+					</label>
+					<br>
+					<button id="js-user-submit" type="submit">Send</button>
+				</fieldset>
+			</form>
+		</section>
 
+	</main>
+
+	<footer>
+		
+	</footer>
 
 	<!-- Enter jQuery -->
 	<script
   src="//code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
   crossorigin="anonymous"></script>
-	<script>window.jQuery || document.write('<script src="/js/jquery-3.3.1.min.js"><\x3C/script>')</script>
+	<script>window.jQuery || document.write('<script src="js/jquery-3.3.1.min.js"><\x3C/script>')</script>
 
 	<!-- Enter jQuery UI -->
 	<script
   src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"
   integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
   crossorigin="anonymous"></script>
-  <script>window.jQuery.ui || document.write('<script src="/js/jquery-ui.min.js"><\x3C/script>')</script>
+  <script>window.jQuery.ui || document.write('<script src="js/jquery-ui.min.js"><\x3C/script>')</script>
+
+  <!-- Enter main.js -->
+  <script src="js/main.js"></script>
 
 </body>
 </html>
