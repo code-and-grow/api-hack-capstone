@@ -1,12 +1,12 @@
 // Startup variables
 let username = '';
 
-// Select placeholder value
+// Select textarea placeholder value
 function setPlaceholder(value) {
 	let newPlaceholder = $('#js-user-message').attr('placeholder', value);
 }
 
-// Set new placeholder value
+// Set new textarea placeholder value
 function renderPlaceholder(value) {
 	setTimeout(() => { setPlaceholder(value); }, 1900);
 }
@@ -35,14 +35,15 @@ function getUsername() {
 function botAi(message) {
 	if (username === '') {
 		username = message;
-		botMessage(`<p class="currentMessage">
-									<span class="bot">Chef Cook:</span>
-									<span class="bot-message">Hello ${username}, 
-									feeling hungry eh? Just type in a meal or some 
-									of your favourite ingredients and I'll find  
-									some tasty recipes for you to try.</span>
-								</p>`);
-		renderPlaceholder('Salami, pita, cucumber, onion etc.')
+		let greetUser = `<p class="currentMessage">
+											<span class="bot">Chef Cook:</span>
+											<span class="bot-message">Hello ${username}, 
+											feeling hungry eh? Just type in a meal or some 
+											of your favourite ingredients and I'll find  
+											some tasty recipes for you to try.</span>
+										</p>`;
+		botMessage(greetUser);
+		renderPlaceholder('Salami, pita, cucumber, onion...')
 	}
 }
 
@@ -85,5 +86,10 @@ function sendUserMessage() {
 
 }
 
-$(getUsername);
-$(sendUserMessage);
+// Start your engines
+function initBot() {
+	getUsername();
+	sendUserMessage();
+}
+
+$(initBot);
