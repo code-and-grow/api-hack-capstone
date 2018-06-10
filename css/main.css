@@ -15,18 +15,10 @@ main {
 	margin-right: auto;
 }
 
-#js-conversation {
-	height: 250px;
-	border-radius: 4px;
-	border: 1px solid #656565;
-	padding: 5px;
-	overflow: scroll;
-}
-
 textarea {
 	resize: none;
 	width: 95.7%;
-  padding: 2%;
+  padding: 10px;
   height: 17px;
 	margin-top: 10px;
 	border: 1px solid grey;
@@ -50,6 +42,40 @@ button:hover {
 	cursor: pointer;
 	background-color: grey;
 	color: white;
+}
+
+input[type="button"] {
+	font-size: 1.2rem;
+	color: white;
+	background-color: red;
+	padding: 5px;
+	cursor: pointer;
+}
+
+#checkboxlist label {
+	white-space: nowrap;
+	background-color: white;
+	color: black;
+	padding: 5px;
+	border-radius: 4px;
+	margin: 1px;
+}
+
+#checkboxlist label:hover {
+	background-color: blue;
+	color: white;
+}
+
+#checkboxlist input[type=checkbox] {
+  
+}
+
+#js-conversation {
+	height: 350px;
+	border-radius: 4px;
+	border: 1px solid #656565;
+	padding: 5px;
+	overflow: scroll;
 }
 
 .username {	
