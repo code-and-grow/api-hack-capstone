@@ -1,4 +1,4 @@
-// Predefined objects
+// * Predefined objects * //
 const searchParameters = {
 			 allergyOptions:  `<span id="checkboxlist">
 												  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
@@ -24,12 +24,14 @@ const searchParameters = {
 }
 
 
-// Startup variables
+// * Startup variables *
+
+// API credentials
 const API_URL = 'https://api.yummly.com/v1';
 const APP_ID = '0163f367';
 const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
 
-
+// API search input
 let username;
 let searchTerms;
 let allowedIng;
@@ -37,13 +39,79 @@ let excludedIng;
 let allergyVal;
 let dietVal;
 
+// Regular expression for splitting user input
+let regExp = /\s*,\s*/;
 
-// Connect to the API
+
+// * Track user message submit event * //
+function sendUserMessage() {
+
+	// User presses Enter key
+	$('#js-user-message').keypress(event => {
+		if (event.which == 13) {
+
+			// If the 'Send message with Enter' checkbox is selected, message gets sent
+			if ($('#js-checkbox').prop('checked')) {
+				event.preventDefault();
+				$('#js-user-submit').click();
+			}
+		}
+	});
+
+	// User clicks Send button
+	$('#js-user-submit').click(event => {
+
+		event.preventDefault();
+
+		// User has entered nothing in the textarea
+		if (!$('#js-user-message').val().trim().length) {
+			return false;
+
+		// If textarea has text inside it
+		} else {
+			let newUserMessage = $('#js-user-message').val();
+
+	 // Send user message to conversation window
+			$('#js-conversation')
+				.append(`<p>
+									<span class="username">You:</span>
+									<span class="user-message">${newUserMessage}</span>
+								</p>`)
+				// Scroll conversation window to see the last appended message
+				.scrollTop($('#js-conversation').prop('scrollHeight'));
+
+			// Clear message field and placeholder text after message is sent
+			$('#js-user-message').val('');
+			$('#js-user-message').attr('placeholder', '');
+
+			// Get answer from bot
+			botAi(newUserMessage);
+
+		}
+	});
+
+}
+
+
+// * Bot message rendering * //
+function botMessage(text) {
+	// Add bot message to conversation window
+	$('#js-conversation').append(text)
+											// Scroll conversation window to see the last appended message
+											 .scrollTop($('#js-conversation').prop('scrollHeight'));
+	// Add a small delay before showing bot message										 
+	$('.currentMessage').hide();
+	$('.currentMessage').delay(1500).show('slide', 400);
+	$('.currentMessage').removeClass('currentMessage');
+}
+
+
+// * API call * //
 function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
+
+	// Set up API call settings
   const settings = {
-    url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY + '&q=' + searchTerms + 
-    '&requirePictures=true&allowedIngredient%5B%5D=' + allowedIng + '&excludedIngredient%5B%5D=' + excludedIng + 
-    '&allowedAllergy%5B%5D=' + allergyVal + '&allowedDiet%5B%5D=' + dietVal,
+    url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
     data: {
     	q: searchTerms,
     	allowedIngredient: allowedIng,
@@ -56,34 +124,25 @@ function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
     success: displayResults
   };
 
+  // Make the API call
   $.ajax(settings);
 
 }
 
 
-// Select textarea placeholder value
+// * Select textarea placeholder value * //
 function setPlaceholder(value) {
 	let newPlaceholder = $('#js-user-message').attr('placeholder', value);
 }
 
 
-// Set new textarea placeholder value
+// * Set new textarea placeholder value with a delay * //
 function renderPlaceholder(value) {
 	setTimeout(() => { setPlaceholder(value); }, 1900);
 }
 
 
-// Bot message
-function botMessage(text) {
-	$('#js-conversation').append(text)
-											 .scrollTop($('#js-conversation').prop('scrollHeight'));
-	$('.currentMessage').hide();
-	$('.currentMessage').delay(1500).show('slide', 400);
-	$('.currentMessage').removeClass('currentMessage');
-}
-
-
-// Get username
+// * Get username * //
 function getUsername() {
 	let greeting = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
@@ -95,9 +154,11 @@ function getUsername() {
 	renderPlaceholder('Type your name here...');
 }
 
-// Bot responds to user messages
+
+// * Bot responses to user messages * //
 function botAi(message) {
-// Greet user and ask for desired recipe or meal name
+
+	// Greet user and ask for desired recipe or meal name
 	if (username === undefined) {
 		username = message;
 		let greetUser = `<p class="currentMessage">
@@ -108,10 +169,10 @@ function botAi(message) {
 										</p>`;
 		botMessage(greetUser);
 		renderPlaceholder('Spicy tomato soup ...');
-// Ask for allowed ingredients
+
+	// Ask for allowed ingredients
 	} else if (username.length >= 1 && searchTerms === undefined) {
-		searchTerms = message;
-		searchTerms = searchTerms.toLowerCase().replace(/ /g, '+');
+		searchTerms = message.toLowerCase().replace(/ /g, '+');
 		console.log(searchTerms);
 		let readyForAllowedIng = `<p class="currentMessage">
 															  <span class="bot">Chef Cook:</span>
@@ -121,9 +182,10 @@ function botAi(message) {
 														  </p>`
 		botMessage(readyForAllowedIng);
 		renderPlaceholder('Garlic, sausage, cucumber...');
-// Ask for excluded ingredients
+
+	// Ask for excluded ingredients
 	} else if (username.length >= 1 && searchTerms.length >= 1 && allowedIng === undefined) {
-		allowedIng = message;
+		allowedIng = message.toLowerCase().split(regExp);
 		let readyForExcludedIng = `<p class="currentMessage">
 															  <span class="bot">Chef Cook:</span>
 															  <span class="bot-message">And what about ingredients you don't like? 
@@ -132,28 +194,29 @@ function botAi(message) {
 														  </p>`
 		botMessage(readyForExcludedIng);
 		renderPlaceholder('Garlic, sausage, cucumber...');
+
 		console.log(allowedIng);
-// Call ask for allergies function
+	// Call ask for allergies function
 	} else if (excludedIng === undefined && searchTerms.length >=1) {
-		excludedIng = message;
+		excludedIng = message.toLowerCase().split(regExp);
 		console.log(excludedIng);
 		checkForAllergies();
 	}
 }
 
 
-// Get checked values
+// * Get checked values * //
 function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
+
+	// Click Next event listener
 	$('#js-conversation').on('click', '.' + targetClass + 'Button', () => {
+
 		let targetChecked = '.' + targetClass + ':checked';
 		let checkedArray = [];
-//		let checked;
-	
+
 		$(targetChecked).each(function() {
-			checkedArray.push($(this).val());
+			checkedArray.push($(this).val().toLowerCase().replace(/ /g, '+'));
 		});
-		
-//		checked = checkedArray.join(', ');
 		
 		if (checkedArray.length > 0) {
 			checkedValues = checkedArray;
@@ -169,13 +232,12 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 		}
 
 		callback();
-		return allergyVal;
-		return dietVal;
+
 	});
 }
 
 
-// Ask user about allergies
+// * Ask user about allergies * //
 function checkForAllergies() {
 	let checkAllergies = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
@@ -188,7 +250,7 @@ function checkForAllergies() {
 }
 
 
-// Ask user for diet preferences
+// * Ask user for diet preferences * //
 function checkForDiet() {
 	console.log(allergyVal);
 	let checkDiet = `<p class="currentMessage">
@@ -202,7 +264,7 @@ function checkForDiet() {
 	getCheckedValues('diet', dietVal, false, startingSearch);
 }
 
-// Notify the user that search has been started
+// * Notify the user that search has been started * //
 function startingSearch() {
 	console.log(dietVal);
 	let startNotification = `<p class="currentMessage">
@@ -212,75 +274,49 @@ function startingSearch() {
 										results below in a jiffy</span>
 									</p>`;
 	botMessage(startNotification);
-	searchAPI();
+	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
 }
 
 
-// Render the result in html
+// * Render the result in html * //
 function renderResult(result) {
+
+	// Convert cooking time from seconds to hours and minutes
+  let h = Math.floor(result.totalTimeInSeconds / 3600);
+  let m = Math.floor(result.totalTimeInSeconds % 3600 / 60);
+  let hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours ") : "";
+  let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes") : "";
+  let cookingTime =  hDisplay + mDisplay; 
+
+  // HTML for item in the results
 	return `<div>
 					<h2>${result.recipeName}</h2>
-					<p><span>Rating: ${result.rating}</span><span>${result.totalTimeInSeconds}</span></p>
+					<p><span>Rating: ${result.rating} </span><span>Cooking time: ${cookingTime}</span></p>
 					<p>${result.ingredients}</p>
 					<hr>
 				 </div>`; 
 }
 
 
-// Display the results to user
+// * Display the results to user * //
 function displayResults(data) {
+
+	// Show preloader gif
 	$('#js-results').html('<img style="margin-left:auto; margin-right:auto;" src="images/Loading_icon.gif">');
 	console.log(data);
+
+	// Loop through the results and render each item
 	const results = data.matches.map( (item, index) => renderResult(item) );
 	setTimeout(() => { $('#js-results').html(results); }, 3500);
 }
 
 
-// Track user message submission
-function sendUserMessage() {
-
-	// User presses Enter key
-	$('#js-user-message').keypress(event => {
-		if (event.which == 13) {
-			if ($('#js-checkbox').prop('checked')) {
-				event.preventDefault();
-				$('#js-user-submit').click();
-			}
-		}
-	});
-
-	// User clicks Send button
-	$('#js-user-submit').click(event => {
-
-		event.preventDefault();
-
-		if (!$('#js-user-message').val().trim().length) {
-			return false;
-		} else {
-			let newUserMessage = $('#js-user-message').val();
-
-			$('#js-conversation')
-				.append(`<p>
-									<span class="username">You:</span>
-									<span class="user-message">${newUserMessage}</span>
-								</p>`)
-				.scrollTop($('#js-conversation').prop('scrollHeight'));
-			$('#js-user-message').val('');
-			$('#js-user-message').attr('placeholder', '');
-
-			botAi(newUserMessage);
-
-		}
-	});
-
-}
-
 // Create a function to present default recipes if nothing is entered
 // Create a function for the case where the search has no results - Try to combine these
 
-// Start your engines
+
+// * Start your engines * //
 function initBot() {
-//	searchAPI('banana', 'cinnamon', 'desserts', showSearchResults);
 	getUsername();
 	sendUserMessage();
 }
