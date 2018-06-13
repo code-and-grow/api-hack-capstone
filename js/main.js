@@ -40,17 +40,17 @@ let allergyVal;
 let dietVal;
 
 let readyForAllowedIng = `<p class="currentMessage">
-																  <span class="bot">Chef Cook:</span>
-																  <span class="bot-message">Please enter ingredients to be included 
-																  in the recipe separated with a comma in the text field below or 
-																  press Enter to skip.</span>
-															  </p>`;
+														<span class="bot">Chef Cook:</span>
+													  <span class="bot-message">Please enter ingredients to be included 
+													  in the recipe separated with a comma in the text field below or 
+													  press Enter to skip.</span>
+												  </p>`;
 let readyForExcludedIng = `<p class="currentMessage">
-																  <span class="bot">Chef Cook:</span>
-																  <span class="bot-message">What about ingredients you don't like? 
-																  Enter them separated with a comma in the textbox below or press 
-																  Enter to skip.</span>
-															  </p>`;
+														<span class="bot">Chef Cook:</span>
+													  <span class="bot-message">What about ingredients you don't like? 
+													  Enter them separated with a comma in the textbox below or press 
+													  Enter to skip.</span>
+    										  </p>`;
 
 // Regular expression for splitting user input
 let regExp = /\s*,\s*/;
@@ -164,13 +164,12 @@ function botAi(message) {
 			console.log(allowedIng);
 		}
 
-	// Call ask for allergies function
+	// Ask for allergies function
 	} else if (excludedIng === undefined && searchTerms.length >=1) {
 
 		if( message === '') {
 			excludedIng = [];
 			console.log(excludedIng);
-			checkForAllergies();
 		} else {
 			excludedIng = message.toLowerCase().split(regExp);
 			console.log(excludedIng);
