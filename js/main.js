@@ -39,58 +39,21 @@ let excludedIng;
 let allergyVal;
 let dietVal;
 
+let readyForAllowedIng = `<p class="currentMessage">
+																  <span class="bot">Chef Cook:</span>
+																  <span class="bot-message">Now please enter your preferred 
+																  ingredients separated with a comma in the text field 
+																  below.<br>
+															  </p>`;
+let readyForExcludedIng = `<p class="currentMessage">
+																  <span class="bot">Chef Cook:</span>
+																  <span class="bot-message">And what about ingredients you don't like? 
+																  Enter these as well separated with a comma in the textbox below 
+																  just like before.</span>
+															  </p>`;
+
 // Regular expression for splitting user input
 let regExp = /\s*,\s*/;
-
-
-// * Track user message submit event * //
-function sendUserMessage() {
-
-	// User presses Enter key
-	$('#js-user-message').keypress(event => {
-		if (event.which == 13) {
-
-			// If the 'Send message with Enter' checkbox is selected, message gets sent
-			if ($('#js-checkbox').prop('checked')) {
-				event.preventDefault();
-				$('#js-user-submit').click();
-			}
-		}
-	});
-
-	// User clicks Send button
-	$('#js-user-submit').click(event => {
-
-		event.preventDefault();
-
-		// User has entered nothing in the textarea
-		if (!$('#js-user-message').val().trim().length) {
-			return false;
-
-		// If textarea has text inside it
-		} else {
-			let newUserMessage = $('#js-user-message').val();
-
-	 // Send user message to conversation window
-			$('#js-conversation')
-				.append(`<p>
-									<span class="username">You:</span>
-									<span class="user-message">${newUserMessage}</span>
-								</p>`)
-				// Scroll conversation window to see the last appended message
-				.scrollTop($('#js-conversation').prop('scrollHeight'));
-
-			// Clear message field and placeholder text after message is sent
-			$('#js-user-message').val('');
-			$('#js-user-message').attr('placeholder', '');
-
-			// Get answer from bot
-			botAi(newUserMessage);
-
-		}
-	});
-
-}
 
 
 // * Bot message rendering * //
@@ -164,44 +127,142 @@ function botAi(message) {
 		let greetUser = `<p class="currentMessage">
 											<span class="bot">Chef Cook:</span>
 											<span class="bot-message">Hello ${username}, feeling hungry eh? 
-											Let's get going then. Enter what kind of recipe are you looking 
-											for separated with a comma in the text field below.<br>
+											Let's get going then. Enter what recipe you're looking for in the 
+											text field below. Press Enter if you have no clue.
+											<br>
 										</p>`;
 		botMessage(greetUser);
-		renderPlaceholder('Spicy tomato soup ...');
+		renderPlaceholder('Spicy chicken soup ...');
 
 	// Ask for allowed ingredients
 	} else if (username.length >= 1 && searchTerms === undefined) {
-		searchTerms = message.toLowerCase().replace(/ /g, '+');
-		console.log(searchTerms);
-		let readyForAllowedIng = `<p class="currentMessage">
-															  <span class="bot">Chef Cook:</span>
-															  <span class="bot-message">Now please enter your preferred 
-															  ingredients separated with a comma in the text field 
-															  below.<br>
-														  </p>`
-		botMessage(readyForAllowedIng);
-		renderPlaceholder('Garlic, sausage, cucumber...');
+		
+		if(message === '') {
+			searchTerms = message;
+			console.log(searchTerms);
+			botMessage(readyForAllowedIng);
+			renderPlaceholder('Chicken, chili, parsley, ...');
+
+		} else {
+			searchTerms = message.toLowerCase().replace(/ /g, '+');
+			console.log(searchTerms);
+			botMessage(readyForAllowedIng);
+			renderPlaceholder('Chicken, chili, parsley, ...');
+		}
 
 	// Ask for excluded ingredients
-	} else if (username.length >= 1 && searchTerms.length >= 1 && allowedIng === undefined) {
-		allowedIng = message.toLowerCase().split(regExp);
-		let readyForExcludedIng = `<p class="currentMessage">
-															  <span class="bot">Chef Cook:</span>
-															  <span class="bot-message">And what about ingredients you don't like? 
-															  Enter these as well separated with a comma in the textbox below 
-															  just like before.</span>
-														  </p>`
-		botMessage(readyForExcludedIng);
-		renderPlaceholder('Garlic, sausage, cucumber...');
+	} else if (username.length >= 1 && searchTerms.length !== undefined && allowedIng === undefined) {
 
-		console.log(allowedIng);
+		if (message === '') {
+			allowedIng = [];
+			botMessage(readyForExcludedIng);
+			renderPlaceholder('Garlic, onions, thyme, ...');
+			console.log(allowedIng);
+		} else {
+			allowedIng = message.toLowerCase().split(regExp);
+			botMessage(readyForExcludedIng);
+			renderPlaceholder('Garlic, onions, thyme, ...');
+			console.log(allowedIng);
+		}
+
 	// Call ask for allergies function
 	} else if (excludedIng === undefined && searchTerms.length >=1) {
-		excludedIng = message.toLowerCase().split(regExp);
-		console.log(excludedIng);
-		checkForAllergies();
+
+		if( message === '') {
+			excludedIng = [];
+			console.log(excludedIng);
+			checkForAllergies();
+		} else {
+			excludedIng = message.toLowerCase().split(regExp);
+			console.log(excludedIng);
+			checkForAllergies();
+		}
 	}
+}
+
+
+// * Track user message submit event * //
+function sendUserMessage() {
+
+	// User presses Enter key
+	$('#js-user-message').keypress(event => {
+		if (event.which == 13) {
+
+			// If the 'Send message with Enter' checkbox is selected, message gets sent
+			if ($('#js-checkbox').prop('checked')) {
+				event.preventDefault();
+				$('#js-user-submit').click();
+			}
+		}
+	});
+
+	// User clicks Send button
+	$('#js-user-submit').click(event => {
+
+		let newUserMessage;
+		event.preventDefault();
+
+		// User has entered nothing in the textarea
+		if (!$('#js-user-message').val().trim().length) {
+			newUserMessage = '';
+
+			if (searchTerms === undefined) {
+				$('#js-conversation')
+					.append(`<p>
+										<span class="username">You:</span>
+										<span class="user-message">Dunno, gimme something :)</span>
+									</p>`)
+					// Scroll conversation window to see the last appended message
+					.scrollTop($('#js-conversation').prop('scrollHeight'));
+
+			} else if (searchTerms !== undefined && allowedIng === undefined) {
+				$('#js-conversation')
+					.append(`<p>
+										<span class="username">You:</span>
+										<span class="user-message">Me is no picky pirate ;)</span>
+									</p>`)
+					// Scroll conversation window to see the last appended message
+					.scrollTop($('#js-conversation').prop('scrollHeight'));
+					
+			} else if (searchTerms !== undefined && allowedIng !== undefined && excludedIng === undefined) {
+				$('#js-conversation')
+					.append(`<p>
+										<span class="username">You:</span>
+										<span class="user-message">I could eat yer wooden leg right now :D</span>
+									</p>`)
+					// Scroll conversation window to see the last appended message
+					.scrollTop($('#js-conversation').prop('scrollHeight'));
+					checkForAllergies();
+			}
+
+			// Clear message field and placeholder text after message is sent
+			$('#js-user-message').val('');
+			$('#js-user-message').attr('placeholder', '');
+			botAi(newUserMessage);
+
+		// If textarea has text inside it
+		} else {
+			newUserMessage = $('#js-user-message').val();
+
+	 // Send user message to conversation window
+			$('#js-conversation')
+				.append(`<p>
+									<span class="username">You:</span>
+									<span class="user-message">${newUserMessage}</span>
+								</p>`)
+				// Scroll conversation window to see the last appended message
+				.scrollTop($('#js-conversation').prop('scrollHeight'));
+
+			// Clear message field and placeholder text after message is sent
+			$('#js-user-message').val('');
+			$('#js-user-message').attr('placeholder', '');
+
+			// Get answer from bot
+			botAi(newUserMessage);
+
+		}
+	});
+
 }
 
 
@@ -217,13 +278,8 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 		$(targetChecked).each(function() {
 			checkedArray.push($(this).val().toLowerCase().replace(/ /g, '+'));
 		});
-		
-		if (checkedArray.length > 0) {
-			checkedValues = checkedArray;
-		} else {
-			checkedValues = undefined;	
-			
-		}
+
+		checkedValues = checkedArray;
 
 		if (isAllergy) {
 			allergyVal = checkedValues;
