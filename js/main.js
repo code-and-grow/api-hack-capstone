@@ -32,28 +32,32 @@ const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
 
 let username;
 let searchTerms;
-let excludedIngredients;
-let allergyValues;
-let dietValues;
+let allowedIng;
+let excludedIng;
+let allergyVal;
+let dietVal;
 
 
 // Connect to the API
-function searchAPI(searchTerms, excludedIngredients, allergyValues, dietValues, callback) {
+function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
   const settings = {
-    url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
+    url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY + '&q=' + searchTerms + 
+    '&requirePictures=true&allowedIngredient%5B%5D=' + allowedIng + '&excludedIngredient%5B%5D=' + excludedIng + 
+    '&allowedAllergy%5B%5D=' + allergyVal + '&allowedDiet%5B%5D=' + dietVal,
     data: {
     	q: searchTerms,
-    	excludedIngredient: excludedIngredients,
-    	allowedAllergy: allergyValues,
-    	allowedDiet: dietValues,
-      requirePictures: true
+    	allowedIngredient: allowedIng,
+    	excludedIngredient: excludedIng,
+    	allowedAllergy: allergyVal,
+    	allowedDiet: dietVal
     },
     dataType: 'jsonp',
     type: 'GET',
-    success: callback
+    success: displayResults
   };
 
   $.ajax(settings);
+
 }
 
 
@@ -93,20 +97,33 @@ function getUsername() {
 
 // Bot responds to user messages
 function botAi(message) {
-
+// Greet user and ask for desired recipe or meal name
 	if (username === undefined) {
 		username = message;
 		let greetUser = `<p class="currentMessage">
 											<span class="bot">Chef Cook:</span>
 											<span class="bot-message">Hello ${username}, feeling hungry eh? 
-											Let's get going then. Enter your preferred ingredients separated
-											with a comma in the text field below.<br>
+											Let's get going then. Enter what kind of recipe are you looking 
+											for separated with a comma in the text field below.<br>
 										</p>`;
 		botMessage(greetUser);
-		renderPlaceholder('Salami, tomatoes, garlic, ...');
-
+		renderPlaceholder('Spicy tomato soup ...');
+// Ask for allowed ingredients
 	} else if (username.length >= 1 && searchTerms === undefined) {
 		searchTerms = message;
+		searchTerms = searchTerms.toLowerCase().replace(/ /g, '+');
+		console.log(searchTerms);
+		let readyForAllowedIng = `<p class="currentMessage">
+															  <span class="bot">Chef Cook:</span>
+															  <span class="bot-message">Now please enter your preferred 
+															  ingredients separated with a comma in the text field 
+															  below.<br>
+														  </p>`
+		botMessage(readyForAllowedIng);
+		renderPlaceholder('Garlic, sausage, cucumber...');
+// Ask for excluded ingredients
+	} else if (username.length >= 1 && searchTerms.length >= 1 && allowedIng === undefined) {
+		allowedIng = message;
 		let readyForExcludedIng = `<p class="currentMessage">
 															  <span class="bot">Chef Cook:</span>
 															  <span class="bot-message">And what about ingredients you don't like? 
@@ -115,14 +132,13 @@ function botAi(message) {
 														  </p>`
 		botMessage(readyForExcludedIng);
 		renderPlaceholder('Garlic, sausage, cucumber...');
-		console.log(searchTerms);
-
-	} else if (excludedIngredients === undefined && searchTerms.length >=1) {
-		excludedIngredients = message;
-		console.log(excludedIngredients);
+		console.log(allowedIng);
+// Call ask for allergies function
+	} else if (excludedIng === undefined && searchTerms.length >=1) {
+		excludedIng = message;
+		console.log(excludedIng);
 		checkForAllergies();
 	}
-	
 }
 
 
@@ -131,30 +147,30 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 	$('#js-conversation').on('click', '.' + targetClass + 'Button', () => {
 		let targetChecked = '.' + targetClass + ':checked';
 		let checkedArray = [];
-		let checked;
+//		let checked;
 	
 		$(targetChecked).each(function() {
 			checkedArray.push($(this).val());
 		});
 		
-		checked = checkedArray.join(', ');
+//		checked = checkedArray.join(', ');
 		
-		if (checked.length > 0) {
-			checkedValues = checked;
-			
+		if (checkedArray.length > 0) {
+			checkedValues = checkedArray;
 		} else {
-			checkedValues = null;	
+			checkedValues = undefined;	
 			
 		}
 
 		if (isAllergy) {
-			allergyValues = checkedValues;
+			allergyVal = checkedValues;
 		} else {
-			dietValues = checkedValues;
+			dietVal = checkedValues;
 		}
 
 		callback();
-
+		return allergyVal;
+		return dietVal;
 	});
 }
 
@@ -168,13 +184,13 @@ function checkForAllergies() {
 										${searchParameters.allergyOptions}</span>
 									</p>`;
 	botMessage(checkAllergies);
-	getCheckedValues('allergy', allergyValues, true, checkForDiet);
-
+	getCheckedValues('allergy', allergyVal, true, checkForDiet);
 }
 
 
 // Ask user for diet preferences
 function checkForDiet() {
+	console.log(allergyVal);
 	let checkDiet = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
 										<span class="bot-message">Grrreat but 
@@ -183,15 +199,40 @@ function checkForDiet() {
 										${searchParameters.dietOptions}</span>
 									</p>`;
 	botMessage(checkDiet);
-	getCheckedValues('diet', dietValues, false, showSearchResults);
+	getCheckedValues('diet', dietVal, false, startingSearch);
+}
 
+// Notify the user that search has been started
+function startingSearch() {
+	console.log(dietVal);
+	let startNotification = `<p class="currentMessage">
+										<span class="bot">Chef Cook:</span>
+										<span class="bot-message">Thanks for your patience.
+										I have started the search and you'll see the 
+										results below in a jiffy</span>
+									</p>`;
+	botMessage(startNotification);
+	searchAPI();
 }
 
 
-// Get the search results
-function showSearchResults(data) {
-	console.log(`I'm searching for recipes with ${searchTerms} and no ${excludedIngredients}. 
-		Recipes found are suitable for ${allergyValues} free and ${dietValues}  diets`);
+// Render the result in html
+function renderResult(result) {
+	return `<div>
+					<h2>${result.recipeName}</h2>
+					<p><span>Rating: ${result.rating}</span><span>${result.totalTimeInSeconds}</span></p>
+					<p>${result.ingredients}</p>
+					<hr>
+				 </div>`; 
+}
+
+
+// Display the results to user
+function displayResults(data) {
+	$('#js-results').html('<img style="margin-left:auto; margin-right:auto;" src="images/Loading_icon.gif">');
+	console.log(data);
+	const results = data.matches.map( (item, index) => renderResult(item) );
+	setTimeout(() => { $('#js-results').html(results); }, 3500);
 }
 
 
@@ -234,6 +275,8 @@ function sendUserMessage() {
 
 }
 
+// Create a function to present default recipes if nothing is entered
+// Create a function for the case where the search has no results - Try to combine these
 
 // Start your engines
 function initBot() {
