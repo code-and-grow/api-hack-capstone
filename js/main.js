@@ -41,15 +41,15 @@ let dietVal;
 
 let readyForAllowedIng = `<p class="currentMessage">
 																  <span class="bot">Chef Cook:</span>
-																  <span class="bot-message">Now please enter your preferred 
-																  ingredients separated with a comma in the text field 
-																  below.<br>
+																  <span class="bot-message">Please enter ingredients to be included 
+																  in the recipe separated with a comma in the text field below or 
+																  press Enter to skip.</span>
 															  </p>`;
 let readyForExcludedIng = `<p class="currentMessage">
 																  <span class="bot">Chef Cook:</span>
-																  <span class="bot-message">And what about ingredients you don't like? 
-																  Enter these as well separated with a comma in the textbox below 
-																  just like before.</span>
+																  <span class="bot-message">What about ingredients you don't like? 
+																  Enter them separated with a comma in the textbox below or press 
+																  Enter to skip.</span>
 															  </p>`;
 
 // Regular expression for splitting user input
@@ -128,8 +128,7 @@ function botAi(message) {
 											<span class="bot">Chef Cook:</span>
 											<span class="bot-message">Hello ${username}, feeling hungry eh? 
 											Let's get going then. Enter what recipe you're looking for in the 
-											text field below. Press Enter if you have no clue.
-											<br>
+											text field below. Press Enter to skip if you haven't decided.</span>
 										</p>`;
 		botMessage(greetUser);
 		renderPlaceholder('Spicy chicken soup ...');
