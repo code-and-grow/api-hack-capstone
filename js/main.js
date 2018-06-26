@@ -296,7 +296,7 @@ function checkForAllergies() {
 	let checkAllergies = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
 										<span class="bot-message">Thanks, but what about allergies? 
-										Press NEXT if you're done or no allergies apply.<br>
+										Press NEXT when you're done or no allergies apply.<br>
 										${searchParameters.allergyOptions}</span>
 									</p>`;
 	botMessage(checkAllergies);
@@ -310,7 +310,7 @@ function checkForDiet() {
 	let checkDiet = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
 										<span class="bot-message">Grrreat but 
-										are you on a diet? Press NEXT if you're
+										are you on a diet? Press NEXT when you're
 										done or no diets apply.<br>
 										${searchParameters.dietOptions}</span>
 									</p>`;
@@ -321,13 +321,13 @@ function checkForDiet() {
 // * Notify the user that search has been started * //
 function startingSearch() {
 	console.log(dietVal);
-	let startNotification = `<p class="currentMessage">
+	let startSearchNotification = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
 										<span class="bot-message">Thanks for your patience.
 										I have started the search and you'll see the 
 										results below in a jiffy</span>
 									</p>`;
-	botMessage(startNotification);
+	botMessage(startSearchNotification);
 	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
 }
 
@@ -352,6 +352,11 @@ function renderResult(result) {
 }
 
 
+function getRecipeId(recipe) {
+	return recipe.id; 
+}
+
+
 // * Display the results to user * //
 function displayResults(data) {
 
@@ -361,6 +366,8 @@ function displayResults(data) {
 
 	// Loop through the results and render each item
 	const results = data.matches.map( (item, index) => renderResult(item) );
+	const recipeId = data.matches.map( (item, index) => getRecipeId(item) );
+	console.log(recipeId);
 	setTimeout(() => { $('#js-results').html(results); }, 3500);
 }
 
