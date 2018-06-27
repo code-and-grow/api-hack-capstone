@@ -38,6 +38,7 @@ let allowedIng;
 let excludedIng;
 let allergyVal;
 let dietVal;
+let imageUrl;
 
 let readyForAllowedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
@@ -64,12 +65,12 @@ function botMessage(text) {
 											 .scrollTop($('#js-conversation').prop('scrollHeight'));
 	// Add a small delay before showing bot message										 
 	$('.currentMessage').hide();
-	$('.currentMessage').delay(1500).show('slide', 400);
+	$('.currentMessage').delay(10).show('slide', 10);
 	$('.currentMessage').removeClass('currentMessage');
 }
 
 
-// * API call * //
+// * Search API call * //
 function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
 
 	// Set up API call settings
@@ -101,7 +102,7 @@ function setPlaceholder(value) {
 
 // * Set new textarea placeholder value with a delay * //
 function renderPlaceholder(value) {
-	setTimeout(() => { setPlaceholder(value); }, 1900);
+	setTimeout(() => { setPlaceholder(value); }, 10);
 }
 
 
@@ -123,7 +124,11 @@ function botAi(message) {
 
 	// Greet user and ask for desired recipe or meal name
 	if (username === undefined) {
-		username = message;
+		if (message.length === 0) {
+			username = 'Hungry Stranger';
+		} else {
+			username = message;
+		}
 		let greetUser = `<p class="currentMessage">
 											<span class="bot">Chef Cook:</span>
 											<span class="bot-message">Hello ${username}, feeling hungry eh? 
@@ -150,7 +155,7 @@ function botAi(message) {
 		}
 
 	// Ask for excluded ingredients
-	} else if (username.length >= 1 && searchTerms.length !== undefined && allowedIng === undefined) {
+	} else if (username.length >= 1 && searchTerms !== undefined && allowedIng === undefined) {
 
 		if (message === '') {
 			allowedIng = [];
@@ -165,7 +170,7 @@ function botAi(message) {
 		}
 
 	// Ask for allergies function
-	} else if (excludedIng === undefined && searchTerms.length >=1) {
+	} else if (excludedIng === undefined && searchTerms !== undefined) {
 
 		if( message === '') {
 			excludedIng = [];
@@ -332,6 +337,27 @@ function startingSearch() {
 }
 
 
+// * Get recipe image Url * //
+function getRecipeImageUrl(recipeId) {
+	// Set up recipe API call settings
+  const settings = {
+    url: API_URL + '/api/recipe/' + recipeId + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
+    data: {
+    	images: 'images'
+    },
+    dataType: 'jsonp',
+    type: 'GET',
+    success: function(data) {
+    	imageUrl =  data.images[0].hostedLargeUrl;
+    }
+  };
+
+  // Make the recipe API call
+  $.ajax(settings);
+}
+
+
+
 // * Render the result in html * //
 function renderResult(result) {
 
@@ -341,20 +367,22 @@ function renderResult(result) {
   let hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours ") : "";
   let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes") : "";
   let cookingTime =  hDisplay + mDisplay; 
+  
+  $.when( getRecipeImageUrl(result.id) ).done( function() {
+//  console.log(imageUrl);
+//  setTimeout(() => { console.log(imageUrl);  }, 1000);
 
   // HTML for item in the results
-	return `<div>
+	return `<div class="js-result">
+					<img class="" src="${imageUrl}">
 					<h2>${result.recipeName}</h2>
 					<p><span>Rating: ${result.rating} </span><span>Cooking time: ${cookingTime}</span></p>
 					<p>${result.ingredients}</p>
 					<hr>
-				 </div>`; 
+				 </div>`;
+				}); 
 }
 
-
-function getRecipeId(recipe) {
-	return recipe.id; 
-}
 
 
 // * Display the results to user * //
@@ -362,18 +390,12 @@ function displayResults(data) {
 
 	// Show preloader gif
 	$('#js-results').html('<img style="margin-left:auto; margin-right:auto;" src="images/Loading_icon.gif">');
-	console.log(data);
 
 	// Loop through the results and render each item
 	const results = data.matches.map( (item, index) => renderResult(item) );
-	const recipeId = data.matches.map( (item, index) => getRecipeId(item) );
-	console.log(recipeId);
-	setTimeout(() => { $('#js-results').html(results); }, 3500);
+
+	setTimeout(() => { $('#js-results').html(results); }, 100);
 }
-
-
-// Create a function to present default recipes if nothing is entered
-// Create a function for the case where the search has no results - Try to combine these
 
 
 // * Start your engines * //
