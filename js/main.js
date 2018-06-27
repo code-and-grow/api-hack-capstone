@@ -368,7 +368,7 @@ function renderResult(result) {
   let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes") : "";
   let cookingTime =  hDisplay + mDisplay; 
   
-  $.when( getRecipeImageUrl(result.id) ).done( function() {
+  getRecipeImageUrl(result.id)
 //  console.log(imageUrl);
 //  setTimeout(() => { console.log(imageUrl);  }, 1000);
 
@@ -380,7 +380,6 @@ function renderResult(result) {
 					<p>${result.ingredients}</p>
 					<hr>
 				 </div>`;
-				}); 
 }
 
 
