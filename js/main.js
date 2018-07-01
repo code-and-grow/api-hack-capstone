@@ -28,8 +28,8 @@ const searchParameters = {
 
 // API credentials
 const API_URL = 'https://api.yummly.com/v1';
-const APP_ID = '0163f367';
-const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
+const APP_ID = 'YOUR_ID';
+const APP_KEY = 'YOUR_KEY';
 
 // API search input
 let username;
@@ -342,24 +342,25 @@ function getRecipeImageUrl(recipeId) {
 	// Set up recipe API call settings
   const settings = {
     url: API_URL + '/api/recipe/' + recipeId + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
-    data: {
-    	images: 'images'
-    },
+    data: {images: 'images'},
     dataType: 'jsonp',
     type: 'GET',
     success: function(data) {
     	imageUrl =  data.images[0].hostedLargeUrl;
+    	console.log("success!" + data.images[0].hostedLargeUrl);
     }
   };
 
   // Make the recipe API call
-  $.ajax(settings);
+  return $.ajax(settings);
 }
 
 
 
 // * Render the result in html * //
 function renderResult(result) {
+
+	console.log(result);
 
 	// Convert cooking time from seconds to hours and minutes
   let h = Math.floor(result.totalTimeInSeconds / 3600);
@@ -368,13 +369,13 @@ function renderResult(result) {
   let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes") : "";
   let cookingTime =  hDisplay + mDisplay; 
   
-  getRecipeImageUrl(result.id)
+  getRecipeImageUrl(result.id);
 //  console.log(imageUrl);
 //  setTimeout(() => { console.log(imageUrl);  }, 1000);
 
   // HTML for item in the results
 	return `<div class="js-result">
-					<img class="" src="${imageUrl}">
+					<img class="" src="${result.smallImageUrls[0]}">
 					<h2>${result.recipeName}</h2>
 					<p><span>Rating: ${result.rating} </span><span>Cooking time: ${cookingTime}</span></p>
 					<p>${result.ingredients}</p>
