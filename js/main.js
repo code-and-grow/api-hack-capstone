@@ -374,8 +374,11 @@ function renderResult(result) {
 //  setTimeout(() => { console.log(imageUrl);  }, 1000);
 
   // HTML for item in the results
+  let imageFull = result.smallImageUrls[0].substring(0,result.smallImageUrls[0].length -4);
+  console.log("Image: " + imageFull);
+
 	return `<div class="js-result">
-					<img class="" src="${result.smallImageUrls[0]}">
+					<img class="" src="${imageFull}">
 					<h2>${result.recipeName}</h2>
 					<p><span>Rating: ${result.rating} </span><span>Cooking time: ${cookingTime}</span></p>
 					<p>${result.ingredients}</p>
