@@ -10,7 +10,7 @@ body {
 
 header,
 main {
-	width: 90%;
+	width: 760px;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -130,4 +130,10 @@ input[type="button"] {
 	font-size: 1.2rem;
 	background-color: #676767;
 	color: white;
+}
+
+.js-result {
+	width: 360px;
+	float: left;
+	padding: 10px;
 }

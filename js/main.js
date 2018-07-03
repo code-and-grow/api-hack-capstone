@@ -38,7 +38,8 @@ let allowedIng;
 let excludedIng;
 let allergyVal;
 let dietVal;
-let imageUrl;
+let recipes = [];
+let recipeIngredients;
 
 let readyForAllowedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
@@ -67,30 +68,6 @@ function botMessage(text) {
 	$('.currentMessage').hide();
 	$('.currentMessage').delay(10).show('slide', 10);
 	$('.currentMessage').removeClass('currentMessage');
-}
-
-
-// * Search API call * //
-function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
-
-	// Set up API call settings
-  const settings = {
-    url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
-    data: {
-    	q: searchTerms,
-    	allowedIngredient: allowedIng,
-    	excludedIngredient: excludedIng,
-    	allowedAllergy: allergyVal,
-    	allowedDiet: dietVal
-    },
-    dataType: 'jsonp',
-    type: 'GET',
-    success: displayResults
-  };
-
-  // Make the API call
-  $.ajax(settings);
-
 }
 
 
@@ -337,23 +314,54 @@ function startingSearch() {
 }
 
 
-// * Get recipe image Url * //
-function getRecipeImageUrl(recipeId) {
-	// Set up recipe API call settings
+
+// * Search API call * //
+function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
+
+	// Set up API call settings
   const settings = {
-    url: API_URL + '/api/recipe/' + recipeId + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
+    url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
     data: {
-    	images: 'images'
+    	q: searchTerms,
+    	allowedIngredient: allowedIng,
+    	excludedIngredient: excludedIng,
+    	allowedAllergy: allergyVal,
+    	allowedDiet: dietVal
     },
     dataType: 'jsonp',
     type: 'GET',
-    success: function(data) {
-    	imageUrl =  data.images[0].hostedLargeUrl;
-    }
+    success: displayResults
   };
+  // Make the API call
+  $.ajax(settings);
 
+}
+
+
+// * Get recipe data from API * //
+function getRecipeData(recipeId, callback) {
+
+	// Set up recipe API call settings
+  const settings = {
+    url: API_URL + '/api/recipe/' + recipeId + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
+    recipeData: {
+    	images: 'images',
+    	ingredientLines: 'ingredientLines',
+    	source: 'source'
+    },
+    dataType: 'jsonp',
+    type: 'GET',
+    success: callback
+  };
   // Make the recipe API call
   $.ajax(settings);
+
+}
+
+
+// * Add recipe ids to array * //
+function saveRecipe(recipeData) {
+  recipes.push({recipeData});
 }
 
 
@@ -361,39 +369,52 @@ function getRecipeImageUrl(recipeId) {
 // * Render the result in html * //
 function renderResult(result) {
 
+	// Save recipe results to array
+	getRecipeData(result.id, saveRecipe);
+
 	// Convert cooking time from seconds to hours and minutes
   let h = Math.floor(result.totalTimeInSeconds / 3600);
   let m = Math.floor(result.totalTimeInSeconds % 3600 / 60);
   let hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours ") : "";
   let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes") : "";
   let cookingTime =  hDisplay + mDisplay; 
-  
-  getRecipeImageUrl(result.id)
-//  console.log(imageUrl);
-//  setTimeout(() => { console.log(imageUrl);  }, 1000);
 
-  // HTML for item in the results
-	return `<div class="js-result">
-					<img class="" src="${imageUrl}">
-					<h2>${result.recipeName}</h2>
-					<p><span>Rating: ${result.rating} </span><span>Cooking time: ${cookingTime}</span></p>
-					<p>${result.ingredients}</p>
-					<hr>
-				 </div>`;
+  // loop through results and append each one, give each one unique id (result.id)
+ 
+  $('#js-results')
+  	.append(`<div class="js-result" id="${result.id}">
+							<img>
+							<h2>${result.recipeName}</h2>
+							<p>
+								<span>Rating: ${result.rating} </span>
+								<span>Cooking time: ${cookingTime}</span>
+							</p>
+							<p>${result.ingredients}</p>
+							<hr>
+			 			</div>`);
+	
 }
-
 
 
 // * Display the results to user * //
 function displayResults(data) {
-
 	// Show preloader gif
-	$('#js-results').html('<img style="margin-left:auto; margin-right:auto;" src="images/Loading_icon.gif">');
+//	$('#js-results').html('<img id="preloader" style="margin-left:auto; margin-right:auto;" src="images/Loading_icon.gif">');
+	// Loop through the results and render them 
+	data.matches.map( (item, index) => renderResult(item) );
+	setTimeout(function() {
+		for (let i = 0; i < recipes.length; i++) {
+			$('#js-results')
+				.find(`#${recipes[i].recipeData.id} img`)
+				.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
+		}
+	}, 1000);
+	console.log(recipes);
+}
 
-	// Loop through the results and render each item
-	const results = data.matches.map( (item, index) => renderResult(item) );
 
-	setTimeout(() => { $('#js-results').html(results); }, 100);
+function showRecipeToUser() {
+	// body...
 }
 
 
