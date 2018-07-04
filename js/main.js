@@ -39,7 +39,6 @@ let excludedIng;
 let allergyVal;
 let dietVal;
 let recipes = [];
-let recipeIngredients;
 
 let readyForAllowedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
@@ -252,21 +251,26 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 	// Click Next event listener
 	$('#js-conversation').on('click', '.' + targetClass + 'Button', () => {
 
+		// Declare variables to store checked item data
 		let targetChecked = '.' + targetClass + ':checked';
 		let checkedArray = [];
 
+		// Loop through checked items and add them to array
 		$(targetChecked).each(function() {
 			checkedArray.push($(this).val().toLowerCase().replace(/ /g, '+'));
 		});
 
+		// Assign the array to function parameter
 		checkedValues = checkedArray;
 
+		// Assign the checked values to the parameter in question
 		if (isAllergy) {
 			allergyVal = checkedValues;
 		} else {
 			dietVal = checkedValues;
 		}
 
+		// Init the callback function
 		callback();
 
 	});
@@ -344,11 +348,7 @@ function getRecipeData(recipeId, callback) {
 	// Set up recipe API call settings
   const settings = {
     url: API_URL + '/api/recipe/' + recipeId + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
-    recipeData: {
-    	images: 'images',
-    	ingredientLines: 'ingredientLines',
-    	source: 'source'
-    },
+    recipe: {},
     dataType: 'jsonp',
     type: 'GET',
     success: callback
@@ -359,7 +359,7 @@ function getRecipeData(recipeId, callback) {
 }
 
 
-// * Add recipe ids to array * //
+// * Add recipe data to array * //
 function saveRecipe(recipeData) {
   recipes.push({recipeData});
 }
@@ -382,8 +382,8 @@ function renderResult(result) {
   // loop through results and append each one, give each one unique id (result.id)
  
   $('#js-results')
-  	.append(`<div class="js-result" id="${result.id}">
-							<img>
+  	.append(`<a class="js-result" id="${result.id}">
+							<img src="images/Loading_icon.gif">
 							<h2>${result.recipeName}</h2>
 							<p>
 								<span>Rating: ${result.rating} </span>
@@ -391,30 +391,88 @@ function renderResult(result) {
 							</p>
 							<p>${result.ingredients}</p>
 							<hr>
-			 			</div>`);
+			 			</a>`);
 	
 }
 
 
 // * Display the results to user * //
 function displayResults(data) {
-	// Show preloader gif
-//	$('#js-results').html('<img id="preloader" style="margin-left:auto; margin-right:auto;" src="images/Loading_icon.gif">');
+	
 	// Loop through the results and render them 
 	data.matches.map( (item, index) => renderResult(item) );
+
+	// Add images from recipes array
 	setTimeout(function() {
 		for (let i = 0; i < recipes.length; i++) {
 			$('#js-results')
 				.find(`#${recipes[i].recipeData.id} img`)
 				.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
 		}
-	}, 1000);
+	}, 1500);
 	console.log(recipes);
+
+	// Load the function that returns the recipe to user after selecting it
+	showRecipeToUser();
 }
 
-
+// * Display the recipe user selects * //
 function showRecipeToUser() {
-	// body...
+	$('.js-result').on('click', function(event) {
+		event.preventDefault();
+		// Store the clicked recipe data
+		const recipeClicked = recipes.find(recipe => recipe.recipeData.id === this.id);
+		// Store recipe details that are to be rendered to variables
+		const recipeName = recipeClicked.recipeData.name;
+		const recipeImage = recipeClicked.recipeData.images[0].hostedLargeUrl;
+		const recipeCourse = recipeClicked.recipeData.attributes.course;
+		const recipeRating = recipeClicked.recipeData.rating;
+		const recipeServings = recipeClicked.recipeData.yield;
+		const totalTime = recipeClicked.recipeData.totalTime;
+		const recipeIngredients = recipeClicked.recipeData.ingredientLines;
+		const sourceName = recipeClicked.recipeData.source.sourceDisplayName;
+		const sourceUrl = recipeClicked.recipeData.source.sourceRecipeUrl;
+		const yummlyLogo = recipeClicked.recipeData.attribution.logo;
+		const yummlyUrl = recipeClicked.recipeData.attribution.url;
+		const contentHtml = `<p id="closeLightbox">[X] Close</p>
+													<img src="${recipeImage}">
+													<h2>${recipeName}</h2>
+													<p>Course: ${recipeCourse}</p>
+													<p>
+														<span>Cooking time: ${totalTime} </span>
+														<span>Rating: ${recipeRating}</span>
+													</p>
+													<p>${recipeIngredients}</p>
+													<p>Visit original recipe by <em>${sourceName}</em> for detailed instructions <a href="${sourceUrl}" target="_blank">here</a>.</p>
+												 `
+
+		// If lightbox exists
+		if ($('#lightbox').length > 0) { 
+			$('#content').html(contentHtml);
+		   	
+			// Show lightbox window 
+			$('#lightbox').show();
+		
+		// If lightbox does not exist
+		} else { 
+	
+			//create HTML markup for lightbox window
+			const lightbox = 
+					`<div id="lightbox">
+						<p>Click to close</p>
+						<div id="content">${contentHtml}</div>	
+					</div>`;
+				
+			//insert lightbox HTML into page
+			$('body').append(lightbox);
+		}
+
+		// Click anywhere on the page to get rid of lightbox window
+		$('#closeLightbox').on('click', function() {
+			$('#lightbox').hide();
+		});
+
+	});
 }
 
 
