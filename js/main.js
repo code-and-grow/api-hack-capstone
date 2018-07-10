@@ -10,6 +10,7 @@ let excludedIng = [];
 let allergyVal;
 let dietVal;
 let recipes = [];
+let searchHasBeenRun = false;
 
 
 // Bot message rendering 
@@ -44,9 +45,12 @@ function greetUser() {
 	getTags(searchTerms, 'search-tags', 'search-input', getAllowedIng);
 }
 
-// Greet user and ask what meal to search
+
+// Ask what ingredients are allowed
 function getAllowedIng() {
-	searchTerms = searchTerms.map(item => item.text).join('+');
+	if (searchTerms.length >= 1) {
+		searchTerms = searchTerms.map(item => item.text).join('+');
+	}
 	let askForAllowedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 													  <span class="bot-message">Please enter ingredients to be included 
@@ -60,8 +64,12 @@ function getAllowedIng() {
 	getTags(allowedIng, 'allowed-tags', 'allowed-input', getExcludedIng);
 }
 
+
+// Ask what ingredients are excluded
 function getExcludedIng() {
-	allowedIng = allowedIng.map(item => item.text);
+	if (allowedIng.length >= 1) {
+		allowedIng = allowedIng.map(item => item.text);
+	} 
 	let askForExcludedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 													  <span class="bot-message">What about ingredients you don't like? 
@@ -73,7 +81,117 @@ function getExcludedIng() {
 									        </p>`;
 	botMessage(askForExcludedIng);
 	getTags(excludedIng, 'excluded-tags', 'excluded-input', checkForAllergies);
+	if (excludedIng.length >= 1) {
+		excludedIng = excludedIng.map(item => item.text);
+	} 
+	
 }
+
+
+
+// Ask user about allergies 
+function checkForAllergies() {
+
+	let checkAllergies = `<p class="currentMessage">
+										<span class="bot">Chef Cook:</span>
+										<span class="bot-message">Thanks, but what about allergies? 
+										Press NEXT when you're done or no allergies apply.<br>
+											<span id="checkboxlist">
+											  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
+										    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
+										    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
+										    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
+										    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
+										    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
+										    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
+										    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
+										    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
+										    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
+										    <input type="button" value="NEXT" class="allergyButton">
+									    </span>
+								    </span>
+									</p>`;
+	botMessage(checkAllergies);
+	getCheckedValues('allergy', allergyVal, true, checkForDiet);
+
+}
+
+
+
+// Ask user for diet preferences 
+function checkForDiet() {
+	let checkDiet = `<p class="currentMessage">
+										<span class="bot">Chef Cook:</span>
+										<span class="bot-message">Grrreat but 
+										are you on a diet? Press NEXT when you're
+										done or no diets apply.<br>
+											<span id="checkboxlist">
+											  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
+										    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
+										    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
+										    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
+										    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
+										    <input type="button" value="NEXT" class="dietButton">
+									    </span>
+										</span>
+									</p>`;
+	botMessage(checkDiet);
+	getCheckedValues('diet', dietVal, false, startingSearch);
+}
+
+
+
+// Notify the user that search has been started 
+function startingSearch() {
+	if (searchHasBeenRun) {
+		$('#js-results').empty();
+	}
+	let startSearchNotification = `<p class="currentMessage">
+										<span class="bot">Chef Cook:</span>
+										<span class="bot-message">Thanks for your patience, hungry stranger.
+										I have started the search and you'll see the results below in a jiffy
+										If there's nothing you fancy in the current results, press 'Start Over' 
+										to do new search.
+										<button id="js-restart-button" data-restart>START OVER</button>
+										</span>
+									</p>`;
+	botMessage(startSearchNotification);
+	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
+	userRestart();
+	searchHasBeenRun = true;
+}
+
+
+
+// Clear conversation and restart app 
+function userRestart() {
+	document.addEventListener('click', function(event) {
+
+    if (event.target.dataset.restart != undefined) { 
+    	$('#js-conversation').empty();
+
+			let restartGreet = `<p class="currentMessage">
+														<span class="bot">Chef Cook:</span>
+														<span class="bot-message">OK, let's search for something else. Enter
+														 what meal you're looking for in the text field below. Press Enter when you're 
+														 done or want to skip this part.
+														</span>
+														<span class="username">You:</span>
+								            <span class="search-tags" data-name="search-tags"></span>
+									        </p>`;
+			botMessage(restartGreet);
+			searchTerms = [];
+			allowedIng = [];
+			excludedIng = [];
+			allergyVal;
+			dietVal;
+			recipes = [];
+			getTags(searchTerms, 'search-tags', 'search-input', getAllowedIng);
+    }
+  });
+	
+}
+
 
 // Get tags from user input
 function getTags(array, inputClass, mainInputClass, callback) {
@@ -164,77 +282,11 @@ function getTags(array, inputClass, mainInputClass, callback) {
 }
 
 
-// Ask user about allergies 
-function checkForAllergies() {
-	excludedIng = excludedIng.map(item => item.text);
-	let checkAllergies = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Thanks, but what about allergies? 
-										Press NEXT when you're done or no allergies apply.<br>
-											<span id="checkboxlist">
-											  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
-										    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
-										    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
-										    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
-										    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
-										    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
-										    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
-										    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
-										    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
-										    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
-										    <input type="button" value="NEXT" class="allergyButton">
-									    </span>
-								    </span>
-									</p>`;
-	botMessage(checkAllergies);
-	getCheckedValues('allergy', allergyVal, true, checkForDiet);
-}
-
-
-
-// Ask user for diet preferences 
-function checkForDiet() {
-	console.log(allergyVal);
-	let checkDiet = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Grrreat but 
-										are you on a diet? Press NEXT when you're
-										done or no diets apply.<br>
-											<span id="checkboxlist">
-											  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
-										    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
-										    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
-										    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
-										    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
-										    <input type="button" value="NEXT" class="dietButton">
-									    </span>
-										</span>
-									</p>`;
-	botMessage(checkDiet);
-	getCheckedValues('diet', dietVal, false, startingSearch);
-}
-
-
-
-// Notify the user that search has been started 
-function startingSearch() {
-	console.log(dietVal);
-	let startSearchNotification = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Thanks for your patience, hungry stranger.
-										I have started the search and you'll see the 
-										results below in a jiffy</span>
-									</p>`;
-	botMessage(startSearchNotification);
-	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
-}
-
-
 
 // Get checked values 
 function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 	// Click Next event listener
-	$('#js-conversation').on('click', '.' + targetClass + 'Button', () => {
+	$('#js-conversation').off('click', '.' + targetClass + 'Button').on('click', '.' + targetClass + 'Button', () => {
 		// Declare variables to store checked item data
 		let targetChecked = '.' + targetClass + ':checked';
 		let checkedArray = [];
@@ -341,7 +393,6 @@ function displayResults(data) {
 				.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
 		}
 	}, 1500);
-	console.log(recipes);
 	// Open recipe in a lightbox after user click
 	showRecipeToUser();
 }
@@ -405,9 +456,12 @@ function showRecipeToUser() {
 }
 
 
+
+
 // Start your engines 
 function initBot() {
 	greetUser();
+	
 }
 
 $(initBot);
