@@ -39,7 +39,7 @@ function greetUser() {
 											Press Enter when you're done or want to skip this part.
 										</span>
 										<span class="username">You:</span>
-				            <span class="search-tags" data-name="search-tags"></span>
+				            <span class="search-tags" data-name="search-tags" data-search-tags></span>
 					        </p>`;
 	botMessage(greeting);
 	getTags(searchTerms, 'search-tags', 'search-input', getAllowedIng);
@@ -196,88 +196,88 @@ function userRestart() {
 // Get tags from user input
 function getTags(array, inputClass, mainInputClass, callback) {
 	[].forEach.call(document.getElementsByClassName(inputClass), function (el) {
-	    let hiddenInput = document.createElement('input'),
-	        mainInput = document.createElement('input'),
-	        tags = array;
-	    
-	    hiddenInput.setAttribute('type', 'hidden');
-	    hiddenInput.setAttribute('name', el.getAttribute('data-name'));
+    let hiddenInput = document.createElement('input'),
+        mainInput = document.createElement('input'),
+        tags = array;
+    
+    hiddenInput.setAttribute('type', 'hidden');
+    hiddenInput.setAttribute('name', el.getAttribute('data-name'));
 
-	    mainInput.setAttribute('type', 'text');
-	    mainInput.classList.add(mainInputClass);
+    mainInput.setAttribute('type', 'text');
+    mainInput.classList.add(mainInputClass);
 
-	    mainInput.addEventListener('input', function () {
-	        let enteredTags = mainInput.value.split(',');
-	        if (enteredTags.length > 1) {
-	            enteredTags.forEach(function (t) {
-	                let filteredTag = filterTag(t);
-	                if (filteredTag.length > 0)
-	                    addTag(filteredTag);
-	            });
-	            mainInput.value = '';
-	        }
-	    });
+    mainInput.addEventListener('input', function () {
+      let enteredTags = mainInput.value.split('	');
+      if (enteredTags.length > 1) {
+          enteredTags.forEach(function (t) {
+              let filteredTag = filterTag(t);
+              if (filteredTag.length > 0)
+                  addTag(filteredTag);
+          });
+          mainInput.value = '';
+      	}
+    });
 
-	    mainInput.addEventListener('keydown', function (e) {
-	        let keyCode = e.which || e.keyCode;
-	        if (keyCode === 8 && mainInput.value.length === 0 && tags.length > 0) {
-	            removeTag(tags.length - 1);
-	        }
-	    });
+    mainInput.addEventListener('keydown', function (e) {
+        let keyCode = e.which || e.keyCode;
+        if (keyCode === 8 && mainInput.value.length === 0 && tags.length > 0) {
+            removeTag(tags.length - 1);
+        }
+    });
 
-	    mainInput.addEventListener('keydown', function (e) {
-	        let keyCode = e.which || e.keyCode;
-	        if (keyCode === 13) {
-	        	callback();
-	        	return tags;
-	        }
-	    });
+    mainInput.addEventListener('keydown', function (e) {
+        let keyCode = e.which || e.keyCode;
+        if (keyCode === 13 && e.shiftKey) {
+        	callback();
+        	return tags;
+        }
+    });
 
-	    el.appendChild(mainInput);
-	    el.appendChild(hiddenInput);
-	    
+    el.appendChild(mainInput);
+    el.appendChild(hiddenInput);
+    
 
-	    function addTag (text) {
-	        let tag = {
-	            text: text,
-	            element: document.createElement('span'),
-	        };
+    function addTag (text) {
+        let tag = {
+            text: text,
+            element: document.createElement('span'),
+        };
 
-	        tag.element.classList.add('tag');
-	        tag.element.textContent = tag.text;
+        tag.element.classList.add('tag');
+        tag.element.textContent = tag.text;
 
-	        let closeBtn = document.createElement('span');
-	        closeBtn.classList.add('close');
-	        closeBtn.addEventListener('click', function () {
-	            removeTag(tags.indexOf(tag));
-	        });
-	        tag.element.appendChild(closeBtn);
+        let closeBtn = document.createElement('span');
+        closeBtn.classList.add('close');
+        closeBtn.addEventListener('click', function () {
+            removeTag(tags.indexOf(tag));
+        });
+        tag.element.appendChild(closeBtn);
 
-	        tags.push(tag);
+        tags.push(tag);
 
-	        el.insertBefore(tag.element, mainInput);
+        el.insertBefore(tag.element, mainInput);
 
-	        refreshTags();
-	    }
+        refreshTags();
+    }
 
-	    function removeTag (index) {
-	        let tag = tags[index];
-	        tags.splice(index, 1);
-	        el.removeChild(tag.element);
-	        refreshTags();
-	    }
+    function removeTag (index) {
+        let tag = tags[index];
+        tags.splice(index, 1);
+        el.removeChild(tag.element);
+        refreshTags();
+    }
 
-	    function refreshTags () {
-	        let tagsList = [];
-	        tags.forEach(function (t) {
-	            tagsList.push(t.text);
-	        });
-	        hiddenInput.value = tagsList.join(',');
-	    }
+    function refreshTags () {
+        let tagsList = [];
+        tags.forEach(function (t) {
+            tagsList.push(t.text);
+        });
+        hiddenInput.value = tagsList.join(',');
+    }
 
-	    function filterTag (tag) {
-	        return tag.replace(/[^\w -]/g, '').trim().replace(/\W+/g, '-');
-	    }
+    function filterTag (tag) {
+        return tag.replace(/[^\w -]/g, '').trim().replace(/\W+/g, '+');
+    }
 	});
 }
 
@@ -286,7 +286,8 @@ function getTags(array, inputClass, mainInputClass, callback) {
 // Get checked values 
 function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 	// Click Next event listener
-	$('#js-conversation').off('click', '.' + targetClass + 'Button').on('click', '.' + targetClass + 'Button', () => {
+	$('#js-conversation').off('click', '.' + targetClass + 'Button')
+											 .on('click', '.' + targetClass + 'Button', () => {
 		// Declare variables to store checked item data
 		let targetChecked = '.' + targetClass + ':checked';
 		let checkedArray = [];
