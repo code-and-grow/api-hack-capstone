@@ -4,21 +4,18 @@ const APP_ID = '0163f367';
 const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
 
 // Undefined startup variables
-let username;
-let searchTerms;
-let allowedIng;
-let excludedIng;
+let searchTerms = [];
+let allowedIng = [];
+let excludedIng = [];
 let allergyVal;
 let dietVal;
 let recipes = [];
-// Regular expression for splitting user input
-let regExp = /\s*,\s*/;
 
 
 // Bot message rendering 
-function botMessage(text) {
+function botMessage(html) {
 	// Add bot message to conversation window
-	$('#js-conversation').append(text)
+	$('#js-conversation').append(html)
 											// Scroll conversation window to see the last appended message
 											 .scrollTop(
 											 	$('#js-conversation').prop('scrollHeight')
@@ -30,113 +27,146 @@ function botMessage(text) {
 }
 
 
-// Select textarea placeholder value 
-function setPlaceholder(value) {
-	let newPlaceholder = $('#js-user-message').attr('placeholder', value);
-}
 
-
-// Set new textarea placeholder value with a delay 
-function renderPlaceholder(value) {
-	setTimeout(() => { setPlaceholder(value); }, 10);
-}
-
-
-// Get username 
-function getUsername() {
+// Greet user and ask what meal to search
+function greetUser() {
 	let greeting = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Howdy partner! 
-										I am captain Cook and ready to help. 
-										What is your name? You can press Enter to
-										skip if you want to stay inkognito.</span>
-									</p>`;
+										<span class="bot-message">Howdy hungry pirate! 
+											I am captain Cook and ready to help. Enter what sort 
+											recipe you're looking for in the text field below. 
+											Press Enter when you're done or want to skip this part.
+										</span>
+										<span class="username">You:</span>
+				            <span class="search-tags" data-name="search-tags"></span>
+					        </p>`;
 	botMessage(greeting);
-	renderPlaceholder('Type your name here...');
-	setFocusToTextBox();
+	getTags(searchTerms, 'search-tags', 'search-input', getAllowedIng);
 }
 
-
-// Focus the user message field 
-function setFocusToTextBox(){
-    $('#js-user-message').focus();
+// Greet user and ask what meal to search
+function getAllowedIng() {
+	searchTerms = searchTerms.map(item => item.text).join('+');
+	let askForAllowedIng = `<p class="currentMessage">
+														<span class="bot">Chef Cook:</span>
+													  <span class="bot-message">Please enter ingredients to be included 
+														  in the recipe separated with a comma in the text field below or 
+														  press Enter to skip.
+														</span>
+														<span class="username">You:</span>
+								            <span class="allowed-tags" data-name="allowed-tags"></span>
+									        </p>`;
+	botMessage(askForAllowedIng);
+	getTags(allowedIng, 'allowed-tags', 'allowed-input', getExcludedIng);
 }
 
-
-// Bot responses to user messages 
-function botAi(message) {
-	// Greet user and ask for desired recipe or meal name
-	if (username === undefined) {
-		if (message.length === 0) {
-			username = 'Starvin\' Stranger';
-		} else {
-			username = message;
-		}
-		let greetUser = `<p class="currentMessage">
-											<span class="bot">Chef Cook:</span>
-											<span class="bot-message">Hello ${username}, feeling hungry eh? 
-											Let's get going then. Enter what recipe you're looking for in the 
-											text field below. Press Enter to skip if you haven't decided.</span>
-										</p>`;
-		botMessage(greetUser);
-		renderPlaceholder('Spicy chicken soup ...');
-	// Ask for allowed ingredients
-	} else if (username.length >= 1 && searchTerms === undefined) {
-		let readyForAllowedIng = `<p class="currentMessage">
-																<span class="bot">Chef Cook:</span>
-															  <span class="bot-message">Please enter ingredients to be included 
-															  in the recipe separated with a comma in the text field below or 
-															  press Enter to skip.</span>
-														  </p>`;
-		if(message === '') {
-			searchTerms = message;
-			console.log(searchTerms);
-			botMessage(readyForAllowedIng);
-			renderPlaceholder('Chicken, chili, parsley, ...');
-
-		} else {
-			searchTerms = message.toLowerCase().replace(/ /g, '+');
-			console.log(searchTerms);
-			botMessage(readyForAllowedIng);
-			renderPlaceholder('Chicken, chili, parsley, ...');
-		}
-	// Ask for excluded ingredients
-	} else if (username.length >= 1 && searchTerms !== undefined && allowedIng === undefined) {
-		let readyForExcludedIng = `<p class="currentMessage">
-																<span class="bot">Chef Cook:</span>
-															  <span class="bot-message">What about ingredients you don't like? 
-															  Enter them separated with a comma in the textbox below or press 
-															  Enter to skip.</span>
-		    										  </p>`;
-		if (message === '') {
-			allowedIng = [];
-			botMessage(readyForExcludedIng);
-			renderPlaceholder('Garlic, onions, thyme, ...');
-			console.log(allowedIng);
-		} else {
-			allowedIng = message.toLowerCase().split(regExp);
-			botMessage(readyForExcludedIng);
-			renderPlaceholder('Garlic, onions, thyme, ...');
-			console.log(allowedIng);
-		}
-	// Ask for allergies 
-	} else if (excludedIng === undefined && searchTerms !== undefined) {
-
-		if( message === '') {
-			excludedIng = [];
-			console.log(excludedIng);
-		} else {
-			excludedIng = message.toLowerCase().split(regExp);
-			console.log(excludedIng);
-			checkForAllergies();
-		}
-	}
+function getExcludedIng() {
+	allowedIng = allowedIng.map(item => item.text);
+	let askForExcludedIng = `<p class="currentMessage">
+														<span class="bot">Chef Cook:</span>
+													  <span class="bot-message">What about ingredients you don't like? 
+														  Enter them separated with a comma in the textbox below or press 
+														  Enter to skip.
+														</span>
+														<span class="username">You:</span>
+								            <span class="excluded-tags" data-name="excluded-tags"></span>
+									        </p>`;
+	botMessage(askForExcludedIng);
+	getTags(excludedIng, 'excluded-tags', 'excluded-input', checkForAllergies);
 }
 
+// Get tags from user input
+function getTags(array, inputClass, mainInputClass, callback) {
+	[].forEach.call(document.getElementsByClassName(inputClass), function (el) {
+	    let hiddenInput = document.createElement('input'),
+	        mainInput = document.createElement('input'),
+	        tags = array;
+	    
+	    hiddenInput.setAttribute('type', 'hidden');
+	    hiddenInput.setAttribute('name', el.getAttribute('data-name'));
+
+	    mainInput.setAttribute('type', 'text');
+	    mainInput.classList.add(mainInputClass);
+
+	    mainInput.addEventListener('input', function () {
+	        let enteredTags = mainInput.value.split(',');
+	        if (enteredTags.length > 1) {
+	            enteredTags.forEach(function (t) {
+	                let filteredTag = filterTag(t);
+	                if (filteredTag.length > 0)
+	                    addTag(filteredTag);
+	            });
+	            mainInput.value = '';
+	        }
+	    });
+
+	    mainInput.addEventListener('keydown', function (e) {
+	        let keyCode = e.which || e.keyCode;
+	        if (keyCode === 8 && mainInput.value.length === 0 && tags.length > 0) {
+	            removeTag(tags.length - 1);
+	        }
+	    });
+
+	    mainInput.addEventListener('keydown', function (e) {
+	        let keyCode = e.which || e.keyCode;
+	        if (keyCode === 13) {
+	        	callback();
+	        	return tags;
+	        }
+	    });
+
+	    el.appendChild(mainInput);
+	    el.appendChild(hiddenInput);
+	    
+
+	    function addTag (text) {
+	        let tag = {
+	            text: text,
+	            element: document.createElement('span'),
+	        };
+
+	        tag.element.classList.add('tag');
+	        tag.element.textContent = tag.text;
+
+	        let closeBtn = document.createElement('span');
+	        closeBtn.classList.add('close');
+	        closeBtn.addEventListener('click', function () {
+	            removeTag(tags.indexOf(tag));
+	        });
+	        tag.element.appendChild(closeBtn);
+
+	        tags.push(tag);
+
+	        el.insertBefore(tag.element, mainInput);
+
+	        refreshTags();
+	    }
+
+	    function removeTag (index) {
+	        let tag = tags[index];
+	        tags.splice(index, 1);
+	        el.removeChild(tag.element);
+	        refreshTags();
+	    }
+
+	    function refreshTags () {
+	        let tagsList = [];
+	        tags.forEach(function (t) {
+	            tagsList.push(t.text);
+	        });
+	        hiddenInput.value = tagsList.join(',');
+	    }
+
+	    function filterTag (tag) {
+	        return tag.replace(/[^\w -]/g, '').trim().replace(/\W+/g, '-');
+	    }
+	});
+}
 
 
 // Ask user about allergies 
 function checkForAllergies() {
+	excludedIng = excludedIng.map(item => item.text);
 	let checkAllergies = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
 										<span class="bot-message">Thanks, but what about allergies? 
@@ -191,113 +221,12 @@ function startingSearch() {
 	console.log(dietVal);
 	let startSearchNotification = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Thanks for your patience.
+										<span class="bot-message">Thanks for your patience, hungry stranger.
 										I have started the search and you'll see the 
 										results below in a jiffy</span>
 									</p>`;
 	botMessage(startSearchNotification);
 	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
-}
-
-
-
-// Track user message submit event 
-function sendUserMessage() {
-	// If 'Send with Enter' is checked
-	enterKeyPressEqualsSend();
-	// User message is sent
-	userSendsMessage();
-}
-
-
-
-// User clicks Send button
-function userSendsMessage() {
-	$('#js-user-submit').click(event => {
-		let newUserMessage;
-		event.preventDefault();
-		checkUserMessage(newUserMessage);
-	});
-}
-
-
-
-// Allow user send message with Enter key when 'Send with Enter' is checked
-function enterKeyPressEqualsSend() {
-	$('#js-user-message').keypress(event => {
-		if (event.which == 13) {
-			if ($('#js-checkbox').prop('checked')) {
-				event.preventDefault();
-				$('#js-user-submit').click();
-			}
-		}
-	});
-}
-
-
-
-// What to do when user leaves the textfield blank or has entered a message
-function checkUserMessage(message) {
-	// User has entered nothing in the textarea (separate function)
-	if (!$('#js-user-message').val().trim().length) {
-		message = '';
-
-		if (username === undefined) {
-			appendUserMessage('You can call me the Starvin\' Stranger.');
-
-		} else if (searchTerms === undefined) {
-			appendUserMessage('Dunno, gimme something!');
-
-		} else if (searchTerms !== undefined && allowedIng === undefined) {
-			appendUserMessage('Me is no picky pirate.');
-				
-		} else if (searchTerms !== undefined && allowedIng !== undefined && excludedIng === undefined) {
-			appendUserMessage('Arr, I could eat a wooden leg right now!');
-			checkForAllergies();
-		}
-
-		// Clear message field and placeholder text after message is sent
-		clearUserMessageField();
-		botAi(message);
-
-	// If textarea has text inside it
-	} else { 
-		userAnswered();
-	}
-}
-
-
-
-// When user enters a message 
-function userAnswered() {
-	newUserMessage = $('#js-user-message').val();
-	// Send user message to conversation window
-	appendUserMessage(`${newUserMessage}`);
-	// Clear message field and placeholder text after message is sent
-	clearUserMessageField();
-	// Get answer from bot
-	botAi(newUserMessage);
-}
-
-
-
-// Append user message to conversation window 
-function appendUserMessage(string) {
-	$('#js-conversation')
-					.append(`<p>
-										<span class="username">You:</span>
-										<span class="user-message">${string}</span>
-									</p>`)
-					// Scroll conversation window to see the last appended message
-					.scrollTop($('#js-conversation').prop('scrollHeight'));
-}
-
-
-
-// Clear message field and placeholder text after message is sent 
-function clearUserMessageField() {
-	$('#js-user-message').val('');
-	$('#js-user-message').attr('placeholder', '');
 }
 
 
@@ -478,8 +407,7 @@ function showRecipeToUser() {
 
 // Start your engines 
 function initBot() {
-	getUsername();
-	sendUserMessage();
+	greetUser();
 }
 
 $(initBot);
