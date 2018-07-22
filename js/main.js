@@ -4,6 +4,7 @@ const APP_ID = '0163f367';
 const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
 
 // Undefined startup variables
+let tags = [];
 let searchTerms = [];
 let allowedIng = [];
 let excludedIng = [];
@@ -28,28 +29,82 @@ function botMessage(html) {
 }
 
 
+// * Track user message submit event * //
+function sendUserMessage() {
+
+	// User presses Enter key
+	$('#js-user-message').keypress(event => {
+		if (event.which == 13) {
+
+			// If the 'Send message with Enter' checkbox is selected, message gets sent
+			if ($('#js-checkbox').prop('checked')) {
+				event.preventDefault();
+				$('#js-user-submit').click();
+			}
+		}
+	});
+
+	// User clicks Send button
+	$('#js-user-submit').click(event => {
+		return false;
+	});
+}
+
+// User answer rendering
+function userMessage(input) {
+	$('#js-conversation')
+					.append(`<p>
+										<span class="username">You:</span>
+										<span class="user-message">${input}</span>
+									</p>`)
+					// Scroll conversation window to see the last appended message
+					.scrollTop($('#js-conversation').prop('scrollHeight'));
+}
+
+
 
 // Greet user and ask what meal to search
 function greetUser() {
-	let greeting = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Howdy hungry pirate! 
-											I am captain Cook and ready to help. Enter what sort 
-											recipe you're looking for in the text field below. 
-											Press Enter when you're done or want to skip this part.
-										</span>
-										<span class="username">You:</span>
-				            <span class="search-tags" data-name="search-tags" data-search-tags></span>
-					        </p>`;
-	botMessage(greeting);
-	getTags(searchTerms, 'search-tags', 'search-input', getAllowedIng);
+	let greetMessage = `<p class="currentMessage">
+												<span class="bot">Chef Cook:</span>
+												<span class="bot-message">
+													Howdy hungry pirate! Captain Cook here. I will help you find a recipe 
+													to try from my extensive cookbook. Just follow the instructions that
+													follow. Arrrright?
+												</span>
+							        </p>`;
+	botMessage(greetMessage);
+	setTimeout(function(){ instructUser(); }, 1000);
+}
+
+
+// Tell the user how to 
+function instructUser() {
+	let secondBotMessage = `<p class="currentMessage">
+														<span class="bot">Chef Cook:</span>
+														<span class="bot-message">
+															Please enter keywords that describe the meal you're looking for in the 
+															field below. Typing a comma confirms the entered keyword or phrase. You 
+															can delete tags with Backspace or by clicking the X next to the tag. 
+															Press Enter when you're done or want to skip this part.
+														</span>
+													</p>`;			        
+	botMessage(secondBotMessage);
+	getTags(getAllowedIng);
+	$('.main-input').focus();
 }
 
 
 // Ask what ingredients are allowed
 function getAllowedIng() {
-	if (searchTerms.length >= 1) {
-		searchTerms = searchTerms.map(item => item.text).join('+');
+	if (tags.length >= 1) {
+		searchTerms = tags.map(item => item.text).join().replace(/\W+/g, '+');
+		let showSearchTerms = tags.map(item => item.text).join(' ');
+		userMessage(showSearchTerms);
+		$('.tags-input').empty();
+		tags = [];
+	} else {
+		$('.tags-input').empty();
 	}
 	let askForAllowedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
@@ -57,41 +112,47 @@ function getAllowedIng() {
 														  in the recipe separated with a comma in the text field below or 
 														  press Enter to skip.
 														</span>
-														<span class="username">You:</span>
-								            <span class="allowed-tags" data-name="allowed-tags"></span>
 									        </p>`;
 	botMessage(askForAllowedIng);
-	getTags(allowedIng, 'allowed-tags', 'allowed-input', getExcludedIng);
+	getTags(getExcludedIng);
+	$('.main-input').focus();
 }
 
 
 // Ask what ingredients are excluded
 function getExcludedIng() {
-	if (allowedIng.length >= 1) {
-		allowedIng = allowedIng.map(item => item.text);
-	} 
+	if (tags.length >= 1) {
+		allowedIng = tags.map(item => item.text);
+		userMessage(allowedIng);
+		$('.tags-input').empty();
+		tags = [];
+	} else {
+		$('.tags-input').empty();
+	}
 	let askForExcludedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 													  <span class="bot-message">What about ingredients you don't like? 
 														  Enter them separated with a comma in the textbox below or press 
 														  Enter to skip.
 														</span>
-														<span class="username">You:</span>
-								            <span class="excluded-tags" data-name="excluded-tags"></span>
 									        </p>`;
 	botMessage(askForExcludedIng);
-	getTags(excludedIng, 'excluded-tags', 'excluded-input', checkForAllergies);
-	if (excludedIng.length >= 1) {
-		excludedIng = excludedIng.map(item => item.text);
-	} 
-	
+	getTags(checkForAllergies);
+	$('.main-input').focus();
 }
 
 
 
 // Ask user about allergies 
 function checkForAllergies() {
-
+	if (tags.length >= 1) {
+		excludedIng = tags.map(item => item.text);
+		userMessage(excludedIng);
+		$('.tags-input').empty();
+		tags = [];
+	} else {
+		$('.tags-input').empty();
+	} 
 	let checkAllergies = `<p class="currentMessage">
 										<span class="bot">Chef Cook:</span>
 										<span class="bot-message">Thanks, but what about allergies? 
@@ -157,6 +218,7 @@ function startingSearch() {
 									</p>`;
 	botMessage(startSearchNotification);
 	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
+	$('#user-input').css('display', 'none');
 	userRestart();
 	searchHasBeenRun = true;
 }
@@ -169,15 +231,14 @@ function userRestart() {
 
     if (event.target.dataset.restart != undefined) { 
     	$('#js-conversation').empty();
-
+    	$('.tags-input').empty();
+    	$('#user-input').css('display', 'block');
 			let restartGreet = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 														<span class="bot-message">OK, let's search for something else. Enter
 														 what meal you're looking for in the text field below. Press Enter when you're 
 														 done or want to skip this part.
 														</span>
-														<span class="username">You:</span>
-								            <span class="search-tags" data-name="search-tags"></span>
 									        </p>`;
 			botMessage(restartGreet);
 			searchTerms = [];
@@ -186,7 +247,7 @@ function userRestart() {
 			allergyVal;
 			dietVal;
 			recipes = [];
-			getTags(searchTerms, 'search-tags', 'search-input', getAllowedIng);
+			getTags(getAllowedIng);
     }
   });
 	
@@ -194,30 +255,19 @@ function userRestart() {
 
 
 // Get tags from user input
-function getTags(array, inputClass, mainInputClass, callback) {
-	[].forEach.call(document.getElementsByClassName(inputClass), function (el) {
+function getTags(callback) {
+	[].forEach.call(document.getElementsByClassName('tags-input'), function (el) {
     let hiddenInput = document.createElement('input'),
         mainInput = document.createElement('input'),
-        tags = array;
+        enteredTags = [];
     
     hiddenInput.setAttribute('type', 'hidden');
     hiddenInput.setAttribute('name', el.getAttribute('data-name'));
 
     mainInput.setAttribute('type', 'text');
-    mainInput.classList.add(mainInputClass);
+    mainInput.classList.add('main-input');
 
-    mainInput.addEventListener('input', function () {
-      let enteredTags = mainInput.value.split('	');
-      if (enteredTags.length > 1) {
-          enteredTags.forEach(function (t) {
-              let filteredTag = filterTag(t);
-              if (filteredTag.length > 0)
-                  addTag(filteredTag);
-          });
-          mainInput.value = '';
-      	}
-    });
-
+    // When user presses Backspace on their keyboard during entering of the search details
     mainInput.addEventListener('keydown', function (e) {
         let keyCode = e.which || e.keyCode;
         if (keyCode === 8 && mainInput.value.length === 0 && tags.length > 0) {
@@ -225,18 +275,26 @@ function getTags(array, inputClass, mainInputClass, callback) {
         }
     });
 
+    // When user presses Enter or Comma during entering of the search details
     mainInput.addEventListener('keydown', function (e) {
         let keyCode = e.which || e.keyCode;
-        if (keyCode === 13 && e.shiftKey) {
-        	callback();
-        	return tags;
+        if (keyCode === 13 || keyCode === 188) {
+        	e.preventDefault();
+        	enteredTag = mainInput.value;
+        	if ( enteredTag.length > 0 ) {
+	        	addTag(enteredTag);
+	        	mainInput.value = '';
+	        	return tags;
+	        } else if ( enteredTag.length < 1 ) {
+	        	callback();
+	        }
         }
     });
 
     el.appendChild(mainInput);
     el.appendChild(hiddenInput);
     
-
+    // Add entered tag before the search input and append/remove it to/from tags array
     function addTag (text) {
         let tag = {
             text: text,
@@ -260,6 +318,7 @@ function getTags(array, inputClass, mainInputClass, callback) {
         refreshTags();
     }
 
+    // Remove tag from tags array
     function removeTag (index) {
         let tag = tags[index];
         tags.splice(index, 1);
@@ -267,6 +326,7 @@ function getTags(array, inputClass, mainInputClass, callback) {
         refreshTags();
     }
 
+    // Refresh tags in tags array
     function refreshTags () {
         let tagsList = [];
         tags.forEach(function (t) {
@@ -275,8 +335,9 @@ function getTags(array, inputClass, mainInputClass, callback) {
         hiddenInput.value = tagsList.join(',');
     }
 
+    // Filter the entered tag
     function filterTag (tag) {
-        return tag.replace(/[^\w -]/g, '').trim().replace(/\W+/g, '+');
+        return tag.replace(/[^\w -]/g, '').trim().replace(/\W+/g, ' ');
     }
 	});
 }
@@ -462,7 +523,7 @@ function showRecipeToUser() {
 // Start your engines 
 function initBot() {
 	greetUser();
-	
+	sendUserMessage();
 }
 
 $(initBot);
