@@ -24,31 +24,10 @@ function botMessage(html) {
 											 );
 	// Add a small delay before showing bot message										 
 	$('.currentMessage').hide();
-	$('.currentMessage').delay(10).show('slide', 10);
+	$('.currentMessage').delay(500).show('slide', 250);
 	$('.currentMessage').removeClass('currentMessage');
 }
 
-
-// * Track user message submit event * //
-function sendUserMessage() {
-
-	// User presses Enter key
-	$('#js-user-message').keypress(event => {
-		if (event.which == 13) {
-
-			// If the 'Send message with Enter' checkbox is selected, message gets sent
-			if ($('#js-checkbox').prop('checked')) {
-				event.preventDefault();
-				$('#js-user-submit').click();
-			}
-		}
-	});
-
-	// User clicks Send button
-	$('#js-user-submit').click(event => {
-		return false;
-	});
-}
 
 // User answer rendering
 function userMessage(input) {
@@ -70,11 +49,11 @@ function greetUser() {
 												<span class="bot-message">
 													Howdy hungry pirate! Captain Cook here. I will help you find a recipe 
 													to try from my extensive cookbook. Just follow the instructions that
-													follow. Arrrright?
+													follow. Arrrright, let's go!
 												</span>
 							        </p>`;
 	botMessage(greetMessage);
-	setTimeout(function(){ instructUser(); }, 1000);
+	setTimeout(function(){ instructUser(); }, 2500);
 }
 
 
@@ -83,10 +62,9 @@ function instructUser() {
 	let secondBotMessage = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 														<span class="bot-message">
-															Please enter keywords that describe the meal you're looking for in the 
-															field below. Typing a comma confirms the entered keyword or phrase. You 
-															can delete tags with Backspace or by clicking the X next to the tag. 
-															Press Enter when you're done or want to skip this part.
+															Please type in keywords that describe the meal you're looking for in the 
+															text field below. You can delete tags with Backspace or by clicking the X 
+															next to the tag. Press Enter when you're done or want to skip this part.
 														</span>
 													</p>`;			        
 	botMessage(secondBotMessage);
@@ -109,8 +87,7 @@ function getAllowedIng() {
 	let askForAllowedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 													  <span class="bot-message">Please enter ingredients to be included 
-														  in the recipe separated with a comma in the text field below or 
-														  press Enter to skip.
+														  in the recipe or just press Enter to skip.
 														</span>
 									        </p>`;
 	botMessage(askForAllowedIng);
@@ -132,8 +109,7 @@ function getExcludedIng() {
 	let askForExcludedIng = `<p class="currentMessage">
 														<span class="bot">Chef Cook:</span>
 													  <span class="bot-message">What about ingredients you don't like? 
-														  Enter them separated with a comma in the textbox below or press 
-														  Enter to skip.
+														  Enter them now or press Enter to skip.
 														</span>
 									        </p>`;
 	botMessage(askForExcludedIng);
@@ -280,19 +256,36 @@ function getTags(callback) {
         let keyCode = e.which || e.keyCode;
         if (keyCode === 13 || keyCode === 188) {
         	e.preventDefault();
-        	enteredTag = mainInput.value;
-        	if ( enteredTag.length > 0 ) {
-	        	addTag(enteredTag);
-	        	mainInput.value = '';
-	        	return tags;
-	        } else if ( enteredTag.length < 1 ) {
-	        	callback();
-	        }
+        	userEntered();
         }
     });
 
+    $('#js-user-submit').off('click')
+											  .on('click', () => {
+	        		event.preventDefault();
+	         		userEntered();
+	        	});
+
     el.appendChild(mainInput);
     el.appendChild(hiddenInput);
+
+
+    // What happens when user enters input
+    function userEntered() {
+    	empty = /^ +$/;
+    	enteredTag = mainInput.value;
+    	if (empty.test(enteredTag)) {
+			  // It has only spaces, or is empty
+			  mainInput.value = '';
+			  return false;
+			} else if ( enteredTag.length > 0 ) {
+      	addTag(enteredTag);
+      	mainInput.value = '';
+      	return tags;
+      } else if ( enteredTag.length < 1 ) {
+      	callback();
+      }
+    }
     
     // Add entered tag before the search input and append/remove it to/from tags array
     function addTag (text) {
@@ -523,7 +516,6 @@ function showRecipeToUser() {
 // Start your engines 
 function initBot() {
 	greetUser();
-	sendUserMessage();
 }
 
 $(initBot);
