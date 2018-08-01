@@ -1,3 +1,5 @@
+
+
 // API credentials
 const API_URL = 'https://api.yummly.com/v1';
 const APP_ID = '0163f367';
@@ -11,7 +13,43 @@ let excludedIng = [];
 let allergyVal;
 let dietVal;
 let recipes = [];
+let userInstructed = false;
+let readyForAllergies = false;
+let readyForDiet = false;
 let searchHasBeenRun = false;
+const botSays = {
+	firstBotMessage : `<p class="currentMessage">
+												<span class="bot">Chef Cook:</span>
+												<span class="bot-message">
+													Ahoy Jack! Greetings from Captain Cook, the infamous Chef of the Black Pearl. 
+													I'll help ye find some tasty recipes!
+												</span>
+							        </p>`,
+	secondBotMessage : `<p class="currentMessage">
+														<span class="bot">Chef Cook:</span>
+														<span class="bot-message">
+															Ok matey, define me some search preferences first. Much obliged!
+														</span>
+													</p>`,
+  gotResultsNotification : `<p class="currentMessage">
+										<span class="bot">Chef Cook:</span>
+										<span class="bot-message">Hang on bucko, I have started the search! 
+										Start over if there's nothing ye fancy in the current results.
+										<button id="js-restart-button" data-restart>START OVER</button>
+										</span>
+									</p>`,
+	noResultsNotification : `<p class="currentMessage">
+										<span class="bot">Chef Cook:</span>
+										<span class="bot-message">Sorry Jack! I have no recipes that match the terms you entered! 
+										<button id="js-restart-button" data-restart>START NEW SEARCH</button>
+										</span>
+									</p>`,
+  restartGreet : `<p class="currentMessage">
+														<span class="bot">Chef Cook:</span>
+														<span class="bot-message">Go on matey, I'm ready to take your order!
+														</span>
+									        </p>`
+}
 
 
 // Bot message rendering 
@@ -25,6 +63,20 @@ function botMessage(html) {
 	// Add a small delay before showing bot message										 
 	$('.currentMessage').hide();
 	$('.currentMessage').delay(500).show('slide', 250);
+	$('.currentMessage').removeClass('currentMessage');
+}
+
+// Bot message when there are results 
+function resultsMessage(html) {
+	// Add bot message to conversation window
+	$('#js-conversation').append(html)
+											// Scroll conversation window to see the last appended message
+											 .scrollTop(
+											 	$('#js-conversation').prop('scrollHeight')
+											 );
+	// Add a small delay before showing bot message										 
+	$('.currentMessage').hide();
+	$('.currentMessage').show();
 	$('.currentMessage').removeClass('currentMessage');
 }
 
@@ -44,55 +96,37 @@ function userMessage(input) {
 
 // Greet user and ask what meal to search
 function greetUser() {
-	let greetMessage = `<p class="currentMessage">
-												<span class="bot">Chef Cook:</span>
-												<span class="bot-message">
-													Howdy hungry pirate! Captain Cook here. I will help you find a recipe 
-													to try from my extensive cookbook. Just follow the instructions that
-													follow. Arrrright, let's go!
-												</span>
-							        </p>`;
-	botMessage(greetMessage);
-	setTimeout(function(){ instructUser(); }, 2500);
+	botMessage(botSays.firstBotMessage);
+	setTimeout(function(){ 
+		botMessage(botSays.secondBotMessage); 
+		userInstructed = true;
+	}, 4000);
+	setTimeout(function(){ 
+		if (userInstructed) {
+			$('#user-input').css('display', 'block');
+			$('.main-input').focus().attr('placeholder', 'Type in desired meal or skip with \'Enter\' or \'Send\'');
+		}
+  }, 4750);
+	getMeal(getAllowedIng);
 }
 
-
-// Tell the user how to 
-function instructUser() {
-	let secondBotMessage = `<p class="currentMessage">
-														<span class="bot">Chef Cook:</span>
-														<span class="bot-message">
-															Please type in keywords that describe the meal you're looking for in the 
-															text field below. You can delete tags with Backspace or by clicking the X 
-															next to the tag. Press Enter when you're done or want to skip this part.
-														</span>
-													</p>`;			        
-	botMessage(secondBotMessage);
-	getTags(getAllowedIng);
-	$('.main-input').focus();
-}
 
 
 // Ask what ingredients are allowed
 function getAllowedIng() {
 	if (tags.length >= 1) {
-		searchTerms = tags.map(item => item.text).join().replace(/\W+/g, '+');
-		let showSearchTerms = tags.map(item => item.text).join(' ');
+		searchTerms = tags.join().replace(/\W+/g, '+');
+		let showSearchTerms = tags;
 		userMessage(showSearchTerms);
 		$('.tags-input').empty();
 		tags = [];
 	} else {
+		userMessage('Aah, me skipped the meal! Ain\'t that ironic...');
 		$('.tags-input').empty();
 	}
-	let askForAllowedIng = `<p class="currentMessage">
-														<span class="bot">Chef Cook:</span>
-													  <span class="bot-message">Please enter ingredients to be included 
-														  in the recipe or just press Enter to skip.
-														</span>
-									        </p>`;
-	botMessage(askForAllowedIng);
+	//botMessage(botSays.askForAllowedIng);
 	getTags(getExcludedIng);
-	$('.main-input').focus();
+	$('.main-input').focus().attr('placeholder', 'Type in allowed ingredients or skip with \'Enter\' or \'Send\'');
 }
 
 
@@ -104,17 +138,13 @@ function getExcludedIng() {
 		$('.tags-input').empty();
 		tags = [];
 	} else {
+		userMessage('Yarr, I just could not leave out any of me hearties.');
 		$('.tags-input').empty();
 	}
-	let askForExcludedIng = `<p class="currentMessage">
-														<span class="bot">Chef Cook:</span>
-													  <span class="bot-message">What about ingredients you don't like? 
-														  Enter them now or press Enter to skip.
-														</span>
-									        </p>`;
-	botMessage(askForExcludedIng);
+	//botMessage(botSays.askForExcludedIng);
 	getTags(checkForAllergies);
-	$('.main-input').focus();
+	$('.main-input').focus().attr('placeholder', 'Type in excluded ingredients or skip with \'Enter\' or \'Send\'');
+	readyForAllergies = true;
 }
 
 
@@ -127,73 +157,82 @@ function checkForAllergies() {
 		$('.tags-input').empty();
 		tags = [];
 	} else {
+		userMessage('No hornswaggle I tell ya, me eats it all!');
 		$('.tags-input').empty();
 	} 
-	let checkAllergies = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Thanks, but what about allergies? 
-										Press NEXT when you're done or no allergies apply.<br>
-											<span id="checkboxlist">
-											  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
-										    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
-										    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
-										    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
-										    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
-										    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
-										    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
-										    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
-										    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
-										    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
-										    <input type="button" value="NEXT" class="allergyButton">
-									    </span>
-								    </span>
-									</p>`;
-	botMessage(checkAllergies);
-	getCheckedValues('allergy', allergyVal, true, checkForDiet);
-
+	$('#user-input').empty().html(`<div class="checkboxheader">Avast matey, do you have allergies? When yer
+																	done choosing or no allergies apply press 'Enter' or 'Send'.<br>
+																
+																<form id="js-user-input">
+																  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
+															    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
+															    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
+															    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
+															    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
+															    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
+															    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
+															    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
+															    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
+															    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
+															    <button id="js-user-submit" type="submit" class="allergyButton">Send</button>
+														    </form>
+														    </div>`);
+	
+	//botMessage(botSays.checkAllergies);
+	if (readyForAllergies) {
+		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
+		readyForDiet = true;
+	} else {
+		return false;
+	}
+	readyForAllergies = false;
 }
 
 
 
 // Ask user for diet preferences 
 function checkForDiet() {
-	let checkDiet = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Grrreat but 
-										are you on a diet? Press NEXT when you're
-										done or no diets apply.<br>
-											<span id="checkboxlist">
-											  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
-										    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
-										    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
-										    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
-										    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
-										    <input type="button" value="NEXT" class="dietButton">
-									    </span>
-										</span>
-									</p>`;
-	botMessage(checkDiet);
-	getCheckedValues('diet', dietVal, false, startingSearch);
+	if (allergyVal.length > 0) {
+		userMessage(allergyVal);
+	} else {
+		userMessage('No men blown down today.');
+	}
+	$('#user-input').empty().html(`<div class="checkboxheader">Aye but are you on a diet? When yer
+																	done choosing or no diets apply press 'Enter' or 'Show results'.<br>
+																
+																<form id="js-user-input">
+																  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
+															    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
+															    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
+															    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
+															    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
+															    <button id="js-user-submit" type="submit" class="dietButton ">Show results</button>
+														    </form>
+														    </div>`);
+	//botMessage(botSays.checkDiet);''
+	
+	if (readyForDiet) {
+		getCheckedValues('.diet', dietVal, false, startingSearch);
+	} else {
+		return false;
+	}
+	readyForDiet = false;
 }
 
 
 
 // Notify the user that search has been started 
 function startingSearch() {
+	if (dietVal.length > 0) {
+		userMessage(dietVal);
+	} else {
+		userMessage('Oh, thy magic bowel!');
+	}
 	if (searchHasBeenRun) {
 		$('#js-results').empty();
 	}
-	let startSearchNotification = `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Thanks for your patience, hungry stranger.
-										I have started the search and you'll see the results below in a jiffy
-										If there's nothing you fancy in the current results, press 'Start Over' 
-										to do new search.
-										<button id="js-restart-button" data-restart>START OVER</button>
-										</span>
-									</p>`;
-	botMessage(startSearchNotification);
 	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
+	
 	$('#user-input').css('display', 'none');
 	userRestart();
 	searchHasBeenRun = true;
@@ -203,30 +242,94 @@ function startingSearch() {
 
 // Clear conversation and restart app 
 function userRestart() {
+	// When user presses Enter or Comma during entering of the search details
+    document.addEventListener('keydown', function (e) {
+        let keyCode = e.which || e.keyCode;
+        if (keyCode === 13) {
+        	e.preventDefault();
+        } 
+
+    });
 	document.addEventListener('click', function(event) {
 
     if (event.target.dataset.restart != undefined) { 
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
-    	$('#user-input').css('display', 'block');
-			let restartGreet = `<p class="currentMessage">
-														<span class="bot">Chef Cook:</span>
-														<span class="bot-message">OK, let's search for something else. Enter
-														 what meal you're looking for in the text field below. Press Enter when you're 
-														 done or want to skip this part.
-														</span>
-									        </p>`;
-			botMessage(restartGreet);
+    	$('#user-input').empty().html(`<form id="js-user-input">
+																			<fieldset>
+																				<div class="tags-input" data-name="tags-input">
+																				</div>
+																				<br>
+																				<input id="js-checkbox" type="checkbox" name="checkbox" checked="">
+																				<label for="checkbox">
+																					Send message with Enter
+																				</label>
+																				<br>
+																				<button id="js-user-submit" type="submit">Send</button>
+																			</fieldset>
+																		</form>`);
+			botMessage(botSays.restartGreet);
 			searchTerms = [];
 			allowedIng = [];
 			excludedIng = [];
 			allergyVal;
 			dietVal;
 			recipes = [];
-			getTags(getAllowedIng);
+			let readyForAllergies = false;
+			let readyForDiet = false;
+			getMeal(getAllowedIng);
+			$('#user-input').css('display', 'block');
+			$('.main-input').focus().attr('placeholder', 'Type in desired meal or press \'Enter\' to skip');
     }
-  });
+  }, false);
 	
+}
+
+
+// Get meal from user input
+function getMeal(callback) {
+	const tagsInput = document.getElementsByClassName('tags-input');
+	let mainInput = document.createElement('input');
+
+  mainInput.setAttribute('type', 'text');
+  mainInput.classList.add('main-input');
+
+	$(tagsInput).append(mainInput);
+
+	// When user presses Enter or Comma during entering of the search details
+    mainInput.addEventListener('keydown', function (e) {
+        let keyCode = e.which || e.keyCode;
+        if (keyCode === 13) {
+        	e.preventDefault();
+        	userEnteredMeal();
+        } 
+
+    });
+
+    $('#js-user-submit').off('click')
+											  .on('click', (e) => {
+								        		e.preventDefault();
+								        		userEnteredMeal();
+								        	});
+
+		// What happens when user enters meal
+    function userEnteredMeal() {
+    	let emptyRegExp = /^ +$/;
+    	let enteredMeal = mainInput.value;
+    	if (userInstructed) {
+	    	if (emptyRegExp.test(enteredMeal)) {
+				  mainInput.value = '';
+				} else if ( enteredMeal.length > 0 ) {
+	      	tags.push(enteredMeal);
+	      	mainInput.value = '';
+	      	callback();
+	      	return tags;
+	      } else if ( enteredMeal.length < 1 ) {
+	      	callback();
+	      }
+	    }
+    }
+
 }
 
 
@@ -236,7 +339,7 @@ function getTags(callback) {
     let hiddenInput = document.createElement('input'),
         mainInput = document.createElement('input'),
         enteredTags = [];
-    
+
     hiddenInput.setAttribute('type', 'hidden');
     hiddenInput.setAttribute('name', el.getAttribute('data-name'));
 
@@ -257,34 +360,36 @@ function getTags(callback) {
         if (keyCode === 13 || keyCode === 188) {
         	e.preventDefault();
         	userEntered();
-        }
+        } 
+
     });
 
     $('#js-user-submit').off('click')
-											  .on('click', () => {
-	        		event.preventDefault();
-	         		userEntered();
-	        	});
+											  .on('click', (e) => {
+								        		e.preventDefault();
+								         		userEntered();
+								        	});
 
     el.appendChild(mainInput);
     el.appendChild(hiddenInput);
 
 
-    // What happens when user enters input
+    // What happens when user enters text
     function userEntered() {
-    	empty = /^ +$/;
-    	enteredTag = mainInput.value;
-    	if (empty.test(enteredTag)) {
-			  // It has only spaces, or is empty
-			  mainInput.value = '';
-			  return false;
-			} else if ( enteredTag.length > 0 ) {
-      	addTag(enteredTag);
-      	mainInput.value = '';
-      	return tags;
-      } else if ( enteredTag.length < 1 ) {
-      	callback();
-      }
+    	let emptyRegExp = /^ +$/;
+    	let enteredTag = mainInput.value;
+    	if (userInstructed) {
+	    	if (emptyRegExp.test(enteredTag)) {
+				  mainInput.value = '';
+				} else if ( enteredTag.length > 0 ) {
+	      	addTag(enteredTag);
+	      	mainInput.setAttribute('placeholder', 'Type another tag or use \'Enter\' to move forward');
+	      	mainInput.value = '';
+	      	return tags;
+	      } else if ( enteredTag.length < 1 ) {
+	      	callback();
+	      }
+	    }
     }
     
     // Add entered tag before the search input and append/remove it to/from tags array
@@ -307,7 +412,6 @@ function getTags(callback) {
         tags.push(tag);
 
         el.insertBefore(tag.element, mainInput);
-
         refreshTags();
     }
 
@@ -339,27 +443,45 @@ function getTags(callback) {
 
 // Get checked values 
 function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
-	// Click Next event listener
-	$('#js-conversation').off('click', '.' + targetClass + 'Button')
-											 .on('click', '.' + targetClass + 'Button', () => {
+	if (readyForAllergies || readyForDiet) {
 		// Declare variables to store checked item data
-		let targetChecked = '.' + targetClass + ':checked';
+		let targetChecked = targetClass + ':checked';
 		let checkedArray = [];
-		// Loop through checked items and add them to array
-		$(targetChecked).each(function() {
-			checkedArray.push($(this).val().toLowerCase().replace(/ /g, '+'));
-		});
-		// Assign the array to function parameter
-		checkedValues = checkedArray;
-		// Assign the checked values to the parameter in question
-		if (isAllergy) {
-			allergyVal = checkedValues;
-		} else {
-			dietVal = checkedValues;
+		
+    $(document).off().on('keypress',  function (e) {
+        let keyCode = e.which || e.keyCode;
+        if (keyCode === 13) {
+        	e.preventDefault();
+        	lookForCheckedValues();
+        } 
+
+    });
+
+    $('#js-user-submit').off('click')
+											  .on('click', (e) => {
+											  		e.preventDefault();
+								         		lookForCheckedValues();
+								        	});
+
+
+
+		function lookForCheckedValues() {
+			// Loop through checked items and add them to array
+			$(targetChecked).each(function() {
+				checkedArray.push($(this).val().toLowerCase().replace(/ /g, '+'));
+			});
+			// Assign the array to function parameter
+			checkedValues = checkedArray;
+			// Assign the checked values to the parameter in question
+			if (isAllergy) {
+				allergyVal = checkedValues;
+			} else {
+				dietVal = checkedValues;
+			}
+			// Init the callback function
+			callback();
 		}
-		// Init the callback function
-		callback();
-	});
+	}
 }
 
 
@@ -431,25 +553,29 @@ function renderResult(result) {
 							<p>${result.ingredients}</p>
 							<hr>
 			 			</a>`);
-	
 }
 
 
 
 // Display the results to user 
 function displayResults(data) {
-	// Loop through the results and render them 
-	data.matches.map( (item, index) => renderResult(item) );
-	// Add images from recipes array
-	setTimeout(function() {
-		for (let i = 0; i < recipes.length; i++) {
-			$('#js-results')
-				.find(`#${recipes[i].recipeData.id} img`)
-				.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
-		}
-	}, 1500);
-	// Open recipe in a lightbox after user click
-	showRecipeToUser();
+	if (data.matches.length > 0) {
+		resultsMessage(botSays.gotResultsNotification);
+		// Loop through the results and render them 
+		data.matches.map( (item, index) => renderResult(item) );
+		// Add images from recipes array
+		setTimeout(function() {
+			for (let i = 0; i < recipes.length; i++) {
+				$('#js-results')
+					.find(`#${recipes[i].recipeData.id} img`)
+					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
+			}
+		}, 1500);
+		// Open recipe in a lightbox after user click
+		showRecipeToUser();
+	} else {
+		resultsMessage(botSays.noResultsNotification);
+	}
 }
 
 
@@ -484,9 +610,7 @@ function showRecipeToUser() {
 														<span>Rating: ${recipeDetails.rating}</span>
 													</p>
 													<p>${recipeDetails.ingredients}</p>
-													<p>Visit original source by <b>${recipeDetails.sourceName}</b> 
-													for detailed instructions 
-													<a href="${recipeDetails.sourceUrl}" target="_blank">here</a>.
+													<p>For detailed instructions visit <a href="${recipeDetails.sourceUrl}" target="_blank">${recipeDetails.sourceName}</a>.
 												</p>`
 		// If lightbox exists
 		if ($('#lightbox').length > 0) { 
@@ -519,3 +643,4 @@ function initBot() {
 }
 
 $(initBot);
+
