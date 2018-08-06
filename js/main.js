@@ -18,52 +18,76 @@ let readyForAllergies = false;
 let readyForDiet = false;
 let searchHasBeenRun = false;
 const botSays = {
-	firstBotMessage : `<p class="currentMessage">
-												<span class="bot">Chef Cook:</span>
-												<span class="bot-message">
-													Ahoy Jack! Greetings from Captain Cook, the infamous Chef of the Black Pearl. 
-													I'll help ye find some tasty recipes!
-												</span>
-							        </p>`,
-	secondBotMessage : `<p class="currentMessage">
-														<span class="bot">Chef Cook:</span>
-														<span class="bot-message">
-															Ok matey, define me some search preferences first. Much obliged!
-														</span>
-													</p>`,
-  gotResultsNotification : `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Hang on bucko, I have started the search! 
-										Start over if there's nothing ye fancy in the current results.
-										<button id="js-restart-button" data-restart>START OVER</button>
-										</span>
-									</p>`,
-	noResultsNotification : `<p class="currentMessage">
-										<span class="bot">Chef Cook:</span>
-										<span class="bot-message">Sorry Jack! I have no recipes that match the terms you entered! 
-										<button id="js-restart-button" data-restart>START NEW SEARCH</button>
-										</span>
-									</p>`,
-  restartGreet : `<p class="currentMessage">
-														<span class="bot">Chef Cook:</span>
-														<span class="bot-message">Go on matey, I'm ready to take your order!
-														</span>
-									        </p>`
+										loader : `<div class='current-message message'>
+															 <div class="bot-icon">
+					 												<img src='images/pirate.png'>
+					 											</div>
+					 											<p class="bot-message">
+					 											  <img src="images/typing.svg">
+					 											</p>
+															</div>`,
+					 firstBotMessage : `<div class="bot-icon">
+				 												<img src='images/pirate.png'>
+				 											</div>
+				 											<p class="bot-message">
+																	Ahoy Jack!
+																	<br>Greetings from Captain Cook! 
+																	I'll help ye find some tasty recipes!
+													    </p>`,
+					secondBotMessage : `<div class="bot-icon">
+				 												<img src='images/pirate.png'>
+				 											</div>
+				 											<p class="bot-message">
+																Ok matey, define the five search preferences 
+																that follow. Much obliged!
+														  </p>`,
+	  gotResultsNotification : `<div class='current-message message'>
+		  													<div class="bot-icon">
+					 												<img src='images/pirate.png'>
+					 											</div>
+					 											<p class="bot-message">
+																	Me started the search and result will appear below. Ye can 
+																	start over if there's nothing ye fancy on the list.
+																	<button id="js-restart-button" data-restart>
+																		START OVER
+																	</button>
+																</p>
+															</div>`,
+     noResultsNotification : `<div class='current-message message'>
+     														<div class="bot-icon">
+					 												<img src='images/pirate.png'>
+					 											</div>
+					 											<p class="bot-message">
+	     				  									Sorry Jack! I have no recipes that match the terms you entered! 
+						  										<button id="js-restart-button" data-restart>
+					  												START NEW SEARCH
+				  												</button>
+	      												</p>
+	      											</div>`,
+						  restartGreet : `<div class='current-message message'>
+					 											<div class="bot-icon">
+					 												<img src='images/pirate.png'>
+					 											</div>
+					 											<p class="bot-message">
+																 Go on matey, I'm ready to take your order!
+															  </p>
+															</div>`
 }
 
 
 // Bot message rendering 
-function botMessage(html) {
+function botMessage(text1, text2, timeout) {
 	// Add bot message to conversation window
-	$('#js-conversation').append(html)
+	$('#js-conversation').append(text1)
 											// Scroll conversation window to see the last appended message
 											 .scrollTop(
 											 	$('#js-conversation').prop('scrollHeight')
 											 );
-	// Add a small delay before showing bot message										 
-	$('.currentMessage').hide();
-	$('.currentMessage').delay(500).show('slide', 250);
-	$('.currentMessage').removeClass('currentMessage');
+	// Add a small delay before showing bot message	
+	setTimeout(function(){ 									 
+		$('.current-message').html(text2);
+		$('.current-message').removeClass('current-message');
+	}, timeout);
 }
 
 // Bot message when there are results 
@@ -75,38 +99,51 @@ function resultsMessage(html) {
 											 	$('#js-conversation').prop('scrollHeight')
 											 );
 	// Add a small delay before showing bot message										 
-	$('.currentMessage').hide();
-	$('.currentMessage').show();
-	$('.currentMessage').removeClass('currentMessage');
+	$('.current-message').hide();
+	$('.current-message').show();
+	$('.current-message').removeClass('current-message');
 }
 
 
 // User answer rendering
 function userMessage(input) {
 	$('#js-conversation')
-					.append(`<p>
-										<span class="username">You:</span>
-										<span class="user-message">${input}</span>
-									</p>`)
+					.append(`<div class="message">
+										<div class="user-icon">
+											<img src='images/skull.png' width='40px'>
+										</div>
+										<p class="user-message">
+											${input}
+										</p>
+									</div>`)
 					// Scroll conversation window to see the last appended message
 					.scrollTop($('#js-conversation').prop('scrollHeight'));
 }
 
 
+// Userflow icons and instructions rendering
+function userFlow(imgSrc, instructions) {
+	$('#user-input').prepend(`<div id='user-flow'>
+															<img src='${imgSrc}'>
+													  	<p>${instructions}</p>
+													 </div>`);
+}
+
 
 // Greet user and ask what meal to search
 function greetUser() {
-	botMessage(botSays.firstBotMessage);
+	botMessage(botSays.loader, botSays.firstBotMessage, 3000);
 	setTimeout(function(){ 
-		botMessage(botSays.secondBotMessage); 
+		botMessage(botSays.loader, botSays.secondBotMessage, 3200); 
 		userInstructed = true;
-	}, 4000);
+	}, 3700);
 	setTimeout(function(){ 
 		if (userInstructed) {
 			$('#user-input').css('display', 'block');
-			$('.main-input').focus().attr('placeholder', 'Type in desired meal or skip with \'Enter\' or \'Send\'');
+			$('.main-input').focus().attr('placeholder', 'Type desired meal here...');
 		}
-  }, 4750);
+  }, 6800);
+  userFlow('images/meal.jpg', 'Type desired meal below or skip with \'Next\'');
 	getMeal(getAllowedIng);
 }
 
@@ -124,9 +161,10 @@ function getAllowedIng() {
 		userMessage('Aah, me skipped the meal! Ain\'t that ironic...');
 		$('.tags-input').empty();
 	}
-	//botMessage(botSays.askForAllowedIng);
+	$('#user-flow').remove();
+	userFlow('images/allowed.jpg', 'Type allowed ingredients below or skip with \'Next\'');
 	getTags(getExcludedIng);
-	$('.main-input').focus().attr('placeholder', 'Type in allowed ingredients or skip with \'Enter\' or \'Send\'');
+	$('.main-input').focus().attr('placeholder', 'Type allowed ingredients here...');
 }
 
 
@@ -141,9 +179,10 @@ function getExcludedIng() {
 		userMessage('Yarr, I just could not leave out any of me hearties.');
 		$('.tags-input').empty();
 	}
-	//botMessage(botSays.askForExcludedIng);
+	$('#user-flow').remove();
+	userFlow('images/excluded.jpg', 'Type excluded ingredients below or skip with \'Next\'');
 	getTags(checkForAllergies);
-	$('.main-input').focus().attr('placeholder', 'Type in excluded ingredients or skip with \'Enter\' or \'Send\'');
+	$('.main-input').focus().attr('placeholder', 'Type excluded ingredients here...');
 	readyForAllergies = true;
 }
 
@@ -160,10 +199,8 @@ function checkForAllergies() {
 		userMessage('No hornswaggle I tell ya, me eats it all!');
 		$('.tags-input').empty();
 	} 
-	$('#user-input').empty().html(`<div class="checkboxheader">Avast matey, do you have allergies? When yer
-																	done choosing or no allergies apply press 'Enter' or 'Send'.<br>
-																
-																<form id="js-user-input">
+	$('#user-input').empty().html(`<div class="checkboxheader">
+																<form id="js-user-input" class="checkboxlist">
 																  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
 															    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
 															    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
@@ -174,11 +211,11 @@ function checkForAllergies() {
 															    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
 															    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
 															    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
-															    <button id="js-user-submit" type="submit" class="allergyButton">Send</button>
+															    <button id="js-user-submit" type="submit" class="allergyButton">Next</button>
 														    </form>
 														    </div>`);
-	
-	//botMessage(botSays.checkAllergies);
+	$('#user-flow').remove();
+	userFlow('images/allergy.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
 	if (readyForAllergies) {
 		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
 		readyForDiet = true;
@@ -197,10 +234,8 @@ function checkForDiet() {
 	} else {
 		userMessage('No men blown down today.');
 	}
-	$('#user-input').empty().html(`<div class="checkboxheader">Aye but are you on a diet? When yer
-																	done choosing or no diets apply press 'Enter' or 'Show results'.<br>
-																
-																<form id="js-user-input">
+	$('#user-input').empty().html(`<div class="checkboxheader">
+																<form id="js-user-input" class="checkboxlist">
 																  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
 															    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
 															    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
@@ -209,7 +244,8 @@ function checkForDiet() {
 															    <button id="js-user-submit" type="submit" class="dietButton ">Show results</button>
 														    </form>
 														    </div>`);
-	//botMessage(botSays.checkDiet);''
+	$('#user-flow').remove();
+	userFlow('images/diet.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Show results\'');
 	
 	if (readyForDiet) {
 		getCheckedValues('.diet', dietVal, false, startingSearch);
@@ -242,17 +278,18 @@ function startingSearch() {
 
 // Clear conversation and restart app 
 function userRestart() {
-	// When user presses Enter or Comma during entering of the search details
-    document.addEventListener('keydown', function (e) {
+  document.addEventListener('keydown', function (e) {
         let keyCode = e.which || e.keyCode;
         if (keyCode === 13) {
         	e.preventDefault();
         } 
 
     });
-	document.addEventListener('click', function(event) {
+	document.addEventListener('click', function(e) {
 
-    if (event.target.dataset.restart != undefined) { 
+    if (e.target.dataset.restart != undefined) { 
+    	$('#results h2').remove();
+    	$('#js-results').empty();
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
     	$('#user-input').empty().html(`<form id="js-user-input">
@@ -265,7 +302,7 @@ function userRestart() {
 																					Send message with Enter
 																				</label>
 																				<br>
-																				<button id="js-user-submit" type="submit">Send</button>
+																				<button id="js-user-submit" type="submit">Next</button>
 																			</fieldset>
 																		</form>`);
 			botMessage(botSays.restartGreet);
@@ -277,9 +314,10 @@ function userRestart() {
 			recipes = [];
 			let readyForAllergies = false;
 			let readyForDiet = false;
+			userFlow('images/meal.jpg', 'Type desired meal below or skip with \'Enter\' or \'Next\'');
 			getMeal(getAllowedIng);
 			$('#user-input').css('display', 'block');
-			$('.main-input').focus().attr('placeholder', 'Type in desired meal or press \'Enter\' to skip');
+			$('.main-input').focus().attr('placeholder', 'Type desired meal here...');
     }
   }, false);
 	
@@ -542,17 +580,18 @@ function renderResult(result) {
   let mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes") : "";
   let cookingTime =  hDisplay + mDisplay; 
   // Append recipe to DOM
-  $('#js-results')
-  	.append(`<a class="js-result" id="${result.id}">
-							<img src="images/Loading_icon.gif">
-							<h2>${result.recipeName}</h2>
-							<p>
-								<span>Rating: ${result.rating} </span>
-								<span>Cooking time: ${cookingTime}</span>
-							</p>
-							<p>${result.ingredients}</p>
-							<hr>
-			 			</a>`);
+  $('#js-results').append(`<a class="js-result col-6" id="${result.id}">
+							  						<div>
+															<img src="images/Loading_icon.gif">
+															<h3>${result.recipeName}</h3>
+															<div class="result-info">
+																<p>Rating: ${result.rating}</p>
+																<p>Cooking time: ${cookingTime}</p>
+																<p>Ingredients:</p>
+																<ul class="ingredients">${ingredientsList(result.ingredients)}</ul>
+															</div>
+														</div>
+										 			 </a>`);
 }
 
 
@@ -561,6 +600,8 @@ function renderResult(result) {
 function displayResults(data) {
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
+		$('#results h2').remove();
+		$('#results').prepend(`<h2>Results</h2>`);
 		// Loop through the results and render them 
 		data.matches.map( (item, index) => renderResult(item) );
 		// Add images from recipes array
@@ -570,15 +611,27 @@ function displayResults(data) {
 					.find(`#${recipes[i].recipeData.id} img`)
 					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
 			}
-		}, 1500);
+		}, 2200);
 		// Open recipe in a lightbox after user click
 		showRecipeToUser();
 	} else {
+		$('#results h2').remove();
+		$('#results').prepend(`<h2> No Results</h2>`);
 		resultsMessage(botSays.noResultsNotification);
+
 	}
 }
 
-
+// Return ingredients ul list items
+function ingredientsList(ingredientArray) {
+	let resultIngList = '';
+  for (let i = 0; i < ingredientArray.length; i++) {
+  	resultIngList += '<li class="ingredients-item">';
+  	resultIngList += ingredientArray[i];
+  	resultIngList += '</li>';
+  }
+  return resultIngList;
+}
 
 // Display the recipe user selects 
 function showRecipeToUser() {
@@ -590,7 +643,7 @@ function showRecipeToUser() {
 		const recipeDetails = {
 													name: recipeClicked.recipeData.name,
 													image: recipeClicked.recipeData.images[0].hostedLargeUrl,
-													course: recipeClicked.recipeData.attributes.course,
+													course: recipeClicked.recipeData.attributes.course.join(', '),
 													rating: recipeClicked.recipeData.rating,
 													servings: recipeClicked.recipeData.yield,
 													totalTime: recipeClicked.recipeData.totalTime,
@@ -601,7 +654,7 @@ function showRecipeToUser() {
 													yummlyUrl: recipeClicked.recipeData.attribution.url
 												}
 		// Lightbox recipe details html
-		const contentHtml = `<p id="closeLightbox">[X] Close</p>
+		const contentHtml = `<p id="closeLightbox">X</p>
 													<img src="${recipeDetails.image}">
 													<h2>${recipeDetails.name}</h2>
 													<p>Course: ${recipeDetails.course}</p>
@@ -609,12 +662,15 @@ function showRecipeToUser() {
 														<span>Cooking time: ${recipeDetails.totalTime} </span>
 														<span>Rating: ${recipeDetails.rating}</span>
 													</p>
-													<p>${recipeDetails.ingredients}</p>
-													<p>For detailed instructions visit <a href="${recipeDetails.sourceUrl}" target="_blank">${recipeDetails.sourceName}</a>.
+													<ul>
+														<p>Ingredients:</p>
+														${ingredientsList(recipeDetails.ingredients)}
+													</ul>
+													<p class="source">For detailed instructions visit <a href="${recipeDetails.sourceUrl}" target="_blank">${recipeDetails.sourceName}</a>.
 												</p>`
 		// If lightbox exists
 		if ($('#lightbox').length > 0) { 
-			$('#content').html(contentHtml);
+			$('#lightbox-content').html(contentHtml);
 			// Show lightbox window 
 			$('#lightbox').show();
 		// If lightbox does not exist
@@ -622,7 +678,7 @@ function showRecipeToUser() {
 			//create HTML markup for lightbox window
 			const lightbox = 
 					`<div id="lightbox">
-						<div id="content">${contentHtml}</div>	
+						<div id="lightbox-content">${contentHtml}</div>	
 					</div>`;
 			//insert lightbox HTML into page
 			$('body').append(lightbox);

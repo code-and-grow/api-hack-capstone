@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
 
 	<title>Captain Cook's Recipe Finder</title>
 
@@ -10,11 +11,14 @@
   <!-- Styles -->
   <link rel="stylesheet" type="text/css" href="css/main.css">
 
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Lato|MedievalSharp" rel="stylesheet">
+
 </head>
 <body>
 
 	<header>
-		<h1>Talk to the Chef</h1>
+		<h1>Captain Cook's Recipe Finder</h1>
 	</header>
 	
 	<main>
@@ -32,12 +36,14 @@
 						Send message with Enter
 					</label>
 					<br>
-					<button id="js-user-submit" type="submit">Send</button>
+					<button id="js-user-submit" type="submit">Next</button>
 				</fieldset>
 			</form>
 		</section>
 
-		<section id="js-results"></section>
+		<section id="results">
+			<div id="js-results" class="row"></div>
+		</section>
 
 	</main>
 

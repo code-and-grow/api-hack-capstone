@@ -1,18 +1,30 @@
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'MedievalSharp', cursive;
+}
+
 body {
 	height: 100vh;
-	width: 100%;
+	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
-	padding-top: 50px;
 	line-height: 1.65;
-	font-family: sans-serif;
+	background-color: #131B26;
+	font-family: 'Lato', sans-serif;
 }
 
 header,
 main {
-	width: 760px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+header h1 {
+	text-align: center;
+	font-size: 2.0rem;
+	line-height: 1.2;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	color: #FFF07C;
 }
 
 textarea {
@@ -35,7 +47,7 @@ input[type="submit"] {
 	background-color: black;
 	color: white;
 	border-radius: 4px;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	text-transform: uppercase;
 }
 
@@ -46,141 +58,117 @@ input[type="submit"]:hover {
 	color: white;
 }
 
-/*input[type="button"] {
-	font-size: 1.2rem;
-	color: white;
-	background-color: red;
-	padding: 5px;
-	cursor: pointer;
-	display: inline-block;
-	width: 100%;
-
-}*/
-
-#checkboxlist label {
-	white-space: nowrap;
-	background-color: white;
-	color: black;
-	padding: 5px;
-	border-radius: 4px;
-	margin: 1px;
-}
-
-#checkboxlist label:hover {
-	background-color: blue;
-	color: white;
-}
-
-#checkboxlist input[type=checkbox] {
-  
-}
-
 #js-conversation {
-	min-height: 300px;
-	border-radius: 4px;
-	border: 1px solid #656565;
-	padding: 5px;
+	max-height: 350px;
+	max-width: 740px;
+	margin: 0 auto;
+	padding: 10px;
+	background-color: #333;
+	border: 1px solid white;
+	border-radius: .4em;
 	overflow: scroll;
+	display: flex;
+	flex-direction: column;
 }
 
-/*#user-input {
-	display: none;
-}*/
-
-.username {	
-	display: inline-block;
-	width: 22%;
-  padding: 0.5% 0%;
-	margin: 0% 0.75%;
-	font-size: 1.2rem;
-	text-align: right;
-	background-color: white;
-	border-radius: 4px;
-	border: 1px solid white;
-	color: black;
-	vertical-align: top;
+.message {
+	padding: 5px 0;
 }
 
+.bot-message,
 .user-message {
+	display: table;
 	position: relative;
-	display: inline-block;
-	width: 68%;
-  padding: 0.5% 0%;
-  margin: 0% 0.75% 0% 0%;
-	border-radius: 4px;
-	border: 1px solid white;
-	font-size: 1.2rem;
-	background-color: white;
-	color: black;
-}
-
-.bot {	
-	display: inline-block;
-	width: 20%;
-  padding: 0.5% 0% 0.5% 2%;
-	margin: 0.75%;
-	font-size: 1.2rem;
-	text-align: right;
-	background-color: white;
-	border-radius: 4px;
-	border: 1px solid white;
-	color: black;
-	vertical-align: top;
+	border-radius: .4em;
+	font-size: 0.9rem;
+	color: #fff;
+	padding: 7px 15px 10px;
+	margin: 0 auto;
 }
 
 .bot-message {
-	position: relative;
-	display: inline-block;
-	width: 70%;
-  padding: 0.5% 2% 0.5% 2%;
-  margin: 0.75% 0.75% 0.75% 0%;
-	border-radius: 4px;
-	border: 1px solid #676767;
-	font-size: 1.2rem;
-	background-color: #676767;
-	color: white;
+	font-size: 0.9rem;
+	background: #564D65;
+	text-align: left;
+	margin-left: 75px;
+}
+
+.bot-message:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 20px;
+	width: 0;
+	height: 0;
+	border: 1em solid transparent;
+	border-right-color: #564D65;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -0.5em;
+	margin-left: -1em;
+}
+
+.bot-icon,
+.user-icon {
+	padding-top: 2px;
+}
+
+.bot-icon {
+	float: left;
+	padding-left: 8px;
+}
+
+.user-icon {
+	float: right;
+	margin-bottom: -65px;
+	padding-right: 8px;
+}
+
+.bot-icon img,
+.user-icon img {
+	width: 40px;
+}
+
+.user-message {
+	float: right;
+	background: #2CDA9D;
+	text-align: right;
+	margin-right: 75px;
+}
+
+.user-message:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 20px;
+	width: 0;
+	height: 0;
+	border: 1em solid transparent;
+	border-left-color: #2CDA9D;
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -0.5em;
+	margin-right: -1em;
 }
 
 #user-input {
-	margin-top: 10px;
-	padding: 10px;
+	max-width: 740px;
+	margin: 15px auto;
+	padding: 20px;
 	display: none;
-	border: 3px solid red;
+	border-radius: .4em;
+	background-color: #fff;
 }
 
-.js-result {
+#user-flow img {
 	display: block;
-	width: 360px;
-	float: left;
-	margin: 10px;
-	cursor: pointer;
+	margin: 0 auto;
+	width: 100%;
+  height: auto;
 }
 
-.no-results {
-	text-align: center;
-	padding: 20px;
-}
-
-#lightbox {
-    position:fixed; /* keeps the lightbox window in the current viewport */
-    top:0; 
-    left:0; 
-    width:100%; 
-    height:100%; 
-    background: rgba(0,0,0,.7);; 
-}
-
-#content {
-	padding: 20px;
-	margin-left: auto;
-  margin-right: auto;
-	width: 80%;
-	background: #fff;
-}
-
-#closeLightbox {
-	font-weight: bold;
-	cursor: pointer;
+#user-flow p::before {
+	content: 'Instructions: ';
 }
 
 .tags-input {
@@ -198,6 +186,7 @@ input[type="submit"]:hover {
     transition: all 0.1s linear;
     cursor: pointer;
 }
+
 .tag:hover {
     background-color: #3af;
     color: white;
@@ -210,16 +199,18 @@ input[type="submit"]:hover {
     transform: scale(1.4);
     margin-left: 0.75em;
 }
+
 .tag .close:hover::after {
     color: red;
 }
+
 .main-input {
 	display: inline-block;
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-radius: 4px;
   border: 1px solid #333;
-  padding: 0.35em 0.25em;
-  width: 98%;
+  padding: 0.6em 0.5em;
+  width: 97%;
 }
 
 .main-input:focus {
@@ -228,9 +219,219 @@ input[type="submit"]:hover {
 	border: 1px solid red;
 }
 
+.checkboxlist label {
+	display: inline-block;
+  padding-left: 15px;
+  text-indent: -5px;
+  white-space: nowrap;
+  background-color: white;
+  color: black;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 1px;
+  font-size: 1rem;
+}
+
+.checkboxlist label:hover {
+	background-color: blue;
+	color: white;
+}
+
+input.allergy,
+input.diet {
+	width: 18px;
+  height: 18px;
+  padding: 0px;
+  margin: 5px;
+  vertical-align: bottom;
+  top: 0px;
+}
+
 .checkboxheader {
 	font-size: 1.2rem;
   padding: 0.35em 0.25em;
   width: 100%;
+}
 
+#results h2 {
+	text-align: center;
+	font-size: 1.4rem;
+	text-transform: uppercase;
+	padding-top: 20px;
+	padding-bottom: 0;
+	color: #FFF07C;
+}
+
+#js-results {
+  margin: 0.5em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-gap: 20px;
+  font-size: 1.0rem;
+}
+
+.js-result {
+  padding: 15px;
+	cursor: pointer;
+	background-color: #fcf19f;
+	border-radius: .4em;
+}
+
+.js-result h3 {
+	font-weight: bold;
+	font-size: 1.5rem;
+	text-transform: uppercase;
+}
+
+.js-result img {
+	width: 100%;
+  height: auto;
+  border-radius: .3em;
+}
+
+.ingredients {
+	list-style: disc inside;
+}
+
+#lightbox {
+  position:fixed;
+  top:0; 
+  left:0; 
+  width:100%; 
+  height:100%; 
+  background: rgba(0,0,0,.7);
+  overflow: scroll;
+}
+
+#lightbox-content {
+	position: relative;
+	padding: 20px;
+	margin-left: auto;
+  margin-right: auto;
+	width: 90%;
+	background: #fff;
+}
+
+#lightbox-content h2 {
+	font-size: 1.5rem;
+	text-transform: uppercase;
+}
+
+#lightbox-content img {
+	width: 100%;
+	height: auto;
+}
+
+#lightbox-content ul {
+	margin-top: 10px;
+	list-style: disc inside;
+}
+
+#closeLightbox {
+	font-size: 1.9rem;
+	font-weight: bold;
+  text-align: right;
+  cursor: pointer;
+  position: fixed;
+  padding: 6px 24px;
+  left: 85%;
+  top: 7%;
+  transform: translate(-50%, -50%);
+  background-color: red;
+  color: white;
+  border: 2px solid white;
+  border-radius: 30%;
+}
+
+.source {
+	margin-top: 10px;
+}
+
+@media only screen and (min-width: 360px) {
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.0rem;
+	}
+}
+
+@media only screen and (min-width: 375px) {
+
+}
+
+@media only screen and (min-width: 400px) {
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.075rem;
+	}
+}
+
+@media only screen and (min-width: 720px) {
+	#user-flow img {
+    width: 80%;
+	}
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.125rem;
+	}
+	#js-results {
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	}
+	#lightbox-content {
+		padding: 20px;
+		margin-left: auto;
+	  margin-right: auto;
+		width: 70%;
+		background: #fff;
+	}
+	#closeLightbox {
+		font-size: 2.2rem;
+	  padding: 6px 28px;
+	  left: 80%;
+	  top: 3.5%;
+	}	
+}
+
+@media only screen and (min-width: 920px) {
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.2rem;
+	}
+	#lightbox-content {
+		width: 60%;
+	}
+	#closeLightbox {
+	  left: 75%;
+	  top: 5%;
+	}	
+}
+
+@media only screen and (min-width: 1280px) {
+	#lightbox-content {
+		width: 50%;
+	}
+	#closeLightbox {
+	  left: 71.5%;
+	}	
+}
+
+@media only screen and (min-width: 1900px) {
+	#lightbox-content {
+		width: 40%;
+	}
+	#closeLightbox {
+		left: 67.75%;
+    top: 3.6%;
+	}	
 }
