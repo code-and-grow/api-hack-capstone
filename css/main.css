@@ -25,12 +25,17 @@ main {
 	margin-right: auto;
 }
 
-header img {
+header img,
+#results img {
 	display: block;
 	margin: 20px auto;
 	width: 170px;
 	-webkit-filter: drop-shadow(5px 5px 5px #222);
   filter: drop-shadow(5px 5px 5px #222);
+}
+
+#results img {
+	width: 80px;
 }
 
 textarea {
@@ -363,6 +368,9 @@ input.diet {
 	header img {
 		width: 190px;
 	}
+	#results img {
+		width: 90px;
+	}
 }
 
 @media only screen and (min-width: 375px) {
@@ -379,6 +387,9 @@ input.diet {
 	}
 	header img {
 		width: 200px;
+	}
+	#results img {
+		width: 100px;
 	}
 }
 
@@ -412,6 +423,9 @@ input.diet {
 	header img {
 		width: 270px;
 	}
+	#results img {
+		width: 110px;
+	}
 }
 
 @media only screen and (min-width: 920px) {
@@ -431,6 +445,9 @@ input.diet {
 	}	
 	header img {
 		width: 290px;
+	}
+	#results img {
+		width: 115px;
 	}
 }
 
@@ -455,6 +472,9 @@ input.diet {
     top: 3.6%;
 	}	
 	header img {
-		width: 360px;
+		width: 380px;
+	}
+	#results img {
+		width: 135px;
 	}
 }

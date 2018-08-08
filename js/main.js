@@ -288,7 +288,7 @@ function userRestart() {
 	document.addEventListener('click', function(e) {
 
     if (e.target.dataset.restart != undefined) { 
-    	$('#results h2').remove();
+    	$('#results img').remove();
     	$('#js-results').empty();
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
@@ -600,8 +600,8 @@ function renderResult(result) {
 function displayResults(data) {
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
-		$('#results h2').remove();
-		$('#results').prepend(`<h2>Results</h2>`);
+		$('#results img').remove();
+		$('#results').prepend(`<img src='images/results301x185-300dpi.png' alt='Results image'>`);
 		// Loop through the results and render them 
 		data.matches.map( (item, index) => renderResult(item) );
 		// Add images from recipes array
