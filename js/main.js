@@ -601,7 +601,7 @@ function displayResults(data) {
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
 		$('#results img').remove();
-		$('#results').prepend(`<img src='images/results301x185-300dpi.png' alt='Results image'>`);
+		$('#results').prepend(`<img id='result-head-img' src='images/results301x185-300dpi.png' alt='Results image'>`);
 		// Loop through the results and render them 
 		data.matches.map( (item, index) => renderResult(item) );
 		// Add images from recipes array

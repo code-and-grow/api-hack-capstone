@@ -26,7 +26,7 @@ main {
 }
 
 header img,
-#results img {
+#result-head-img {
 	display: block;
 	margin: 20px auto;
 	width: 170px;
@@ -34,7 +34,7 @@ header img,
   filter: drop-shadow(5px 5px 5px #222);
 }
 
-#results img {
+#result-head-img {
 	width: 80px;
 }
 
@@ -368,7 +368,7 @@ input.diet {
 	header img {
 		width: 190px;
 	}
-	#results img {
+	#result-head-img {
 		width: 90px;
 	}
 }
@@ -388,7 +388,7 @@ input.diet {
 	header img {
 		width: 200px;
 	}
-	#results img {
+	#result-head-img {
 		width: 100px;
 	}
 }
@@ -423,7 +423,7 @@ input.diet {
 	header img {
 		width: 270px;
 	}
-	#results img {
+	#result-head-img {
 		width: 110px;
 	}
 }
@@ -446,7 +446,7 @@ input.diet {
 	header img {
 		width: 290px;
 	}
-	#results img {
+	#result-head-img {
 		width: 115px;
 	}
 }
@@ -461,6 +461,9 @@ input.diet {
 	header img {
 		width: 320px;
 	}
+	#result-head-img {
+		width: 120px;
+	}
 }
 
 @media only screen and (min-width: 1900px) {
@@ -474,7 +477,7 @@ input.diet {
 	header img {
 		width: 380px;
 	}
-	#results img {
+	#result-head-img {
 		width: 135px;
 	}
 }
