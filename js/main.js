@@ -16,6 +16,8 @@ let recipes = [];
 let userInstructed = false;
 let readyForAllergies = false;
 let readyForDiet = false;
+let readyForMeal = false;
+let readyForAllowed = false;
 let searchHasBeenRun = false;
 const botSays = {
 										loader : `<div class='current-message message'>
@@ -140,11 +142,142 @@ function greetUser() {
 	setTimeout(function(){ 
 		if (userInstructed) {
 			$('#user-input').css('display', 'block');
-			$('.main-input').focus().attr('placeholder', 'Type desired meal here...');
+			readyForAllergies = true;
+			checkForAllergies();
 		}
   }, 6800);
-  userFlow('images/meal.jpg', 'Type desired meal below or skip with \'Next\'');
-	getMeal(getAllowedIng);
+}
+
+
+
+
+// Ask user about allergies 
+function checkForAllergies() {
+	$('#user-input').empty().html(`<div class="checkboxheader">
+																<form id="js-user-input" class="checkboxlist">
+																  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
+															    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
+															    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
+															    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
+															    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
+															    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
+															    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
+															    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
+															    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
+															    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
+															    <button id="js-user-submit" type="submit" class="allergyButton">Next</button>
+														    </form>
+														    </div>`);
+	// $('#user-flow').remove();
+	userFlow('images/allergy.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
+	if (readyForAllergies) {
+		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
+		readyForDiet = true;
+	} else {
+		return false;
+	}
+	readyForAllergies = false;
+}
+
+
+
+// Ask user for diet preferences 
+function checkForDiet() {
+	if (allergyVal.length > 0) {
+		userMessage(allergyVal);
+	} else {
+		userMessage('No men blown down today.');
+	}
+	$('#user-input').empty().html(`<div class="checkboxheader">
+																<form id="js-user-input" class="checkboxlist">
+																  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
+															    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
+															    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
+															    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
+															    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
+															    <button id="js-user-submit" type="submit" class="dietButton ">Next</button>
+														    </form>
+														    </div>`);
+	$('#user-flow').remove();
+	userFlow('images/diet.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'');
+	
+	if (readyForDiet) {
+		getCheckedValues('.diet', dietVal, false, getMeal);
+		readyForMeal = true;
+	} else {
+		return false;
+	}
+	readyForDiet = false;
+}
+
+
+// Get meal from user input
+function getMeal() {
+	if (dietVal.length > 0) {
+		userMessage(dietVal);
+	} else {
+		userMessage('Oh, thy magic bowel!');
+	}
+	$('#user-input').empty().html(`<form id="js-user-input">
+																			<fieldset>
+																				<div class="tags-input" data-name="tags-input">
+																				</div>
+																				<br>
+																				<input id="js-checkbox" type="checkbox" name="checkbox" checked="">
+																				<label for="checkbox">
+																					Send message with Enter
+																				</label>
+																				<br>
+																				<button id="js-user-submit" type="submit">Next</button>
+																			</fieldset>
+																		</form>`);
+
+	$('#user-flow').remove();
+	userFlow('images/meal.jpg', 'Type desired meal below or skip with \'Next\'');
+
+	const tagsInput = document.getElementsByClassName('tags-input');
+	let mainInput = document.createElement('input');
+
+  mainInput.setAttribute('type', 'text');
+  mainInput.classList.add('main-input');
+
+	$(tagsInput).append(mainInput);
+	$('.main-input').focus().attr('placeholder', 'Type desired meal here...');
+	
+	// When user presses Enter or Comma during entering of the search details
+  $(mainInput).off('keydown').on('keydown', function (e) {
+      let keyCode = e.which || e.keyCode;
+      if (keyCode === 13) {
+      	e.preventDefault();
+      	$('#js-user-submit').click();
+      } 
+
+  });
+
+  $('#js-user-submit').off('click')
+										  .on('click', (e) => {
+							        		e.preventDefault();
+							        		userEnteredMeal();
+							        	});
+
+	// What happens when user enters meal
+  function userEnteredMeal() {
+  	let emptyRegExp = /^ +$/;
+  	let enteredMeal = mainInput.value;
+  	if (userInstructed) {
+    	if (emptyRegExp.test(enteredMeal)) {
+			  mainInput.value = '';
+			} else if ( enteredMeal.length > 0 ) {
+      	tags.push(enteredMeal);
+      	mainInput.value = '';
+      	getAllowedIng();
+      	return tags;
+      } else if ( enteredMeal.length < 1 ) {
+      	getAllowedIng();
+      }
+    }
+  }
+
 }
 
 
@@ -181,91 +314,26 @@ function getExcludedIng() {
 	}
 	$('#user-flow').remove();
 	userFlow('images/excluded.jpg', 'Type excluded ingredients below or skip with \'Next\'');
-	getTags(checkForAllergies);
+	getTags(startingSearch);
 	$('.main-input').focus().attr('placeholder', 'Type excluded ingredients here...');
-	readyForAllergies = true;
 }
 
 
-
-// Ask user about allergies 
-function checkForAllergies() {
+// Notify the user that search has been started 
+function startingSearch() {
 	if (tags.length >= 1) {
 		excludedIng = tags.map(item => item.text);
 		userMessage(excludedIng);
 		$('.tags-input').empty();
 		tags = [];
 	} else {
-		userMessage('No hornswaggle I tell ya, me eats it all!');
+		userMessage('No hornswaggle, me eats it all.');
 		$('.tags-input').empty();
-	} 
-	$('#user-input').empty().html(`<div class="checkboxheader">
-																<form id="js-user-input" class="checkboxlist">
-																  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
-															    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
-															    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
-															    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
-															    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
-															    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
-															    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
-															    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
-															    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
-															    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
-															    <button id="js-user-submit" type="submit" class="allergyButton">Next</button>
-														    </form>
-														    </div>`);
-	$('#user-flow').remove();
-	userFlow('images/allergy.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
-	if (readyForAllergies) {
-		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
-		readyForDiet = true;
-	} else {
-		return false;
-	}
-	readyForAllergies = false;
-}
-
-
-
-// Ask user for diet preferences 
-function checkForDiet() {
-	if (allergyVal.length > 0) {
-		userMessage(allergyVal);
-	} else {
-		userMessage('No men blown down today.');
-	}
-	$('#user-input').empty().html(`<div class="checkboxheader">
-																<form id="js-user-input" class="checkboxlist">
-																  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
-															    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
-															    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
-															    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
-															    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
-															    <button id="js-user-submit" type="submit" class="dietButton ">Show results</button>
-														    </form>
-														    </div>`);
-	$('#user-flow').remove();
-	userFlow('images/diet.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Show results\'');
-	
-	if (readyForDiet) {
-		getCheckedValues('.diet', dietVal, false, startingSearch);
-	} else {
-		return false;
-	}
-	readyForDiet = false;
-}
-
-
-
-// Notify the user that search has been started 
-function startingSearch() {
-	if (dietVal.length > 0) {
-		userMessage(dietVal);
-	} else {
-		userMessage('Oh, thy magic bowel!');
+		readyForAllergies = true;
 	}
 	if (searchHasBeenRun) {
 		$('#js-results').empty();
+		readyForAllergies = true;
 	}
 	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
 	
@@ -279,11 +347,12 @@ function startingSearch() {
 // Clear conversation and restart app 
 function userRestart() {
   document.addEventListener('keydown', function (e) {
+  	if (e.target.dataset.restart != undefined) { 
         let keyCode = e.which || e.keyCode;
         if (keyCode === 13) {
         	e.preventDefault();
         } 
-
+      }
     });
 	document.addEventListener('click', function(e) {
 
@@ -292,19 +361,6 @@ function userRestart() {
     	$('#js-results').empty();
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
-    	$('#user-input').empty().html(`<form id="js-user-input">
-																			<fieldset>
-																				<div class="tags-input" data-name="tags-input">
-																				</div>
-																				<br>
-																				<input id="js-checkbox" type="checkbox" name="checkbox" checked="">
-																				<label for="checkbox">
-																					Send message with Enter
-																				</label>
-																				<br>
-																				<button id="js-user-submit" type="submit">Next</button>
-																			</fieldset>
-																		</form>`);
 			botMessage(botSays.restartGreet);
 			searchTerms = [];
 			allowedIng = [];
@@ -312,62 +368,12 @@ function userRestart() {
 			allergyVal;
 			dietVal;
 			recipes = [];
-			let readyForAllergies = false;
-			let readyForDiet = false;
-			userFlow('images/meal.jpg', 'Type desired meal below or skip with \'Enter\' or \'Next\'');
-			getMeal(getAllowedIng);
+			userFlow('images/allergy.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
+			checkForAllergies();
 			$('#user-input').css('display', 'block');
-			$('.main-input').focus().attr('placeholder', 'Type desired meal here...');
     }
-  }, false);
+  });
 	
-}
-
-
-// Get meal from user input
-function getMeal(callback) {
-	const tagsInput = document.getElementsByClassName('tags-input');
-	let mainInput = document.createElement('input');
-
-  mainInput.setAttribute('type', 'text');
-  mainInput.classList.add('main-input');
-
-	$(tagsInput).append(mainInput);
-
-	// When user presses Enter or Comma during entering of the search details
-    mainInput.addEventListener('keydown', function (e) {
-        let keyCode = e.which || e.keyCode;
-        if (keyCode === 13) {
-        	e.preventDefault();
-        	userEnteredMeal();
-        } 
-
-    });
-
-    $('#js-user-submit').off('click')
-											  .on('click', (e) => {
-								        		e.preventDefault();
-								        		userEnteredMeal();
-								        	});
-
-		// What happens when user enters meal
-    function userEnteredMeal() {
-    	let emptyRegExp = /^ +$/;
-    	let enteredMeal = mainInput.value;
-    	if (userInstructed) {
-	    	if (emptyRegExp.test(enteredMeal)) {
-				  mainInput.value = '';
-				} else if ( enteredMeal.length > 0 ) {
-	      	tags.push(enteredMeal);
-	      	mainInput.value = '';
-	      	callback();
-	      	return tags;
-	      } else if ( enteredMeal.length < 1 ) {
-	      	callback();
-	      }
-	    }
-    }
-
 }
 
 
@@ -601,7 +607,7 @@ function displayResults(data) {
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
 		$('#results img').remove();
-		$('#results').prepend(`<img id='result-head-img' src='images/results301x185-300dpi.png' alt='Results image'>`);
+		$('#results').prepend(`<img id='result-head-img' src='images/results301x185-300dpi.png' alt='Results image - source: https://www.freepik.com/free-vector/pirate-skull-and-a-map-on-the-wall_1296860.htm - Designed by Freepik'>`);
 		// Loop through the results and render them 
 		data.matches.map( (item, index) => renderResult(item) );
 		// Add images from recipes array
@@ -616,7 +622,6 @@ function displayResults(data) {
 		showRecipeToUser();
 	} else {
 		$('#results h2').remove();
-		$('#results').prepend(`<h2> No Results</h2>`);
 		resultsMessage(botSays.noResultsNotification);
 
 	}

@@ -178,6 +178,10 @@ input[type="submit"]:hover {
   height: auto;
 }
 
+#user-flow p {
+	padding: 5px;
+}
+
 #user-flow p::before {
 	content: 'Instructions: ';
 }
@@ -396,6 +400,9 @@ input.diet {
 @media only screen and (min-width: 720px) {
 	#user-flow img {
     width: 80%;
+	}
+	#user-flow p {
+		padding: 8px;
 	}
 	.checkboxlist label,
 	#user-flow,
