@@ -1,5 +1,6 @@
 html { 
-  background: url(../images/bg.jpg) no-repeat center center fixed; 
+  background: url(../images/bg.jpg) no-repeat center; 
+  background-attachment: fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -23,6 +24,10 @@ header,
 main {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+main {
+	overflow: scroll;
 }
 
 header img,
@@ -291,7 +296,7 @@ input.diet {
   padding: 15px;
 	cursor: pointer;
 	background-color: #fcf19f;
-	border-radius: .4em;
+	border-radius: .2em;
 }
 
 .js-result h3 {
@@ -337,6 +342,11 @@ input.diet {
 #lightbox-content img {
 	width: 100%;
 	height: auto;
+}
+
+#js-rating-container img.star,
+#lightbox-content img.star {
+	width: 7%;
 }
 
 #lightbox-content ul {
@@ -424,6 +434,13 @@ input.diet {
 		width: 70%;
 		background: #fff;
 	}
+	#lightbox-content h2 {
+		font-size: 1.6rem;
+	}
+	#js-rating-container img.star,
+	#lightbox-content img.star {
+		width: 3%;
+	}
 	#closeLightbox {
 		font-size: 2.2rem;
 	  padding: 6px 28px;
@@ -449,6 +466,13 @@ input.diet {
 	#lightbox-content {
 		width: 60%;
 	}
+	#lightbox-content h2 {
+		font-size: 1.7rem;
+	}
+	#js-rating-container img.star,
+	#lightbox-content img.star {
+		width: 3.5%;
+	}
 	#closeLightbox {
 	  left: 75%;
 	  top: 5%;
@@ -465,6 +489,13 @@ input.diet {
 	#lightbox-content {
 		width: 50%;
 	}
+	#lightbox-content h2 {
+		font-size: 1.8rem;
+	}
+	#js-rating-container img.star,
+	#lightbox-content img.star {
+		width: 4.5%;
+	}
 	#closeLightbox {
 	  left: 71.5%;
 	}	
@@ -479,6 +510,13 @@ input.diet {
 @media only screen and (min-width: 1900px) {
 	#lightbox-content {
 		width: 40%;
+	}
+	#lightbox-content h2 {
+		font-size: 2.5rem;
+	}
+	#js-rating-container img.star,
+	#lightbox-content img.star {
+		width: 3%;
 	}
 	#closeLightbox {
 		left: 67.75%;

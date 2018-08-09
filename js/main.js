@@ -591,7 +591,7 @@ function renderResult(result) {
 															<img src="images/Loading_icon.gif">
 															<h3>${result.recipeName}</h3>
 															<div class="result-info">
-																<p>Rating: ${result.rating}</p>
+																<p id="js-rating-container"></p>
 																<p>Cooking time: ${cookingTime}</p>
 																<p>Ingredients:</p>
 																<ul class="ingredients">${ingredientsList(result.ingredients)}</ul>
@@ -616,6 +616,9 @@ function displayResults(data) {
 				$('#js-results')
 					.find(`#${recipes[i].recipeData.id} img`)
 					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
+				$('#js-results')
+					.find(`#${recipes[i].recipeData.id} p#js-rating-container`)
+					.html(starRating(recipes[i].recipeData.rating));
 			}
 		}, 2200);
 		// Open recipe in a lightbox after user click
@@ -638,6 +641,16 @@ function ingredientsList(ingredientArray) {
   return resultIngList;
 }
 
+
+// Add stars to rating display
+function starRating(ratingValue) {
+	let stars = '';
+  for (let i = 0; i < ratingValue; i++) {
+  	stars += '<img class="star" src="images/star.png">';
+  }
+  return stars;
+}
+
 // Display the recipe user selects 
 function showRecipeToUser() {
 	$('.js-result').on('click', function(event) {
@@ -648,7 +661,7 @@ function showRecipeToUser() {
 		const recipeDetails = {
 													name: recipeClicked.recipeData.name,
 													image: recipeClicked.recipeData.images[0].hostedLargeUrl,
-													course: recipeClicked.recipeData.attributes.course.join(', '),
+													course: recipeClicked.recipeData.attributes.course,
 													rating: recipeClicked.recipeData.rating,
 													servings: recipeClicked.recipeData.yield,
 													totalTime: recipeClicked.recipeData.totalTime,
@@ -658,15 +671,21 @@ function showRecipeToUser() {
 													yummlyLogo: recipeClicked.recipeData.attribution.logo,
 													yummlyUrl: recipeClicked.recipeData.attribution.url
 												}
+		function getCourse() {
+			if (recipeDetails.course === !undefined) {
+				recipeDetails.course = recipeDetails.course.join(', ');
+				return recipeDetails.course;
+			} else {
+				return recipeDetails.course;
+			}
+		}
 		// Lightbox recipe details html
 		const contentHtml = `<p id="closeLightbox">X</p>
 													<img src="${recipeDetails.image}">
 													<h2>${recipeDetails.name}</h2>
-													<p>Course: ${recipeDetails.course}</p>
-													<p>
-														<span>Cooking time: ${recipeDetails.totalTime} </span>
-														<span>Rating: ${recipeDetails.rating}</span>
-													</p>
+													<p>${starRating(recipeDetails.rating)}</p>
+													<p>Course: ${getCourse()}</p>
+													<p>Cooking time: ${recipeDetails.totalTime}</p>
 													<ul>
 														<p>Ingredients:</p>
 														${ingredientsList(recipeDetails.ingredients)}
