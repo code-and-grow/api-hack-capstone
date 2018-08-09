@@ -48,8 +48,8 @@ const botSays = {
 					 												<img src='images/pirate.png'>
 					 											</div>
 					 											<p class="bot-message">
-																	Me started the search and result will appear below. Ye can 
-																	start over if there's nothing ye fancy on the list.
+																	Me started the search and result will appear below. 
+																	<br>Ye can start over if there's nothing ye fancy on the list.
 																	<button id="js-restart-button" data-restart>
 																		START OVER
 																	</button>

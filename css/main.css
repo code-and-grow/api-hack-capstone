@@ -55,17 +55,18 @@ input[type="submit"] {
 	padding: 0;
 	height: 50px;
 	width: 100%;
-	background-color: black;
+	background-color: #c21a25;
 	color: white;
 	border-radius: 4px;
 	font-size: 1rem;
 	text-transform: uppercase;
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 button:hover,
 input[type="submit"]:hover {
 	cursor: pointer;
-	background-color: grey;
+	background-color: #abbd81;
 	color: white;
 }
 
@@ -74,8 +75,8 @@ input[type="submit"]:hover {
 	max-width: 740px;
 	margin: 0 auto;
 	padding: 10px;
-	background-color: #333;
-	border: 1px solid white;
+	background-color: #000000c2;
+  border: 3px solid #e15b64;
 	border-radius: .4em;
 	overflow: scroll;
 	display: flex;
@@ -95,11 +96,12 @@ input[type="submit"]:hover {
 	color: #fff;
 	padding: 7px 15px 10px;
 	margin: 0 auto;
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .bot-message {
 	font-size: 0.9rem;
-	background: #564D65;
+	background: #e15b64;
 	text-align: left;
 	margin-left: 75px;
 }
@@ -112,7 +114,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-right-color: #564D65;
+	border-right-color: #e15b64;
 	border-left: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -142,7 +144,7 @@ input[type="submit"]:hover {
 
 .user-message {
 	float: right;
-	background: #2CDA9D;
+	background: #abbd81;
 	text-align: right;
 	margin-right: 75px;
 }
@@ -155,7 +157,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-left-color: #2CDA9D;
+	border-left-color: #abbd81;
 	border-right: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -193,18 +195,19 @@ input[type="submit"]:hover {
 }
 
 .tag {
-    font-size: 85%;
-    padding: 0.5em 0.75em;
-    margin: 0.25em 0.1em;
-    display: inline-block;
-    background-color: #ddd;
-    transition: all 0.1s linear;
-    cursor: pointer;
+	color: white;
+  font-size: 85%;
+  padding: 0.5em 0.75em;
+  margin: 0.5em 0.5em 0.75em 0;
+  display: inline-block;
+  background-color: #abbd81;
+  transition: all 0.1s linear;
+  border-radius: .4em;
+  cursor: pointer;
 }
 
 .tag:hover {
-    background-color: #3af;
-    color: white;
+  background-color: #e15b64;
 }
 
 .tag .close::after {
@@ -216,7 +219,7 @@ input[type="submit"]:hover {
 }
 
 .tag .close:hover::after {
-    color: red;
+    color: #f8b26a;
 }
 
 .main-input {
@@ -247,7 +250,7 @@ input[type="submit"]:hover {
 }
 
 .checkboxlist label:hover {
-	background-color: blue;
+	background-color: #abbd81;
 	color: white;
 }
 
