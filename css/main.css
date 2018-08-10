@@ -1,18 +1,46 @@
+html { 
+  background: url(../images/bg.jpg) no-repeat center; 
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'MedievalSharp', cursive;
+}
+
 body {
 	height: 100vh;
-	width: 100%;
+	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
-	padding-top: 50px;
 	line-height: 1.65;
-	font-family: sans-serif;
+	font-family: 'Lato', sans-serif;
 }
 
 header,
 main {
-	width: 760px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+main {
+	overflow: scroll;
+}
+
+header img,
+#result-head-img {
+	display: block;
+	margin: 20px auto;
+	width: 170px;
+	-webkit-filter: drop-shadow(5px 5px 5px #222);
+  filter: drop-shadow(5px 5px 5px #222);
+}
+
+#result-head-img {
+	width: 80px;
 }
 
 textarea {
@@ -26,138 +54,496 @@ textarea {
 	font-size: 1.0rem;
 }
 
-button {
+button,
+input[type="submit"] {
 	margin: 5px 0 0;
 	padding: 0;
 	height: 50px;
 	width: 100%;
-	background-color: black;
+	background-color: #c21a25;
 	color: white;
 	border-radius: 4px;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	text-transform: uppercase;
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
-button:hover {
+button:hover,
+input[type="submit"]:hover {
 	cursor: pointer;
-	background-color: grey;
+	background-color: #abbd81;
 	color: white;
-}
-
-input[type="button"] {
-	font-size: 1.2rem;
-	color: white;
-	background-color: red;
-	padding: 5px;
-	cursor: pointer;
-}
-
-#checkboxlist label {
-	white-space: nowrap;
-	background-color: white;
-	color: black;
-	padding: 5px;
-	border-radius: 4px;
-	margin: 1px;
-}
-
-#checkboxlist label:hover {
-	background-color: blue;
-	color: white;
-}
-
-#checkboxlist input[type=checkbox] {
-  
 }
 
 #js-conversation {
-	height: 350px;
-	border-radius: 4px;
-	border: 1px solid #656565;
-	padding: 5px;
+	max-height: 350px;
+	max-width: 740px;
+	margin: 0 auto;
+	padding: 10px;
+	background-color: #000000c2;
+  border: 3px solid #e15b64;
+	border-radius: .4em;
 	overflow: scroll;
+	display: flex;
+	flex-direction: column;
 }
 
-.username {	
-	display: inline-block;
-	width: 22%;
-  padding: 0.5% 0%;
-	margin: 0% 0.75%;
-	font-size: 1.2rem;
-	text-align: right;
-	background-color: white;
-	border-radius: 4px;
-	border: 1px solid white;
-	color: black;
-	vertical-align: top;
+.message {
+	padding: 5px 0;
 }
 
+.bot-message,
 .user-message {
+	display: table;
 	position: relative;
-	display: inline-block;
-	width: 68%;
-  padding: 0.5% 0%;
-  margin: 0% 0.75% 0% 0%;
-	border-radius: 4px;
-	border: 1px solid white;
-	font-size: 1.2rem;
-	background-color: white;
-	color: black;
-}
-
-.bot {	
-	display: inline-block;
-	width: 20%;
-  padding: 0.5% 0% 0.5% 2%;
-	margin: 0.75%;
-	font-size: 1.2rem;
-	text-align: right;
-	background-color: white;
-	border-radius: 4px;
-	border: 1px solid white;
-	color: black;
-	vertical-align: top;
+	border-radius: .4em;
+	font-size: 0.9rem;
+	color: #fff;
+	padding: 7px 15px 10px;
+	margin: 0 auto;
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .bot-message {
-	position: relative;
+	font-size: 0.9rem;
+	background: #e15b64;
+	text-align: left;
+	margin-left: 75px;
+}
+
+.bot-message:after {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 20px;
+	width: 0;
+	height: 0;
+	border: 1em solid transparent;
+	border-right-color: #e15b64;
+	border-left: 0;
+	border-bottom: 0;
+	margin-top: -0.5em;
+	margin-left: -1em;
+}
+
+.bot-icon,
+.user-icon {
+	padding-top: 2px;
+}
+
+.bot-icon {
+	float: left;
+	padding-left: 8px;
+}
+
+.user-icon {
+	float: right;
+	margin-bottom: -65px;
+	padding-right: 8px;
+}
+
+.bot-icon img,
+.user-icon img {
+	width: 40px;
+}
+
+.user-message {
+	float: right;
+	background: #abbd81;
+	text-align: right;
+	margin-right: 75px;
+}
+
+.user-message:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 20px;
+	width: 0;
+	height: 0;
+	border: 1em solid transparent;
+	border-left-color: #abbd81;
+	border-right: 0;
+	border-bottom: 0;
+	margin-top: -0.5em;
+	margin-right: -1em;
+}
+
+#user-input {
+	max-width: 740px;
+	margin: 15px auto;
+	padding: 20px;
+	display: none;
+	border-radius: .4em;
+	background-color: #fff;
+}
+
+#user-flow img {
+	display: block;
+	margin: 0 auto;
+	width: 100%;
+  height: auto;
+}
+
+#user-flow p {
+	padding: 5px;
+}
+
+#user-flow p::before {
+	content: 'Instructions: ';
+}
+
+.tags-input {
+	width: 100%;
+	height: 40px;
+  display: inline-block;
+}
+
+.tag {
+	color: white;
+  font-size: 85%;
+  padding: 0.5em 0.75em;
+  margin: 0.5em 0.5em 0.75em 0;
+  display: inline-block;
+  background-color: #abbd81;
+  transition: all 0.1s linear;
+  border-radius: .4em;
+  cursor: pointer;
+}
+
+.tag:hover {
+  background-color: #e15b64;
+}
+
+.tag .close::after {
+    content: '×';
+    font-weight: bold;
+    display: inline-block;
+    transform: scale(1.4);
+    margin-left: 0.75em;
+}
+
+.tag .close:hover::after {
+    color: #f8b26a;
+}
+
+.main-input {
 	display: inline-block;
-	width: 70%;
-  padding: 0.5% 2% 0.5% 2%;
-  margin: 0.75% 0.75% 0.75% 0%;
-	border-radius: 4px;
-	border: 1px solid #676767;
-	font-size: 1.2rem;
-	background-color: #676767;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #333;
+  padding: 0.6em 0.5em;
+  width: 97%;
+}
+
+.main-input:focus {
+	background-color: lightgoldenrodyellow;
+	box-shadow: none;
+	border: 1px solid red;
+}
+
+.checkboxlist label {
+	display: inline-block;
+  text-indent: -5px;
+  white-space: nowrap;
+  background-color: white;
+  color: black;
+  border-radius: 4px;
+  margin: 1px;
+  padding: 4px 11px 5px;
+  font-size: 1rem;
+}
+
+.checkboxlist label:hover {
+	background-color: #abbd81;
 	color: white;
 }
 
+input.allergy,
+input.diet {
+	width: 18px;
+  height: 18px;
+  padding: 0px;
+  margin: 5px;
+  vertical-align: bottom;
+  top: 0px;
+}
+
+.checkboxheader {
+	font-size: 1.2rem;
+  padding: 0.35em 0.25em;
+  width: 100%;
+}
+
+#results h2 {
+	text-align: center;
+	font-size: 1.4rem;
+	text-transform: uppercase;
+	padding-top: 20px;
+	padding-bottom: 0;
+	color: #FFF07C;
+}
+
+#js-results {
+  margin: 0.5em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  grid-gap: 20px;
+  font-size: 1.0rem;
+}
+
 .js-result {
-	display: block;
-	width: 360px;
-	float: left;
-	margin: 10px;
+  padding: 15px;
 	cursor: pointer;
+	background-color: #fcf19f;
+	background-image: url(../images/paper-bg.jpg);
+	border-radius: .2em;
+}
+
+.js-result h3 {
+	font-weight: bold;
+	font-size: 1.5rem;
+	text-transform: uppercase;
+}
+
+.js-result p {
+	padding-bottom: 5px;
+}
+
+.js-result img {
+	width: 100%;
+  height: auto;
+  border-radius: .3em;
+}
+
+.clock::before {
+	position: relative;
+	content:url('../images/clock-x20.png');
+	top: 4px;
+	margin-right: 6px;
+}
+
+.ingredients {
+	list-style: disc inside;
 }
 
 #lightbox {
-    position:fixed; /* keeps the lightbox window in the current viewport */
-    top:0; 
-    left:0; 
-    width:100%; 
-    height:100%; 
-    background: rgba(0,0,0,.7);; 
+  position:fixed;
+  top:0; 
+  left:0; 
+  width:100%; 
+  height:100%; 
+  background: rgba(0,0,0,.7);
+  overflow: scroll;
 }
 
-#content {
+#lightbox-content {
+	position: relative;
 	padding: 20px;
 	margin-left: auto;
   margin-right: auto;
-	width: 80%;
+	width: 90%;
 	background: #fff;
 }
 
+#lightbox-content h2 {
+	font-size: 1.5rem;
+	text-transform: uppercase;
+}
+
+#lightbox-content img {
+	width: 100%;
+	height: auto;
+}
+
+#lightbox-content p {
+	margin-bottom: 10px;
+}
+
+#js-rating-container img.star,
+#lightbox-content img.star {
+	width: 7%;
+	margin-bottom: -1px;
+}
+
+#lightbox-content ul {
+	margin-top: 10px;
+	list-style: disc inside;
+}
+
 #closeLightbox {
+	font-size: 1.9rem;
 	font-weight: bold;
-	cursor: pointer;
+  text-align: right;
+  cursor: pointer;
+  position: fixed;
+  padding: 6px 24px;
+  left: 85%;
+  top: 7%;
+  transform: translate(-50%, -50%);
+  background-color: red;
+  color: white;
+  border: 2px solid white;
+  border-radius: 30%;
+}
+
+.source {
+	margin-top: 10px;
+}
+
+@media only screen and (min-width: 360px) {
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.0rem;
+	}
+	header img {
+		width: 190px;
+	}
+	#result-head-img {
+		width: 90px;
+	}
+}
+
+@media only screen and (min-width: 375px) {
+
+}
+
+@media only screen and (min-width: 400px) {
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.075rem;
+	}
+	header img {
+		width: 200px;
+	}
+	#result-head-img {
+		width: 100px;
+	}
+}
+
+@media only screen and (min-width: 720px) {
+	#user-flow img {
+    width: 80%;
+	}
+	#user-flow p {
+		padding: 8px;
+	}
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.125rem;
+	}
+	#js-results {
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	}
+	#lightbox-content {
+		padding: 20px;
+		margin-left: auto;
+	  margin-right: auto;
+		width: 70%;
+	}
+	#lightbox-content h2 {
+		font-size: 1.6rem;
+	}
+	#js-rating-container img.star {
+		width: 6%;
+	}
+	#lightbox-content img.star {
+		width: 4.5%;
+	}
+	#closeLightbox {
+		font-size: 2.2rem;
+	  padding: 6px 28px;
+	  left: 80%;
+	  top: 3.5%;
+	}	
+	header img {
+		width: 270px;
+	}
+	#result-head-img {
+		width: 110px;
+	}
+}
+
+@media only screen and (min-width: 920px) {
+	.checkboxlist label,
+	#user-flow,
+	.bot-message,
+	.user-message,
+	#js-results {
+		font-size: 1.2rem;
+	}
+	.clock::before {
+		top: 3px;
+	}
+	#lightbox-content {
+		width: 60%;
+	}
+	#lightbox-content h2 {
+		font-size: 1.7rem;
+	}
+	#closeLightbox {
+	  left: 75%;
+	  top: 5%;
+	}	
+	header img {
+		width: 290px;
+	}
+	#result-head-img {
+		width: 115px;
+	}
+}
+
+@media only screen and (min-width: 1280px) {
+	#lightbox-content {
+		width: 50%;
+	}
+	#lightbox-content h2 {
+		font-size: 1.8rem;
+	}
+		#js-rating-container img.star {
+		width: 6.5%;
+	}
+	#closeLightbox {
+	  left: 71.5%;
+	}	
+	header img {
+		width: 320px;
+	}
+	#result-head-img {
+		width: 120px;
+	}
+}
+
+@media only screen and (min-width: 1900px) {
+	#lightbox-content {
+		width: 40%;
+	}
+	#lightbox-content h2 {
+		font-size: 2.5rem;
+	}
+	#js-rating-container img.star {
+		width: 8%;
+	}
+	#lightbox-content img.star {
+		width: 4%;
+	}
+	#closeLightbox {
+		left: 67.75%;
+    top: 3.6%;
+	}	
+	header img {
+		width: 380px;
+	}
+	#result-head-img {
+		width: 135px;
+	}
 }
