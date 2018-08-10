@@ -176,7 +176,7 @@ function checkForAllergies() {
 	} else {
 		return false;
 	}
-	readyForAllergies = false;
+	//readyForAllergies = false;
 }
 
 
