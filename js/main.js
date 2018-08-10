@@ -592,7 +592,7 @@ function renderResult(result) {
 															<h3>${result.recipeName}</h3>
 															<div class="result-info">
 																<p id="js-rating-container"></p>
-																<p>Cooking time: ${cookingTime}</p>
+																<p class="clock">${cookingTime}</p>
 																<p>Ingredients:</p>
 																<ul class="ingredients">${ingredientsList(result.ingredients)}</ul>
 															</div>
@@ -684,8 +684,8 @@ function showRecipeToUser() {
 													<img src="${recipeDetails.image}">
 													<h2>${recipeDetails.name}</h2>
 													<p>${starRating(recipeDetails.rating)}</p>
+													<p class="clock">${recipeDetails.totalTime}</p>
 													<p>Course: ${getCourse()}</p>
-													<p>Cooking time: ${recipeDetails.totalTime}</p>
 													<ul>
 														<p>Ingredients:</p>
 														${ingredientsList(recipeDetails.ingredients)}

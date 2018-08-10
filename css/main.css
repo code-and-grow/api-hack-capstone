@@ -296,6 +296,7 @@ input.diet {
   padding: 15px;
 	cursor: pointer;
 	background-color: #fcf19f;
+	background-image: url(../images/paper-bg.jpg);
 	border-radius: .2em;
 }
 
@@ -305,10 +306,21 @@ input.diet {
 	text-transform: uppercase;
 }
 
+.js-result p {
+	padding-bottom: 5px;
+}
+
 .js-result img {
 	width: 100%;
   height: auto;
   border-radius: .3em;
+}
+
+.clock::before {
+	position: relative;
+	content:url('../images/clock-x20.png');
+	top: 4px;
+	margin-right: 6px;
 }
 
 .ingredients {
@@ -332,6 +344,7 @@ input.diet {
   margin-right: auto;
 	width: 90%;
 	background: #fff;
+	background-image: url(../images/paper-bg.jpg);
 }
 
 #lightbox-content h2 {
@@ -344,9 +357,14 @@ input.diet {
 	height: auto;
 }
 
+#lightbox-content p {
+	margin-bottom: 10px;
+}
+
 #js-rating-container img.star,
 #lightbox-content img.star {
 	width: 7%;
+	margin-bottom: -1px;
 }
 
 #lightbox-content ul {
@@ -432,14 +450,15 @@ input.diet {
 		margin-left: auto;
 	  margin-right: auto;
 		width: 70%;
-		background: #fff;
 	}
 	#lightbox-content h2 {
 		font-size: 1.6rem;
 	}
-	#js-rating-container img.star,
+	#js-rating-container img.star {
+		width: 6%;
+	}
 	#lightbox-content img.star {
-		width: 3%;
+		width: 4.5%;
 	}
 	#closeLightbox {
 		font-size: 2.2rem;
@@ -463,15 +482,14 @@ input.diet {
 	#js-results {
 		font-size: 1.2rem;
 	}
+	.clock::before {
+		top: 3px;
+	}
 	#lightbox-content {
 		width: 60%;
 	}
 	#lightbox-content h2 {
 		font-size: 1.7rem;
-	}
-	#js-rating-container img.star,
-	#lightbox-content img.star {
-		width: 3.5%;
 	}
 	#closeLightbox {
 	  left: 75%;
@@ -492,9 +510,8 @@ input.diet {
 	#lightbox-content h2 {
 		font-size: 1.8rem;
 	}
-	#js-rating-container img.star,
-	#lightbox-content img.star {
-		width: 4.5%;
+		#js-rating-container img.star {
+		width: 6.5%;
 	}
 	#closeLightbox {
 	  left: 71.5%;
@@ -514,9 +531,11 @@ input.diet {
 	#lightbox-content h2 {
 		font-size: 2.5rem;
 	}
-	#js-rating-container img.star,
+	#js-rating-container img.star {
+		width: 8%;
+	}
 	#lightbox-content img.star {
-		width: 3%;
+		width: 4%;
 	}
 	#closeLightbox {
 		left: 67.75%;
