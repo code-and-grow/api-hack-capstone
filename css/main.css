@@ -60,7 +60,7 @@ input[type="submit"] {
 	padding: 0;
 	height: 50px;
 	width: 100%;
-	background-color: #c21a25;
+	background-color: #74D585;
 	color: white;
 	border-radius: 4px;
 	font-size: 1rem;
@@ -71,7 +71,7 @@ input[type="submit"] {
 button:hover,
 input[type="submit"]:hover {
 	cursor: pointer;
-	background-color: #abbd81;
+	background-color: #30A945;
 	color: white;
 }
 
@@ -81,7 +81,7 @@ input[type="submit"]:hover {
 	margin: 0 auto;
 	padding: 10px;
 	background-color: #000000c2;
-  border: 3px solid #e15b64;
+  border: 3px solid #74d585;
 	border-radius: .4em;
 	overflow: scroll;
 	display: flex;
@@ -106,7 +106,7 @@ input[type="submit"]:hover {
 
 .bot-message {
 	font-size: 0.9rem;
-	background: #e15b64;
+	background: #3c3d86;
 	text-align: left;
 	margin-left: 75px;
 }
@@ -119,7 +119,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-right-color: #e15b64;
+	border-right-color: #3c3d86;
 	border-left: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -149,7 +149,7 @@ input[type="submit"]:hover {
 
 .user-message {
 	float: right;
-	background: #abbd81;
+	background: #74D585;
 	text-align: right;
 	margin-right: 75px;
 }
@@ -162,7 +162,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-left-color: #abbd81;
+	border-left-color: #74D585;
 	border-right: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -191,6 +191,14 @@ input[type="submit"]:hover {
 
 #user-flow p::before {
 	content: 'Instructions: ';
+	font-weight: bold;
+}
+
+#user-flow-img {
+	width: 100%;
+	background-color: #74d585;
+	padding: 10px; 
+	border-radius: .3em;
 }
 
 .tags-input {
@@ -377,7 +385,7 @@ input.diet {
   text-align: right;
   cursor: pointer;
   position: fixed;
-  padding: 6px 24px;
+  padding: 0px 20px;
   left: 85%;
   top: 7%;
   transform: translate(-50%, -50%);
@@ -461,7 +469,6 @@ input.diet {
 	}
 	#closeLightbox {
 		font-size: 2.2rem;
-	  padding: 6px 28px;
 	  left: 80%;
 	  top: 3.5%;
 	}	

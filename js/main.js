@@ -126,7 +126,9 @@ function userMessage(input) {
 // Userflow icons and instructions rendering
 function userFlow(imgSrc, instructions) {
 	$('#user-input').prepend(`<div id='user-flow'>
-															<img src='${imgSrc}'>
+													    <div id='user-flow-img'>
+															  <img src='${imgSrc}'>
+														  </div>
 													  	<p>${instructions}</p>
 													 </div>`);
 }
@@ -169,7 +171,7 @@ function checkForAllergies() {
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
-	userFlow('images/allergy.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
+	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'');
 	if (readyForAllergies) {
 		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
 		readyForDiet = true;
@@ -199,7 +201,7 @@ function checkForDiet() {
 														    </form>
 														    </div>`);
 	$('#user-flow').remove();
-	userFlow('images/diet.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'');
+	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'');
 	
 	if (readyForDiet) {
 		getCheckedValues('.diet', dietVal, false, getMeal);
@@ -233,7 +235,7 @@ function getMeal() {
 																		</form>`);
 
 	$('#user-flow').remove();
-	userFlow('images/meal.jpg', 'Type desired meal below or skip with \'Next\'');
+	userFlow('images/meal-green.jpg', 'Type desired meal below or skip with \'Next\'');
 
 	const tagsInput = document.getElementsByClassName('tags-input');
 	let mainInput = document.createElement('input');
@@ -295,7 +297,7 @@ function getAllowedIng() {
 		$('.tags-input').empty();
 	}
 	$('#user-flow').remove();
-	userFlow('images/allowed.jpg', 'Type allowed ingredients below or skip with \'Next\'');
+	userFlow('images/allowed-green.jpg', 'Type allowed ingredients below or skip with \'Next\'');
 	getTags(getExcludedIng);
 	$('.main-input').focus().attr('placeholder', 'Type allowed ingredients here...');
 }
@@ -313,7 +315,7 @@ function getExcludedIng() {
 		$('.tags-input').empty();
 	}
 	$('#user-flow').remove();
-	userFlow('images/excluded.jpg', 'Type excluded ingredients below or skip with \'Next\'');
+	userFlow('images/excluded-green.jpg', 'Type excluded ingredients below or skip with \'Next\'');
 	getTags(startingSearch);
 	$('.main-input').focus().attr('placeholder', 'Type excluded ingredients here...');
 }
@@ -368,7 +370,7 @@ function userRestart() {
 			allergyVal;
 			dietVal;
 			recipes = [];
-			userFlow('images/allergy.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
+			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
 			checkForAllergies();
 			$('#user-input').css('display', 'block');
     }
