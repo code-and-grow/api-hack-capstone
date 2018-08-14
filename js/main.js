@@ -171,7 +171,7 @@ function checkForAllergies() {
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
-	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'');
+	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 	if (readyForAllergies) {
 		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
 		readyForDiet = true;
@@ -201,7 +201,7 @@ function checkForDiet() {
 														    </form>
 														    </div>`);
 	$('#user-flow').remove();
-	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'');
+	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'.');
 	
 	if (readyForDiet) {
 		getCheckedValues('.diet', dietVal, false, getMeal);
@@ -235,7 +235,7 @@ function getMeal() {
 																		</form>`);
 
 	$('#user-flow').remove();
-	userFlow('images/meal-green.jpg', 'Type desired meal below or skip with \'Next\'');
+	userFlow('images/meal-green.jpg', 'Type desired meal below or skip with \'Next\'.');
 
 	const tagsInput = document.getElementsByClassName('tags-input');
 	let mainInput = document.createElement('input');
@@ -297,7 +297,7 @@ function getAllowedIng() {
 		$('.tags-input').empty();
 	}
 	$('#user-flow').remove();
-	userFlow('images/allowed-green.jpg', 'Type allowed ingredients below or skip with \'Next\'');
+	userFlow('images/allowed-green.jpg', 'Type allowed ingredients below or skip with \'Next\'.');
 	getTags(getExcludedIng);
 	$('.main-input').focus().attr('placeholder', 'Type allowed ingredients here...');
 }
@@ -315,7 +315,7 @@ function getExcludedIng() {
 		$('.tags-input').empty();
 	}
 	$('#user-flow').remove();
-	userFlow('images/excluded-green.jpg', 'Type excluded ingredients below or skip with \'Next\'');
+	userFlow('images/excluded-green.jpg', 'Type excluded ingredients below or skip with \'Next\'.');
 	getTags(startingSearch);
 	$('.main-input').focus().attr('placeholder', 'Type excluded ingredients here...');
 }
@@ -363,14 +363,14 @@ function userRestart() {
     	$('#js-results').empty();
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
-			botMessage(botSays.restartGreet);
+    	botMessage(botSays.loader, botSays.restartGreet, 1200);
 			searchTerms = [];
 			allowedIng = [];
 			excludedIng = [];
 			allergyVal;
 			dietVal;
 			recipes = [];
-			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Enter\' or \'Next\'');
+			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 			checkForAllergies();
 			$('#user-input').css('display', 'block');
     }
@@ -673,12 +673,19 @@ function showRecipeToUser() {
 													yummlyLogo: recipeClicked.recipeData.attribution.logo,
 													yummlyUrl: recipeClicked.recipeData.attribution.url
 												}
-		function getCourse() {
-			if (recipeDetails.course === !undefined) {
-				recipeDetails.course = recipeDetails.course.join(', ');
-				return recipeDetails.course;
+		function checkCourse() {
+			if (recipeDetails.course) {
+				recipeDetailsData = recipeDetails.course.join(', ');
+				return recipeDetailsData;
 			} else {
-				return recipeDetails.course;
+				return 'Yarr-arr, dunno. Sorry!';
+			}
+		}
+		function checkYield() {
+			if (recipeDetails.servings) {
+				return recipeDetails.servings;
+			} else {
+				return 'Me can\'t remembarr!';
 			}
 		}
 		// Lightbox recipe details html
@@ -687,12 +694,23 @@ function showRecipeToUser() {
 													<h2>${recipeDetails.name}</h2>
 													<p>${starRating(recipeDetails.rating)}</p>
 													<p class="clock">${recipeDetails.totalTime}</p>
-													<p>Course: ${getCourse()}</p>
+													<p class="yield">${checkYield()}</p>
+													<p class="course"> ${checkCourse()}</p>
 													<ul>
 														<p>Ingredients:</p>
 														${ingredientsList(recipeDetails.ingredients)}
 													</ul>
-													<p class="source">For detailed instructions visit <a href="${recipeDetails.sourceUrl}" target="_blank">${recipeDetails.sourceName}</a>.
+												<p class="source">
+													For detailed instructions visit 
+													<a href="${recipeDetails.sourceUrl}" target="_blank">
+														${recipeDetails.sourceName}
+													</a>.
+												</p>
+												<p class="yummly-ref">
+													Powered by:
+													<a href="${recipeDetails.yummlyUrl}" target="_blank">
+														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}">
+													</a>
 												</p>`
 		// If lightbox exists
 		if ($('#lightbox').length > 0) { 

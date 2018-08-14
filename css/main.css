@@ -1,4 +1,5 @@
 html { 
+	background-color: #000;
   background: url(../images/bg.jpg) no-repeat center; 
   background-attachment: fixed;
   -webkit-background-size: cover;
@@ -60,7 +61,7 @@ input[type="submit"] {
 	padding: 0;
 	height: 50px;
 	width: 100%;
-	background-color: #74D585;
+	background-color: #30A945;
 	color: white;
 	border-radius: 4px;
 	font-size: 1rem;
@@ -71,7 +72,7 @@ input[type="submit"] {
 button:hover,
 input[type="submit"]:hover {
 	cursor: pointer;
-	background-color: #30A945;
+	background-color: #74D585;
 	color: white;
 }
 
@@ -293,7 +294,7 @@ input.diet {
 }
 
 #js-results {
-  margin: 0.5em;
+  margin: 1em 1em 2em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-gap: 20px;
@@ -305,13 +306,28 @@ input.diet {
 	cursor: pointer;
 	background-color: #fcf19f;
 	background-image: url(../images/paper-bg.jpg);
-	border-radius: .2em;
+	border-radius: .25em;
+	-webkit-transition: -webkit-transform 0.5s ease;
+	-moz-transition: -moz-transform 0.5s ease;
+	transition: transform 0.5s ease;
 }
 
 .js-result h3 {
 	font-weight: bold;
 	font-size: 1.5rem;
 	text-transform: uppercase;
+}
+
+.js-result:hover {
+	border: 0.5em solid #30A945;
+	-webkit-transform: scale(1.05);
+	-moz-transform: scale(1.05);
+	-o-transform: scale(1.05);
+	transform: scale(1.05);
+	-webkit-transform-origin: center;
+	-moz-transform-origin: center;
+	-o-transform-origin: center;
+	transform-origin: center;
 }
 
 .js-result p {
@@ -328,7 +344,22 @@ input.diet {
 	position: relative;
 	content:url('../images/clock-x20.png');
 	top: 4px;
-	margin-right: 6px;
+	margin-left:5px;
+	margin-right:11px;
+}
+
+.yield::before {
+	position: relative;
+	content:url('../images/Stack_Personages.svg');
+	top: 4px;
+	margin-right: 8px;
+}
+
+.course::before {
+	position: relative;
+	content:url('../images/dish-x30.png');
+	top: 8px;
+	margin-right: 5px;
 }
 
 .ingredients {
@@ -368,6 +399,10 @@ input.diet {
 	margin-bottom: 10px;
 }
 
+p.yield {
+	margin-bottom: 0 !important;
+}
+
 #js-rating-container img.star,
 #lightbox-content img.star {
 	width: 7%;
@@ -397,6 +432,17 @@ input.diet {
 
 .source {
 	margin-top: 10px;
+}
+
+img#yummly-logo {
+	display: block;
+	width: 13% !important;
+	margin-top: 7px;
+	}
+
+.yummly-ref {
+	margin-top: 30px;
+	font-size: 0.7rem;
 }
 
 @media only screen and (min-width: 360px) {
