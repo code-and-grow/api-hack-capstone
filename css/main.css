@@ -14,7 +14,7 @@ h1, h2, h3, h4, h5, h6 {
 
 body {
 	height: 100vh;
-	width: 90%;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	line-height: 1.65;
@@ -61,12 +61,12 @@ input[type="submit"] {
 	padding: 0;
 	height: 50px;
 	width: 100%;
-	background-color: #30A945;
+	background-color: #19952e;
 	color: white;
 	border-radius: 4px;
-	font-size: 1rem;
+	font-size: 1.25rem;
 	text-transform: uppercase;
-	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+	text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 button:hover,
@@ -74,6 +74,10 @@ input[type="submit"]:hover {
 	cursor: pointer;
 	background-color: #74D585;
 	color: white;
+}
+
+main {
+	width: 90%;
 }
 
 #js-conversation {
@@ -100,9 +104,9 @@ input[type="submit"]:hover {
 	border-radius: .4em;
 	font-size: 0.9rem;
 	color: #fff;
-	padding: 7px 15px 10px;
+	padding: 7px 15px 9px;
 	margin: 0 auto;
-	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+	text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .bot-message {
@@ -150,7 +154,7 @@ input[type="submit"]:hover {
 
 .user-message {
 	float: right;
-	background: #74D585;
+	background: #19952e;
 	text-align: right;
 	margin-right: 75px;
 }
@@ -163,7 +167,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-left-color: #74D585;
+	border-left-color: #19952e;
 	border-right: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -346,7 +350,7 @@ input.diet {
 
 .clock::before {
 	position: relative;
-	content:url('../images/clock-25px.svg');
+	content:url('../images/clock-23px.svg');
 	top: 5px;
   margin-left: 2px;
   margin-right: 10px;
@@ -355,18 +359,18 @@ input.diet {
 .yield::before {
 	position: relative;
 	content:url('../images/Stack_Personages.svg');
-	top: 4px;
+	top: 2px;
 	margin-right: 8px;
 }
 
 .course::before {
 	position: relative;
-	content:url('../images/dish-x30.svg');
-	top: 8px;
+	content:url('../images/dish-x26.svg');
+	top: 2px;
 	margin-right: 5px;
 }
 
-.ingredients {
+.ingredients-list {
 	list-style: disc inside;
 }
 
@@ -402,8 +406,14 @@ input.diet {
 #lightbox-content p {
 	margin-bottom: 10px;
 }
+.course,
+.yield,
+.clock, {
+	display: inline-block;
+	padding: 0 20px 0 0;
+}
 
-#js-rating-container img.star,
+.js-rating-container img.star,
 #lightbox-content img.star {
 	width: 7%;
 	margin-bottom: -1px;
@@ -414,7 +424,8 @@ input.diet {
 	list-style: disc inside;
 }
 
-#lightbox-content ul p {
+#lightbox-content .ingredients,
+.ingredients {
 	font-weight: bold;
 }
 
@@ -455,6 +466,22 @@ img#yummly-logo {
 .yummly-ref {
 	margin-top: 30px;
 	font-size: 0.7rem;
+}
+
+footer {
+	width: 100%;
+	position: fixed;
+	bottom: 0px;
+}
+
+footer p {
+  position: relative;
+  height: 26px;
+  text-align: center;
+  background-color: #040308;
+  color: #454545;
+  font-size: 0.525rem;
+  padding: 8px 2px;
 }
 
 @media only screen and (min-width: 360px) {
@@ -519,7 +546,7 @@ img#yummly-logo {
 	#lightbox-content h2 {
 		font-size: 1.6rem;
 	}
-	#js-rating-container img.star {
+	.js-rating-container img.star {
 		width: 6%;
 	}
 	#lightbox-content img.star {
@@ -577,7 +604,7 @@ img#yummly-logo {
 	#lightbox-content h2 {
 		font-size: 1.8rem;
 	}
-		#js-rating-container img.star {
+		.js-rating-container img.star {
 		width: 6.5%;
 	}
 	#closeLightbox {
@@ -601,7 +628,7 @@ img#yummly-logo {
 	#lightbox-content h2 {
 		font-size: 2.5rem;
 	}
-	#js-rating-container img.star {
+	.js-rating-container img.star {
 		width: 8%;
 	}
 	#lightbox-content img.star {

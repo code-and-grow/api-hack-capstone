@@ -17,11 +17,11 @@
 </head>
 <body>
 
-	<header>
+	<header role="banner">
 		<img src='images/CaptainCooksLogo-301x185-300dpi.png' alt='Captain Cook Recipe Finder'>
 	</header>
 	
-	<main>
+	<main role="main">
 
 		<section id="js-conversation"></section>
 
@@ -31,8 +31,8 @@
 					<div class="tags-input" data-name="tags-input">
 					</div>
 					<br>
-					<input id="js-checkbox" type="checkbox" name="checkbox" checked>
-					<label for="checkbox">
+					<input id="js-checkbox" aria-label="Send message with Enter" type="checkbox" name="enter-checkbox" checked>
+					<label for="enter-checkbox">
 						Send message with Enter
 					</label>
 					<br>
@@ -48,7 +48,7 @@
 	</main>
 
 	<footer>
-		
+		<p>&copy; 2018 A recipe search app using Yummly API, by Pjotr Paan.</p>
 	</footer>
 
 	<!-- Enter jQuery -->

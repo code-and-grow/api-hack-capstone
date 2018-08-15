@@ -22,14 +22,14 @@ let searchHasBeenRun = false;
 const botSays = {
 										loader : `<div class='current-message message'>
 															 <div class="bot-icon">
-					 												<img src='images/pirate.png'>
+					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 					 											</div>
 					 											<p class="bot-message">
-					 											  <img src="images/typing.svg">
+					 											  <img src="images/typing.svg" alt="Captain Cook is typing animation">
 					 											</p>
 															</div>`,
 					 firstBotMessage : `<div class="bot-icon">
-				 												<img src='images/pirate.png'>
+				 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 				 											</div>
 				 											<p class="bot-message">
 																	Ahoy Jack!
@@ -37,7 +37,7 @@ const botSays = {
 																	I'll help ye find some tasty recipes!
 													    </p>`,
 					secondBotMessage : `<div class="bot-icon">
-				 												<img src='images/pirate.png'>
+				 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 				 											</div>
 				 											<p class="bot-message">
 																Ok matey, define the five search preferences 
@@ -45,7 +45,7 @@ const botSays = {
 														  </p>`,
 	  gotResultsNotification : `<div class='current-message message'>
 		  													<div class="bot-icon">
-					 												<img src='images/pirate.png'>
+					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 					 											</div>
 					 											<p class="bot-message">
 																	Me started the search and result will appear below. 
@@ -57,7 +57,7 @@ const botSays = {
 															</div>`,
      noResultsNotification : `<div class='current-message message'>
      														<div class="bot-icon">
-					 												<img src='images/pirate.png'>
+					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 					 											</div>
 					 											<p class="bot-message">
 	     				  									Sorry Jack! I have no recipes that match the terms you entered! 
@@ -68,7 +68,7 @@ const botSays = {
 	      											</div>`,
 						  restartGreet : `<div class='current-message message'>
 					 											<div class="bot-icon">
-					 												<img src='images/pirate.png'>
+					 												<img src='images/pirate.png' aria-hidden="true">
 					 											</div>
 					 											<p class="bot-message">
 																 Go on matey, I'm ready to take your order!
@@ -112,7 +112,7 @@ function userMessage(input) {
 	$('#js-conversation')
 					.append(`<div class="message">
 										<div class="user-icon">
-											<img src='images/skull.png' width='40px'>
+											<img src='images/skull.png' width='40px' aria-hidden="true" alt="User textbox icon">
 										</div>
 										<p class="user-message">
 											${input}
@@ -127,10 +127,11 @@ function userMessage(input) {
 function userFlow(imgSrc, instructions) {
 	$('#user-input').prepend(`<div id='user-flow'>
 													    <div id='user-flow-img'>
-															  <img src='${imgSrc}'>
+															  <img src='${imgSrc}' aria-hidden="true" alt="Captain Cook recipe finder user steps visual representation">
 														  </div>
 													  	<p>${instructions}</p>
-													 </div>`);
+													 </div>`
+									);
 }
 
 
@@ -225,7 +226,7 @@ function getMeal() {
 																				<div class="tags-input" data-name="tags-input">
 																				</div>
 																				<br>
-																				<input id="js-checkbox" type="checkbox" name="checkbox" checked="">
+																				<input id="js-checkbox" aria-label="Send with Enter checkbox" type="checkbox" name="checkbox" checked="">
 																				<label for="checkbox">
 																					Send message with Enter
 																				</label>
@@ -241,6 +242,7 @@ function getMeal() {
 	let mainInput = document.createElement('input');
 
   mainInput.setAttribute('type', 'text');
+  mainInput.setAttribute('aria-label', 'Type in desired meal or skip with Enter')
   mainInput.classList.add('main-input');
 
 	$(tagsInput).append(mainInput);
@@ -299,7 +301,9 @@ function getAllowedIng() {
 	$('#user-flow').remove();
 	userFlow('images/allowed-green.jpg', 'Type allowed ingredients below or skip with \'Next\'.');
 	getTags(getExcludedIng);
-	$('.main-input').focus().attr('placeholder', 'Type allowed ingredients here...');
+	$('.main-input').focus()
+									.attr('placeholder', 'Type allowed ingredients here')
+									.attr('aria-label', 'Type allowed ingredients here');
 }
 
 
@@ -317,7 +321,9 @@ function getExcludedIng() {
 	$('#user-flow').remove();
 	userFlow('images/excluded-green.jpg', 'Type excluded ingredients below or skip with \'Next\'.');
 	getTags(startingSearch);
-	$('.main-input').focus().attr('placeholder', 'Type excluded ingredients here...');
+	$('.main-input').focus()
+									.attr('placeholder', 'Type excluded ingredients here')
+									.attr('aria-label', 'Type excluded ingredients here');
 }
 
 
@@ -590,13 +596,13 @@ function renderResult(result) {
   // Append recipe to DOM
   $('#js-results').append(`<a class="js-result col-6" id="${result.id}">
 							  						<div>
-															<img src="images/Loading_icon.gif">
+															<img src="images/Loading_icon.gif" alt="Loading recipe image animation"  aria-hidden="true">
 															<h3>${result.recipeName}</h3>
 															<div class="result-info">
-																<p id="js-rating-container"></p>
+																<p class="js-rating-container"></p>
 																<p class="clock">${cookingTime}</p>
-																<p>Ingredients:</p>
-																<ul class="ingredients">${ingredientsList(result.ingredients)}</ul>
+																<p class="ingredients">Ingredients:</p>
+																<ul class="ingredients-list">${ingredientsList(result.ingredients)}</ul>
 															</div>
 														</div>
 										 			 </a>`);
@@ -617,7 +623,8 @@ function displayResults(data) {
 			for (let i = 0; i < recipes.length; i++) {
 				$('#js-results')
 					.find(`#${recipes[i].recipeData.id} img`)
-					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl);
+					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl)
+					.attr('alt', recipes[i].recipeData.name);
 				$('#js-results')
 					.find(`#${recipes[i].recipeData.id} p#js-rating-container`)
 					.html(starRating(recipes[i].recipeData.rating));
@@ -690,25 +697,25 @@ function showRecipeToUser() {
 		}
 		// Lightbox recipe details html
 		const contentHtml = `<p id="closeLightbox">X</p>
-													<img src="${recipeDetails.image}">
+													<img src="${recipeDetails.image}" alt="${recipeDetails.name}"  aria-hidden="true">
 													<h2>${recipeDetails.name}</h2>
 													<p>${starRating(recipeDetails.rating)}</p>
-													<p class="course"> ${checkCourse()}</p>
 													<p class="clock">${recipeDetails.totalTime}</p>
+													<p class="course"> ${checkCourse()}</p>
 													<p class="yield">${checkYield()}</p>
+													<p class="ingredients">Ingredients:</p>
 													<ul>
-														<p>Ingredients:</p>
 														${ingredientsList(recipeDetails.ingredients)}
 													</ul>
 												<p class="source">
 													For detailed instructions visit 
-													<a href="${recipeDetails.sourceUrl}" target="_blank">
+													<a href="${recipeDetails.sourceUrl}" target="_blank" aria-label="Take me to ${recipeDetails.sourceName} recipe page">
 														${recipeDetails.sourceName}
 													</a>.
 												</p>
 												<p class="yummly-ref">
-													<a href="${recipeDetails.yummlyUrl}" target="_blank">
-														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}">
+													<a href="${recipeDetails.yummlyUrl}" target="_blank" aria-label="Yummly logo image linked to selected recipe Yummly page">
+														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}" alt="Yummly logo image linked to selected recipe Yummly page">
 													</a>
 												</p>`
 		// If lightbox exists
