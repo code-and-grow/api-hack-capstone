@@ -462,14 +462,22 @@ input.diet {
 img#yummly-logo {
 	display: block;
 	width: 30% !important;
-	margin-top: 7px;
-	margin-right: auto;
-	margin-left: auto;
+	margin: 7px auto 5px;
 	}
 
 .yummly-ref {
 	margin-top: 30px;
-	font-size: 0.7rem;
+	font-size: 0.55rem;
+	text-align: center;
+}
+
+.yummly-ref a {
+	text-decoration: none;
+	color: #000;
+}
+
+.yummly-ref a:hover {
+	text-decoration: underline;
 }
 
 footer {

@@ -716,6 +716,7 @@ function showRecipeToUser() {
 												<p class="yummly-ref">
 													<a href="${recipeDetails.yummlyUrl}" target="_blank" aria-label="Link to selected recipe Yummly page">
 														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}" alt="Link to selected recipe Yummly page">
+														POWERED RECIPE
 													</a>
 												</p>`
 		// If lightbox exists
