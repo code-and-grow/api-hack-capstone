@@ -1,4 +1,5 @@
 html { 
+	background-color: #000;
   background: url(../images/bg.jpg) no-repeat center; 
   background-attachment: fixed;
   -webkit-background-size: cover;
@@ -60,7 +61,7 @@ input[type="submit"] {
 	padding: 0;
 	height: 50px;
 	width: 100%;
-	background-color: #c21a25;
+	background-color: #30A945;
 	color: white;
 	border-radius: 4px;
 	font-size: 1rem;
@@ -71,7 +72,7 @@ input[type="submit"] {
 button:hover,
 input[type="submit"]:hover {
 	cursor: pointer;
-	background-color: #abbd81;
+	background-color: #74D585;
 	color: white;
 }
 
@@ -81,7 +82,7 @@ input[type="submit"]:hover {
 	margin: 0 auto;
 	padding: 10px;
 	background-color: #000000c2;
-  border: 3px solid #e15b64;
+  border: 3px solid #74d585;
 	border-radius: .4em;
 	overflow: scroll;
 	display: flex;
@@ -106,7 +107,7 @@ input[type="submit"]:hover {
 
 .bot-message {
 	font-size: 0.9rem;
-	background: #e15b64;
+	background: #3c3d86;
 	text-align: left;
 	margin-left: 75px;
 }
@@ -119,7 +120,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-right-color: #e15b64;
+	border-right-color: #3c3d86;
 	border-left: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -149,7 +150,7 @@ input[type="submit"]:hover {
 
 .user-message {
 	float: right;
-	background: #abbd81;
+	background: #74D585;
 	text-align: right;
 	margin-right: 75px;
 }
@@ -162,7 +163,7 @@ input[type="submit"]:hover {
 	width: 0;
 	height: 0;
 	border: 1em solid transparent;
-	border-left-color: #abbd81;
+	border-left-color: #74D585;
 	border-right: 0;
 	border-bottom: 0;
 	margin-top: -0.5em;
@@ -191,6 +192,14 @@ input[type="submit"]:hover {
 
 #user-flow p::before {
 	content: 'Instructions: ';
+	font-weight: bold;
+}
+
+#user-flow-img {
+	width: 100%;
+	background-color: #74d585;
+	padding: 10px; 
+	border-radius: .3em;
 }
 
 .tags-input {
@@ -275,6 +284,10 @@ input.diet {
   width: 100%;
 }
 
+#results {
+	padding: 10px;
+}
+
 #results h2 {
 	text-align: center;
 	font-size: 1.4rem;
@@ -285,7 +298,7 @@ input.diet {
 }
 
 #js-results {
-  margin: 0.5em;
+  margin-bottom: 2em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-gap: 20px;
@@ -297,13 +310,28 @@ input.diet {
 	cursor: pointer;
 	background-color: #fcf19f;
 	background-image: url(../images/paper-bg.jpg);
-	border-radius: .2em;
+	border-radius: .25em;
+	-webkit-transition: -webkit-transform 0.5s ease;
+	-moz-transition: -moz-transform 0.5s ease;
+	transition: transform 0.5s ease;
 }
 
 .js-result h3 {
 	font-weight: bold;
 	font-size: 1.5rem;
 	text-transform: uppercase;
+}
+
+.js-result:hover {
+	border: 0.5em solid #30A945;
+	-webkit-transform: scale(1.05);
+	-moz-transform: scale(1.05);
+	-o-transform: scale(1.05);
+	transform: scale(1.05);
+	-webkit-transform-origin: center;
+	-moz-transform-origin: center;
+	-o-transform-origin: center;
+	transform-origin: center;
 }
 
 .js-result p {
@@ -318,9 +346,24 @@ input.diet {
 
 .clock::before {
 	position: relative;
-	content:url('../images/clock-x20.png');
+	content:url('../images/clock-25px.svg');
+	top: 5px;
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.yield::before {
+	position: relative;
+	content:url('../images/Stack_Personages.svg');
 	top: 4px;
-	margin-right: 6px;
+	margin-right: 8px;
+}
+
+.course::before {
+	position: relative;
+	content:url('../images/dish-x30.svg');
+	top: 8px;
+	margin-right: 5px;
 }
 
 .ingredients {
@@ -371,13 +414,17 @@ input.diet {
 	list-style: disc inside;
 }
 
+#lightbox-content ul p {
+	font-weight: bold;
+}
+
 #closeLightbox {
 	font-size: 1.9rem;
 	font-weight: bold;
   text-align: right;
   cursor: pointer;
   position: fixed;
-  padding: 6px 24px;
+  padding: 0px 20px;
   left: 85%;
   top: 7%;
   transform: translate(-50%, -50%);
@@ -389,6 +436,25 @@ input.diet {
 
 .source {
 	margin-top: 10px;
+	font-weight: bold;
+  font-style: italic;
+}
+
+.source a {
+	color: #000;
+}
+
+img#yummly-logo {
+	display: block;
+	width: 30% !important;
+	margin-top: 7px;
+	margin-right: auto;
+	margin-left: auto;
+	}
+
+.yummly-ref {
+	margin-top: 30px;
+	font-size: 0.7rem;
 }
 
 @media only screen and (min-width: 360px) {
@@ -461,10 +527,12 @@ input.diet {
 	}
 	#closeLightbox {
 		font-size: 2.2rem;
-	  padding: 6px 28px;
 	  left: 80%;
 	  top: 3.5%;
 	}	
+	img#yummly-logo {
+		width: 20% !important;
+	}
 	header img {
 		width: 270px;
 	}
@@ -515,6 +583,9 @@ input.diet {
 	#closeLightbox {
 	  left: 71.5%;
 	}	
+	img#yummly-logo {
+		width: 15% !important;
+	}
 	header img {
 		width: 320px;
 	}
@@ -540,6 +611,9 @@ input.diet {
 		left: 67.75%;
     top: 3.6%;
 	}	
+	img#yummly-logo {
+		width: 13% !important;
+	}
 	header img {
 		width: 380px;
 	}
