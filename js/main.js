@@ -365,7 +365,7 @@ function userRestart() {
 	document.addEventListener('click', function(e) {
 
     if (e.target.dataset.restart != undefined) { 
-    	$('#results img').remove();
+    	$('#results h2').remove();
     	$('#js-results').empty();
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
@@ -614,8 +614,10 @@ function renderResult(result) {
 function displayResults(data) {
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
-		$('#results img').remove();
-		$('#results').prepend(`<img id='result-head-img' src='images/results301x185-300dpi.png' alt='Results image - source: https://www.freepik.com/free-vector/pirate-skull-and-a-map-on-the-wall_1296860.htm - Designed by Freepik'>`);
+		$('#results h2').remove();
+		$('#results').prepend(`<h2>
+														<img id='result-head-img' src='images/results301x185-300dpi.png' alt='Results image - source: https://www.freepik.com/free-vector/pirate-skull-and-a-map-on-the-wall_1296860.htm - Designed by Freepik'>
+													</h2>`);
 		// Loop through the results and render them 
 		data.matches.map( (item, index) => renderResult(item) );
 		// Add images from recipes array

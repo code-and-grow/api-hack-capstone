@@ -327,7 +327,6 @@ input.diet {
 }
 
 .js-result:hover {
-	border: 0.5em solid #30A945;
 	-webkit-transform: scale(1.05);
 	-moz-transform: scale(1.05);
 	-o-transform: scale(1.05);
