@@ -172,7 +172,7 @@ function checkForAllergies() {
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
-	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies?<br>When yer done choosing or no allergies apply press \'Next\'.');
+	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 	if (readyForAllergies) {
 		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
 		readyForDiet = true;
@@ -202,7 +202,7 @@ function checkForDiet() {
 														    </form>
 														    </div>`);
 	$('#user-flow').remove();
-	userFlow('images/diet-green.jpg', 'Aye but are you on a diet?<br>When yer done choosing or no diets apply press \'Next\'.');
+	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'.');
 	
 	if (readyForDiet) {
 		getCheckedValues('.diet', dietVal, false, getMeal);
@@ -376,7 +376,7 @@ function userRestart() {
 			allergyVal;
 			dietVal;
 			recipes = [];
-			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies?<br>When yer done choosing or no allergies apply press \'Next\'.');
+			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 			checkForAllergies();
 			$('#user-input').css('display', 'block');
     }
@@ -685,14 +685,14 @@ function showRecipeToUser() {
 				recipeDetailsData = recipeDetails.course.join(', ');
 				return recipeDetailsData;
 			} else {
-				return 'Yarr-arr, me dunno..';
+				return 'Yarr, me dunno..';
 			}
 		}
 		function checkYield() {
 			if (recipeDetails.servings) {
 				return recipeDetails.servings;
 			} else {
-				return 'Me can\'t remembarr..';
+				return 'Can\'t remembarr..';
 			}
 		}
 		// Lightbox recipe details html
