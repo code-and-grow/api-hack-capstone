@@ -27,10 +27,6 @@ main {
 	margin-right: auto;
 }
 
-main {
-	overflow: scroll;
-}
-
 header img,
 #result-head-img {
 	display: block;
@@ -88,7 +84,8 @@ main {
 	background-color: #000000c2;
   border: 3px solid #74d585;
 	border-radius: .4em;
-	overflow: scroll;
+	overflow: auto;
+	-ms-overflow-style: -ms-autohiding-scrollbar;
 	display: flex;
 	flex-direction: column;
 }
@@ -384,7 +381,8 @@ input.diet {
   width:100%; 
   height:100%; 
   background: rgba(0,0,0,.7);
-  overflow: scroll;
+  overflow: auto;
+  -ms-overflow-style: auto | none | scrollbar | -ms-autohiding-scrollbar
 }
 
 #lightbox-content {
