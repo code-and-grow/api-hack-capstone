@@ -171,7 +171,7 @@ function checkForAllergies() {
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
-	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
+	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies?<br>When yer done choosing or no allergies apply press \'Next\'.');
 	if (readyForAllergies) {
 		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
 		readyForDiet = true;
@@ -201,7 +201,7 @@ function checkForDiet() {
 														    </form>
 														    </div>`);
 	$('#user-flow').remove();
-	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'.');
+	userFlow('images/diet-green.jpg', 'Aye but are you on a diet?<br>When yer done choosing or no diets apply press \'Next\'.');
 	
 	if (readyForDiet) {
 		getCheckedValues('.diet', dietVal, false, getMeal);
@@ -370,7 +370,7 @@ function userRestart() {
 			allergyVal;
 			dietVal;
 			recipes = [];
-			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
+			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies?<br>When yer done choosing or no allergies apply press \'Next\'.');
 			checkForAllergies();
 			$('#user-input').css('display', 'block');
     }
@@ -693,9 +693,9 @@ function showRecipeToUser() {
 													<img src="${recipeDetails.image}">
 													<h2>${recipeDetails.name}</h2>
 													<p>${starRating(recipeDetails.rating)}</p>
+													<p class="course"> ${checkCourse()}</p>
 													<p class="clock">${recipeDetails.totalTime}</p>
 													<p class="yield">${checkYield()}</p>
-													<p class="course"> ${checkCourse()}</p>
 													<ul>
 														<p>Ingredients:</p>
 														${ingredientsList(recipeDetails.ingredients)}
@@ -707,7 +707,6 @@ function showRecipeToUser() {
 													</a>.
 												</p>
 												<p class="yummly-ref">
-													Powered by:
 													<a href="${recipeDetails.yummlyUrl}" target="_blank">
 														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}">
 													</a>

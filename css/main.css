@@ -284,6 +284,10 @@ input.diet {
   width: 100%;
 }
 
+#results {
+	padding: 10px;
+}
+
 #results h2 {
 	text-align: center;
 	font-size: 1.4rem;
@@ -294,7 +298,7 @@ input.diet {
 }
 
 #js-results {
-  margin: 1em 1em 2em;
+  margin-bottom: 2em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-gap: 20px;
@@ -342,10 +346,10 @@ input.diet {
 
 .clock::before {
 	position: relative;
-	content:url('../images/clock-x20.png');
-	top: 4px;
-	margin-left:5px;
-	margin-right:11px;
+	content:url('../images/clock-25px.svg');
+	top: 5px;
+  margin-left: 2px;
+  margin-right: 10px;
 }
 
 .yield::before {
@@ -357,7 +361,7 @@ input.diet {
 
 .course::before {
 	position: relative;
-	content:url('../images/dish-x30.png');
+	content:url('../images/dish-x30.svg');
 	top: 8px;
 	margin-right: 5px;
 }
@@ -399,10 +403,6 @@ input.diet {
 	margin-bottom: 10px;
 }
 
-p.yield {
-	margin-bottom: 0 !important;
-}
-
 #js-rating-container img.star,
 #lightbox-content img.star {
 	width: 7%;
@@ -412,6 +412,10 @@ p.yield {
 #lightbox-content ul {
 	margin-top: 10px;
 	list-style: disc inside;
+}
+
+#lightbox-content ul p {
+	font-weight: bold;
 }
 
 #closeLightbox {
@@ -432,12 +436,20 @@ p.yield {
 
 .source {
 	margin-top: 10px;
+	font-weight: bold;
+  font-style: italic;
+}
+
+.source a {
+	color: #000;
 }
 
 img#yummly-logo {
 	display: block;
 	width: 30% !important;
 	margin-top: 7px;
+	margin-right: auto;
+	margin-left: auto;
 	}
 
 .yummly-ref {
