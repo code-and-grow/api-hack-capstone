@@ -655,7 +655,7 @@ function ingredientsList(ingredientArray) {
 function starRating(ratingValue) {
 	let stars = '';
   for (let i = 0; i < ratingValue; i++) {
-  	stars += '<img class="star" src="images/star.png">';
+  	stars += '<img class="star" src="images/star.png" alt="" aria-hidden="true">';
   }
   return stars;
 }
@@ -685,21 +685,21 @@ function showRecipeToUser() {
 				recipeDetailsData = recipeDetails.course.join(', ');
 				return recipeDetailsData;
 			} else {
-				return 'Yarr-arr, dunno. Sorry!';
+				return 'Yarr-arr, me dunno..';
 			}
 		}
 		function checkYield() {
 			if (recipeDetails.servings) {
 				return recipeDetails.servings;
 			} else {
-				return 'Me can\'t remembarr!';
+				return 'Me can\'t remembarr..';
 			}
 		}
 		// Lightbox recipe details html
 		const contentHtml = `<p id="closeLightbox">X</p>
 													<img src="${recipeDetails.image}" alt="${recipeDetails.name}"  aria-hidden="true">
 													<h2>${recipeDetails.name}</h2>
-													<p>${starRating(recipeDetails.rating)}</p>
+													<p class="rating">${starRating(recipeDetails.rating)}<span>${recipeDetails.rating} star rating</span></p>
 													<p class="clock">${recipeDetails.totalTime}</p>
 													<p class="course"> ${checkCourse()}</p>
 													<p class="yield">${checkYield()}</p>
@@ -709,13 +709,13 @@ function showRecipeToUser() {
 													</ul>
 												<p class="source">
 													For detailed instructions visit 
-													<a href="${recipeDetails.sourceUrl}" target="_blank" aria-label="Take me to ${recipeDetails.sourceName} recipe page">
+													<a href="${recipeDetails.sourceUrl}" target="_blank" aria-label="For detailed instructions visit ${recipeDetails.sourceName}.">
 														${recipeDetails.sourceName}
 													</a>.
 												</p>
 												<p class="yummly-ref">
-													<a href="${recipeDetails.yummlyUrl}" target="_blank" aria-label="Yummly logo image linked to selected recipe Yummly page">
-														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}" alt="Yummly logo image linked to selected recipe Yummly page">
+													<a href="${recipeDetails.yummlyUrl}" target="_blank" aria-label="Link to selected recipe Yummly page">
+														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}" alt="Link to selected recipe Yummly page">
 													</a>
 												</p>`
 		// If lightbox exists

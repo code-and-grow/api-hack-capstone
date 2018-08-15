@@ -348,6 +348,10 @@ input.diet {
   border-radius: .3em;
 }
 
+.rating span {
+	display: none;
+}
+
 .clock::before {
 	position: relative;
 	content:url('../images/clock-23px.svg');
