@@ -82,11 +82,11 @@ main {
 	margin: 0 auto;
 	padding: 10px;
 	background-color: #000000;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  filter: alpha(opacity=80);
-  -moz-opacity: 0.8;
-  -khtml-opacity: 0.8;
-  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+  filter: alpha(opacity=90);
+  -moz-opacity: 0.9;
+  -khtml-opacity: 0.9;
+  opacity: 0.9;
   border: 3px solid #74d585;
 	border-radius: .4em;
 	overflow: auto;
@@ -435,6 +435,8 @@ input.diet {
 	font-weight: bold;
 }
 
+
+
 #closeLightbox {
 	font-size: 1.9rem;
 	font-weight: bold;
@@ -461,13 +463,27 @@ input.diet {
 	color: #000;
 }
 
-img#yummly-logo {
+.fb-share-button {
+	width: 48%;
+	display: inline-block;
+}
+
+.fb-share-button img {
 	display: block;
-	width: 30% !important;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 9px;
+	width: 27px !important;
+}
+
+img#yummly-logo {
+	width: 50% !important;
 	margin: 7px auto 5px;
-	}
+}
 
 .yummly-ref {
+	width: 50%;
+	display: inline-block;
 	margin-top: 30px;
 	font-size: 0.55rem;
 	text-align: center;
@@ -572,7 +588,7 @@ footer p {
 	  top: 3.5%;
 	}	
 	img#yummly-logo {
-		width: 20% !important;
+		width: 26% !important;
 	}
 	header img {
 		width: 270px;
@@ -624,9 +640,6 @@ footer p {
 	#closeLightbox {
 	  left: 71.5%;
 	}	
-	img#yummly-logo {
-		width: 15% !important;
-	}
 	header img {
 		width: 320px;
 	}
@@ -652,9 +665,6 @@ footer p {
 		left: 67.75%;
     top: 3.6%;
 	}	
-	img#yummly-logo {
-		width: 13% !important;
-	}
 	header img {
 		width: 380px;
 	}

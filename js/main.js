@@ -715,11 +715,18 @@ function showRecipeToUser() {
 														${recipeDetails.sourceName}
 													</a>.
 												</p>
-												<p class="yummly-ref">
-													<a href="${recipeDetails.yummlyUrl}" target="_blank" aria-label="Link to selected recipe Yummly page">
-														<img id="yummly-logo" src="${recipeDetails.yummlyLogo}" alt="Link to selected recipe Yummly page">
-														POWERED RECIPE
-													</a>
+												<p>
+													<div class="yummly-ref">
+														<a href="${recipeDetails.yummlyUrl}" target="_blank" aria-label="Link to selected recipe Yummly page">
+															<img id="yummly-logo" src="${recipeDetails.yummlyLogo}" alt="Link to selected recipe Yummly page">
+															<br>POWERED RECIPE
+														</a>
+													</div>
+													<div class="fb-share-button" data-href="${recipeDetails.yummlyUrl}" data-layout="button" data-size="large" data-mobile-iframe="true">
+														<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=${recipeDetails.yummlyUrl}&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+															<img src="images/flogo-RGB-HEX-Blk-58.svg" alt="Share on facebook">
+														</a>
+													</div>
 												</p>`
 		// If lightbox exists
 		if ($('#lightbox').length > 0) { 
