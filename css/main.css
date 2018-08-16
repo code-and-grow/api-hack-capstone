@@ -81,7 +81,12 @@ main {
 	max-width: 740px;
 	margin: 0 auto;
 	padding: 10px;
-	background-color: #000000c2;
+	background-color: #000000;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  -moz-opacity: 0.8;
+  -khtml-opacity: 0.8;
+  opacity: 0.8;
   border: 3px solid #74d585;
 	border-radius: .4em;
 	overflow: auto;
