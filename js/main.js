@@ -6,17 +6,318 @@ const APP_ID = '0163f367';
 const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
 
 // Undefined startup variables
+let courseList = [
+  {
+    "id": "course-Main Dishes",
+    "name": "Main Dishes",
+    "type": "course",
+    "description": "Main Dishes",
+    "searchValue": "course^course-Main Dishes",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Desserts",
+    "name": "Desserts",
+    "type": "course",
+    "description": "Desserts",
+    "searchValue": "course^course-Desserts",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Side Dishes",
+    "name": "Side Dishes",
+    "type": "course",
+    "description": "Side Dishes",
+    "searchValue": "course^course-Side Dishes",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Appetizers",
+    "name": "Appetizers",
+    "type": "course",
+    "description": "Appetizers",
+    "searchValue": "course^course-Appetizers",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Salads",
+    "name": "Salads",
+    "type": "course",
+    "description": "Salads",
+    "searchValue": "course^course-Salads",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Breakfast and Brunch",
+    "name": "Breakfast and Brunch",
+    "type": "course",
+    "description": "Breakfast and Brunch",
+    "searchValue": "course^course-Breakfast and Brunch",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Breads",
+    "name": "Breads",
+    "type": "course",
+    "description": "Breads",
+    "searchValue": "course^course-Breads",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Soups",
+    "name": "Soups",
+    "type": "course",
+    "description": "Soups",
+    "searchValue": "course^course-Soups",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Beverages",
+    "name": "Beverages",
+    "type": "course",
+    "description": "Beverages",
+    "searchValue": "course^course-Beverages",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Condiments and Sauces",
+    "name": "Condiments and Sauces",
+    "type": "course",
+    "description": "Condiments and Sauces",
+    "searchValue": "course^course-Condiments and Sauces",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Cocktails",
+    "name": "Cocktails",
+    "type": "course",
+    "description": "Cocktails",
+    "searchValue": "course^course-Cocktails",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Snacks",
+    "name": "Snacks",
+    "type": "course",
+    "description": "Snacks",
+    "searchValue": "course^course-Snacks",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "course-Lunch",
+    "name": "Lunch",
+    "type": "course",
+    "description": "Lunch",
+    "searchValue": "course^course-Lunch",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  }
+];
+let allergyList = [
+  {
+    "id": "393",
+    "shortDescription": "Gluten-Free",
+    "longDescription": "Gluten-Free",
+    "searchValue": "393^Gluten-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "394",
+    "shortDescription": "Peanut-Free",
+    "longDescription": "Peanut-Free",
+    "searchValue": "394^Peanut-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "398",
+    "shortDescription": "Seafood-Free",
+    "longDescription": "Seafood-Free",
+    "searchValue": "398^Seafood-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "399",
+    "shortDescription": "Sesame-Free",
+    "longDescription": "Sesame-Free",
+    "searchValue": "399^Sesame-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "400",
+    "shortDescription": "Soy-Free",
+    "longDescription": "Soy-Free",
+    "searchValue": "400^Soy-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "396",
+    "shortDescription": "Dairy-Free",
+    "longDescription": "Dairy-Free",
+    "searchValue": "396^Dairy-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "397",
+    "shortDescription": "Egg-Free",
+    "longDescription": "Egg-Free",
+    "searchValue": "397^Egg-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "401",
+    "shortDescription": "Sulfite-Free",
+    "longDescription": "Sulfite-Free",
+    "searchValue": "401^Sulfite-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "395",
+    "shortDescription": "Tree Nut-Free",
+    "longDescription": "Tree Nut-Free",
+    "searchValue": "395^Tree Nut-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "392",
+    "shortDescription": "Wheat-Free",
+    "longDescription": "Wheat-Free",
+    "searchValue": "392^Wheat-Free",
+    "type": "allergy",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  }
+];
+
+let dietList = [
+  {
+    "id": "388",
+    "shortDescription": "Lacto vegetarian",
+    "longDescription": "Lacto vegetarian",
+    "searchValue": "388^Lacto vegetarian",
+    "type": "diet",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "389",
+    "shortDescription": "Ovo vegetarian",
+    "longDescription": "Ovo vegetarian",
+    "searchValue": "389^Ovo vegetarian",
+    "type": "diet",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "390",
+    "shortDescription": "Pescetarian",
+    "longDescription": "Pescetarian",
+    "searchValue": "390^Pescetarian",
+    "type": "diet",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "386",
+    "shortDescription": "Vegan",
+    "longDescription": "Vegan",
+    "searchValue": "386^Vegan",
+    "type": "diet",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "387",
+    "shortDescription": "Lacto-ovo vegetarian",
+    "longDescription": "Vegetarian",
+    "searchValue": "387^Lacto-ovo vegetarian",
+    "type": "diet",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  },
+  {
+    "id": "403",
+    "shortDescription": "Paleo",
+    "longDescription": "Paleo",
+    "searchValue": "403^Paleo",
+    "type": "diet",
+    "localesAvailableIn": [
+      "en-US"
+    ]
+  }
+];
 let tags = [];
 let searchTerms = [];
+let courseVal = [];
 let allowedIng = [];
 let excludedIng = [];
-let allergyVal;
-let dietVal;
+let allergyVal = [];
+let dietVal = [];
+let allergyNames = [];
+let courseNames = [];
+let dietNames = [];
 let recipes = [];
 let userInstructed = false;
 let readyForAllergies = false;
 let readyForDiet = false;
-let readyForMeal = false;
+let readyForCourse = false;
 let readyForAllowed = false;
 let searchHasBeenRun = false;
 const botSays = {
@@ -134,6 +435,18 @@ function userFlow(imgSrc, instructions) {
 									);
 }
 
+// Return ingredients ul list items
+	function renderInputs(inputArr) {
+		let result = '';
+		  for (let i = 0; i < inputArr.length; i++) {
+		  	if (inputArr[i].type === 'course'){
+		  		result += `<label><input type="checkbox" value="${inputArr[i].searchValue}" name="${inputArr[i].description}" class="${inputArr[i].type}">${inputArr[i].description}</label>`;
+		  	} else if (inputArr[i].type === 'allergy' || inputArr[i].type === 'diet')
+		  	result += `<label><input type="checkbox" value="${inputArr[i].searchValue}" name="${inputArr[i].shortDescription}" class="${inputArr[i].type}">${inputArr[i].shortDescription}</label>`;
+		  }
+	  return result;
+	}
+
 
 // Greet user and ask what meal to search
 function greetUser() {
@@ -145,37 +458,52 @@ function greetUser() {
 	setTimeout(function(){ 
 		if (userInstructed) {
 			$('#user-input').css('display', 'block');
-			readyForAllergies = true;
-			checkForAllergies();
+			readyForCourse = true;
+			checkForCourse();
 		}
   }, 6800);
 }
 
 
 
+// Ask user about allergies 
+function checkForCourse() {
+	$('#user-input').empty().html(`<div class="checkboxheader">
+																<form id="js-user-input" class="checkboxlist">
+																  ${renderInputs(courseList)}
+															    <button id="js-user-submit" type="submit" class="courseButton">Next</button>
+														    </form>
+														    </div>`);
+	// $('#user-flow').remove();
+	userFlow('', 'Hey matey, ye know what course yer after? When yer done choosing or wanna skip press \'Next\'.');
+	if (readyForCourse) {
+		getCheckedValues('.course', courseVal, false, true, checkForAllergies);
+		readyForAllergies = true;
+	} else {
+		return false;
+	}
+	//readyForAllergies = false;
+}
+
 
 // Ask user about allergies 
 function checkForAllergies() {
+	if (courseVal.length > 0) {
+		userMessage(courseNames.join(', '));
+	} else {
+		userMessage('No preferences.');
+	}
 	$('#user-input').empty().html(`<div class="checkboxheader">
 																<form id="js-user-input" class="checkboxlist">
-																  <label><input type="checkbox" value="Dairy" class="allergy">Dairy</label>
-															    <label><input type="checkbox" value="Egg" class="allergy">Egg</label>
-															    <label><input type="checkbox" value="Gluten" class="allergy">Gluten</label>
-															    <label><input type="checkbox" value="Peanut" class="allergy">Peanut</label>
-															    <label><input type="checkbox" value="Seafood" class="allergy">Seafood</label>
-															    <label><input type="checkbox" value="Sesame" class="allergy">Sesame</label>
-															    <label><input type="checkbox" value="Soy" class="allergy">Soy</label>
-															    <label><input type="checkbox" value="Sulfite" class="allergy">Sulfite</label>
-															    <label><input type="checkbox" value="Tree Nut" class="allergy">Tree Nut</label>
-															    <label><input type="checkbox" value="Wheat" class="allergy">Wheat</label>
+																  ${renderInputs(allergyList)}
 															    <button id="js-user-submit" type="submit" class="allergyButton">Next</button>
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
 	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 	if (readyForAllergies) {
-		getCheckedValues('.allergy', allergyVal, true, checkForDiet);
-		readyForDiet = true;
+		getCheckedValues('.allergy', allergyVal, true, false, getMeal);
+		readyForMeal = true;
 	} else {
 		return false;
 	}
@@ -184,42 +512,41 @@ function checkForAllergies() {
 
 
 
+
+
 // Ask user for diet preferences 
-function checkForDiet() {
-	if (allergyVal.length > 0) {
-		userMessage(allergyVal);
-	} else {
-		userMessage('No men blown down today.');
-	}
-	$('#user-input').empty().html(`<div class="checkboxheader">
-																<form id="js-user-input" class="checkboxlist">
-																  <label><input type="checkbox" value="Lacto vegetarian" class="diet">Lacto vegetarian</label>
-															    <label><input type="checkbox" value="Ovo vegetarian" class="diet">Ovo vegetarian</label>
-															    <label><input type="checkbox" value="Pescetarian" class="diet">Pescetarian</label>
-															    <label><input type="checkbox" value="Vegan" class="diet">Vegan</label>
-															    <label><input type="checkbox" value="Vegetarian" class="diet">Vegetarian</label>
-															    <button id="js-user-submit" type="submit" class="dietButton ">Next</button>
-														    </form>
-														    </div>`);
-	$('#user-flow').remove();
-	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'.');
+// function checkForDiet() {
 	
-	if (readyForDiet) {
-		getCheckedValues('.diet', dietVal, false, getMeal);
-		readyForMeal = true;
-	} else {
-		return false;
-	}
-	readyForDiet = false;
-}
+// 	if (allergyVal.length > 0) {
+// 		userMessage(allergyNames.join(', '));
+// 	} else {
+// 		userMessage('No men blown down today.');
+// 	}
+// 	$('#user-input').empty().html(`<div class="checkboxheader">
+// 																<form id="js-user-input" class="checkboxlist">
+// 																${renderInputs(dietList)}
+// 															    <button id="js-user-submit" type="submit" class="dietButton ">Next</button>
+// 														    </form>
+// 														    </div>`);
+// 	$('#user-flow').remove();
+// 	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'.');
+	
+// 	if (readyForDiet) {
+// 		getCheckedValues('.diet', dietVal, false, false, getMeal);
+// 		readyForMeal = true;
+// 	} else {
+// 		return false;
+// 	}
+// 	readyForDiet = false;
+// }
 
 
 // Get meal from user input
 function getMeal() {
-	if (dietVal.length > 0) {
-		userMessage(dietVal);
+	if (allergyVal.length > 0) {
+		userMessage(allergyNames.join(', '));
 	} else {
-		userMessage('Oh, thy magic bowel!');
+		userMessage('No men blown down today.');
 	}
 	$('#user-input').empty().html(`<form id="js-user-input">
 																			<fieldset>
@@ -246,7 +573,7 @@ function getMeal() {
   mainInput.classList.add('main-input');
 
 	$(tagsInput).append(mainInput);
-	$('.main-input').focus().attr('placeholder', 'Type desired meal here...');
+	$('.main-input').focus().attr('placeholder', 'spicy chicken soup ..');
 	
 	// When user presses Enter or Comma during entering of the search details
   $(mainInput).off('keydown').on('keydown', function (e) {
@@ -272,7 +599,7 @@ function getMeal() {
     	if (emptyRegExp.test(enteredMeal)) {
 			  mainInput.value = '';
 			} else if ( enteredMeal.length > 0 ) {
-      	tags.push(enteredMeal);
+      	searchTerms.push(enteredMeal);
       	mainInput.value = '';
       	getAllowedIng();
       	return tags;
@@ -288,21 +615,22 @@ function getMeal() {
 
 // Ask what ingredients are allowed
 function getAllowedIng() {
-	if (tags.length >= 1) {
-		searchTerms = tags.join().replace(/\W+/g, '+');
-		let showSearchTerms = tags;
+	if (searchTerms.length >= 1) {
+		searchTerms.join().replace(/\W+/g, '+');
+		let showSearchTerms = searchTerms;
 		userMessage(showSearchTerms);
 		$('.tags-input').empty();
 		tags = [];
 	} else {
 		userMessage('Aah, me skipped the meal! Ain\'t that ironic...');
 		$('.tags-input').empty();
+		tags = [];
 	}
 	$('#user-flow').remove();
 	userFlow('images/allowed-green.jpg', 'Type allowed ingredients below or skip with \'Next\'.');
 	getTags(getExcludedIng);
 	$('.main-input').focus()
-									.attr('placeholder', 'Type allowed ingredients here')
+									.attr('placeholder', 'garlic, celeri, chicken ..')
 									.attr('aria-label', 'Type allowed ingredients here');
 }
 
@@ -317,12 +645,13 @@ function getExcludedIng() {
 	} else {
 		userMessage('Yarr, I just could not leave out any of me hearties.');
 		$('.tags-input').empty();
+		tags = [];
 	}
 	$('#user-flow').remove();
 	userFlow('images/excluded-green.jpg', 'Type excluded ingredients below or skip with \'Next\'.');
 	getTags(startingSearch);
 	$('.main-input').focus()
-									.attr('placeholder', 'Type excluded ingredients here')
+									.attr('placeholder', 'meat, chili, onions ..')
 									.attr('aria-label', 'Type excluded ingredients here');
 }
 
@@ -338,12 +667,13 @@ function startingSearch() {
 		userMessage('No hornswaggle, me eats it all.');
 		$('.tags-input').empty();
 		readyForAllergies = true;
+		tags = [];
 	}
 	if (searchHasBeenRun) {
 		$('#js-results').empty();
 		readyForAllergies = true;
 	}
-	searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal);
+	searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal, dietVal);
 	
 	$('#user-input').css('display', 'none');
 	userRestart();
@@ -370,14 +700,19 @@ function userRestart() {
     	$('#js-conversation').empty();
     	$('.tags-input').empty();
     	botMessage(botSays.loader, botSays.restartGreet, 1200);
+    	tags = [];
 			searchTerms = [];
+			courseVal = [];
 			allowedIng = [];
 			excludedIng = [];
 			allergyVal;
+			allergyNames = [];
+			courseNames = [];
+			dietNames = [];
 			dietVal;
 			recipes = [];
-			userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
-			checkForAllergies();
+			userFlow('', 'Avast matey? When yer done choosing or  press \'Next\'.');
+			checkForCourse();
 			$('#user-input').css('display', 'block');
     }
   });
@@ -435,7 +770,7 @@ function getTags(callback) {
 				  mainInput.value = '';
 				} else if ( enteredTag.length > 0 ) {
 	      	addTag(enteredTag);
-	      	mainInput.setAttribute('placeholder', 'Type another tag or use \'Enter\' to move forward');
+	      	mainInput.setAttribute('placeholder', 'Type another tag or use \'Next\' to move forward');
 	      	mainInput.value = '';
 	      	return tags;
 	      } else if ( enteredTag.length < 1 ) {
@@ -494,10 +829,11 @@ function getTags(callback) {
 
 
 // Get checked values 
-function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
-	if (readyForAllergies || readyForDiet) {
+function getCheckedValues (targetClass, checkedValues, isAllergy, isCourse, callback) {
+	if (readyForCourse || readyForAllergies || readyForDiet) {
 		// Declare variables to store checked item data
 		let targetChecked = targetClass + ':checked';
+		let checkedNamesArray = [];
 		let checkedArray = [];
 		
     $(document).off().on('keypress',  function (e) {
@@ -520,15 +856,24 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 		function lookForCheckedValues() {
 			// Loop through checked items and add them to array
 			$(targetChecked).each(function() {
-				checkedArray.push($(this).val().toLowerCase().replace(/ /g, '+'));
+				checkedNamesArray.push($(this).attr('name'));
+				checkedArray.push($(this).val());
 			});
 			// Assign the array to function parameter
+			checkedNames = checkedNamesArray;
 			checkedValues = checkedArray;
+
+
 			// Assign the checked values to the parameter in question
-			if (isAllergy) {
+			if (isAllergy && !isCourse) {
 				allergyVal = checkedValues;
+				allergyNames = checkedNames;
+			} else if (!isAllergy && isCourse) {
+				courseVal = checkedValues;
+				courseNames = checkedNames;
 			} else {
 				dietVal = checkedValues;
+				dietNames = checkedNames;
 			}
 			// Init the callback function
 			callback();
@@ -539,12 +884,13 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 
 
 // Search API call 
-function searchAPI(searchTerms, allowedIng, excludedIng, allergyVal, dietVal) {
+function searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal, dietVal) {
 	// Set up API call settings
   const settings = {
     url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
     data: {
     	q: searchTerms,
+    	allowedCourse: courseVal,
     	allowedIngredient: allowedIng,
     	excludedIngredient: excludedIng,
     	allowedAllergy: allergyVal,
@@ -574,6 +920,25 @@ function getRecipeData(recipeId, callback) {
   $.ajax(settings);
 }
 
+
+// Get recipe data from API 
+function getMetaData(meta) {
+	// Set up recipe API call settings
+  const settings = {
+    url: API_URL + '/api/metadata/' + meta + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
+    allergies: [],
+    dataType: 'jsonp',
+    type: 'GET',
+    success: set_metadata
+  };
+  // Make the recipe API call
+  $.ajax(settings);
+}
+
+
+function set_metadata(meta, data) {
+	console.log(data);
+}
 
 
 // Add recipe data to array 
@@ -612,6 +977,7 @@ function renderResult(result) {
 
 // Display the results to user 
 function displayResults(data) {
+	console.log(data);
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
 		$('#results h2').remove();
@@ -639,6 +1005,7 @@ function displayResults(data) {
 		resultsMessage(botSays.noResultsNotification);
 
 	}
+	console.log(courseVal + ' ' + searchTerms  + ' ' + allergyVal  + ' ' + dietVal  + ' ' + allowedIng  + ' ' + excludedIng);
 }
 
 // Return ingredients ul list items
@@ -687,14 +1054,14 @@ function showRecipeToUser() {
 				recipeDetailsData = recipeDetails.course.join(', ');
 				return recipeDetailsData;
 			} else {
-				return 'Yarr, me dunno..';
+				return '-';
 			}
 		}
 		function checkYield() {
 			if (recipeDetails.servings) {
 				return recipeDetails.servings;
 			} else {
-				return 'Can\'t remembarr..';
+				return '-';
 			}
 		}
 		// Lightbox recipe details html
@@ -703,7 +1070,7 @@ function showRecipeToUser() {
 													<h2>${recipeDetails.name}</h2>
 													<p class="rating">${starRating(recipeDetails.rating)}<span>${recipeDetails.rating} star rating</span></p>
 													<p class="clock">${recipeDetails.totalTime}</p>
-													<p class="course"> ${checkCourse()}</p>
+													<p class="courses"> ${checkCourse()}</p>
 													<p class="yield">${checkYield()}</p>
 													<p class="ingredients">Ingredients:</p>
 													<ul>
@@ -755,6 +1122,7 @@ function showRecipeToUser() {
 
 // Start your engines 
 function initBot() {
+	//getMetaData('course');
 	greetUser();
 }
 

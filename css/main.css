@@ -368,7 +368,7 @@ input.diet {
 	margin-right: 8px;
 }
 
-.course::before {
+.courses::before {
 	position: relative;
 	content:url('../images/dish-x26.svg');
 	top: 2px;
@@ -412,7 +412,7 @@ input.diet {
 #lightbox-content p {
 	margin-bottom: 10px;
 }
-.course,
+.courses,
 .yield,
 .clock, {
 	display: inline-block;
