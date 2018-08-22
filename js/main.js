@@ -341,7 +341,7 @@ const botSays = {
 				 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 				 											</div>
 				 											<p class="bot-message">
-																Ok matey, define the five search preferences 
+																Ok matey, define the four search preferences 
 																that follow. Much obliged!
 														  </p>`,
 	  gotResultsNotification : `<div class='current-message message'>
@@ -349,10 +349,10 @@ const botSays = {
 					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 					 											</div>
 					 											<p class="bot-message">
-																	Me started the search and result will appear below. 
-																	<br>Ye can start over if there's nothing ye fancy on the list.
+																	Me started the search and results will appear below. 
+																	<br>If there's nothing ye fancy on the list just 
 																	<button id="js-restart-button" data-restart>
-																		START OVER
+																		START OVER.
 																	</button>
 																</p>
 															</div>`,
@@ -361,7 +361,7 @@ const botSays = {
 					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 					 											</div>
 					 											<p class="bot-message">
-	     				  									Sorry Jack! I have no recipes that match the terms you entered! 
+	     				  									Sorry Jack! I have no recipes that match the terms you entered! Try fever terms and  
 						  										<button id="js-restart-button" data-restart>
 					  												START NEW SEARCH
 				  												</button>
@@ -425,10 +425,10 @@ function userMessage(input) {
 
 
 // Userflow icons and instructions rendering
-function userFlow(imgSrc, instructions) {
+function userFlow(step, instructions) {
 	$('#user-input').prepend(`<div id='user-flow'>
-													    <div id='user-flow-img'>
-															  <img src='${imgSrc}' aria-hidden="true" alt="Captain Cook recipe finder user steps visual representation">
+													    <div id='user-flow-steps'>
+															  <p>Step ${step} / 5</p>
 														  </div>
 													  	<p>${instructions}</p>
 													 </div>`
@@ -475,14 +475,14 @@ function checkForCourse() {
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
-	userFlow('', 'Hey matey, ye know what course yer after? When yer done choosing or wanna skip press \'Next\'.');
+	userFlow('1', 'Hey matey, pick a course for ye liking. When done choosing or wanna skip press \'Next\'.');
 	if (readyForCourse) {
-		getCheckedValues('.course', courseVal, false, true, checkForAllergies);
+		getCheckedValues('.course', courseVal, false, checkForAllergies);
 		readyForAllergies = true;
 	} else {
 		return false;
 	}
-	//readyForAllergies = false;
+	readyForCourse = false;
 }
 
 
@@ -500,45 +500,15 @@ function checkForAllergies() {
 														    </form>
 														    </div>`);
 	// $('#user-flow').remove();
-	userFlow('images/allergy-green.jpg', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
+	userFlow('2', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 	if (readyForAllergies) {
-		getCheckedValues('.allergy', allergyVal, true, false, getMeal);
+		getCheckedValues('.allergy', allergyVal, true, getMeal);
 		readyForMeal = true;
 	} else {
 		return false;
 	}
-	//readyForAllergies = false;
+	readyForAllergies = false;
 }
-
-
-
-
-
-// Ask user for diet preferences 
-// function checkForDiet() {
-	
-// 	if (allergyVal.length > 0) {
-// 		userMessage(allergyNames.join(', '));
-// 	} else {
-// 		userMessage('No men blown down today.');
-// 	}
-// 	$('#user-input').empty().html(`<div class="checkboxheader">
-// 																<form id="js-user-input" class="checkboxlist">
-// 																${renderInputs(dietList)}
-// 															    <button id="js-user-submit" type="submit" class="dietButton ">Next</button>
-// 														    </form>
-// 														    </div>`);
-// 	$('#user-flow').remove();
-// 	userFlow('images/diet-green.jpg', 'Aye but are you on a diet? When yer done choosing or no diets apply press \'Next\'.');
-	
-// 	if (readyForDiet) {
-// 		getCheckedValues('.diet', dietVal, false, false, getMeal);
-// 		readyForMeal = true;
-// 	} else {
-// 		return false;
-// 	}
-// 	readyForDiet = false;
-// }
 
 
 // Get meal from user input
@@ -563,7 +533,7 @@ function getMeal() {
 																		</form>`);
 
 	$('#user-flow').remove();
-	userFlow('images/meal-green.jpg', 'Type desired meal below or skip with \'Next\'.');
+	userFlow('3', 'Type in desired meal below or skip with \'Next\'.');
 
 	const tagsInput = document.getElementsByClassName('tags-input');
 	let mainInput = document.createElement('input');
@@ -573,7 +543,7 @@ function getMeal() {
   mainInput.classList.add('main-input');
 
 	$(tagsInput).append(mainInput);
-	$('.main-input').focus().attr('placeholder', 'spicy chicken soup ..');
+	$('.main-input').focus().attr('placeholder', 'e.g. vegan glazed carrots');
 	
 	// When user presses Enter or Comma during entering of the search details
   $(mainInput).off('keydown').on('keydown', function (e) {
@@ -627,10 +597,10 @@ function getAllowedIng() {
 		tags = [];
 	}
 	$('#user-flow').remove();
-	userFlow('images/allowed-green.jpg', 'Type allowed ingredients below or skip with \'Next\'.');
+	userFlow('4', 'Type allowed ingredients below or skip with \'Next\'.');
 	getTags(getExcludedIng);
 	$('.main-input').focus()
-									.attr('placeholder', 'garlic, celeri, chicken ..')
+									.attr('placeholder', 'e.g. garlic, celeri, chicken ..')
 									.attr('aria-label', 'Type allowed ingredients here');
 }
 
@@ -648,10 +618,10 @@ function getExcludedIng() {
 		tags = [];
 	}
 	$('#user-flow').remove();
-	userFlow('images/excluded-green.jpg', 'Type excluded ingredients below or skip with \'Next\'.');
+	userFlow('5', 'Type excluded ingredients below or skip with \'Next\'.');
 	getTags(startingSearch);
 	$('.main-input').focus()
-									.attr('placeholder', 'meat, chili, onions ..')
+									.attr('placeholder', 'e.g. chili, onions, meat ..')
 									.attr('aria-label', 'Type excluded ingredients here');
 }
 
@@ -673,7 +643,7 @@ function startingSearch() {
 		$('#js-results').empty();
 		readyForAllergies = true;
 	}
-	searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal, dietVal);
+	searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal);
 	
 	$('#user-input').css('display', 'none');
 	userRestart();
@@ -711,7 +681,8 @@ function userRestart() {
 			dietNames = [];
 			dietVal;
 			recipes = [];
-			userFlow('', 'Avast matey? When yer done choosing or  press \'Next\'.');
+			readyForCourse = true;
+			userFlow('1', 'Hey matey, pick a course for ye liking. When done choosing or wanna skip press \'Next\'.');
 			checkForCourse();
 			$('#user-input').css('display', 'block');
     }
@@ -829,7 +800,7 @@ function getTags(callback) {
 
 
 // Get checked values 
-function getCheckedValues (targetClass, checkedValues, isAllergy, isCourse, callback) {
+function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
 	if (readyForCourse || readyForAllergies || readyForDiet) {
 		// Declare variables to store checked item data
 		let targetChecked = targetClass + ':checked';
@@ -865,17 +836,14 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, isCourse, call
 
 
 			// Assign the checked values to the parameter in question
-			if (isAllergy && !isCourse) {
+			if (isAllergy) {
 				allergyVal = checkedValues;
 				allergyNames = checkedNames;
-			} else if (!isAllergy && isCourse) {
+			} else {
 				courseVal = checkedValues;
 				courseNames = checkedNames;
-			} else {
-				dietVal = checkedValues;
-				dietNames = checkedNames;
 			}
-			// Init the callback function
+			
 			callback();
 		}
 	}
@@ -884,7 +852,7 @@ function getCheckedValues (targetClass, checkedValues, isAllergy, isCourse, call
 
 
 // Search API call 
-function searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal, dietVal) {
+function searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal) {
 	// Set up API call settings
   const settings = {
     url: API_URL + '/api/recipes?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
@@ -893,8 +861,8 @@ function searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal, 
     	allowedCourse: courseVal,
     	allowedIngredient: allowedIng,
     	excludedIngredient: excludedIng,
-    	allowedAllergy: allergyVal,
-    	allowedDiet: dietVal
+    	allowedAllergy: allergyVal
+    	// allowedDiet: dietVal
     },
     dataType: 'jsonp',
     type: 'GET',
@@ -961,10 +929,10 @@ function renderResult(result) {
   // Append recipe to DOM
   $('#js-results').append(`<a class="js-result col-6" id="${result.id}">
 							  						<div>
-															<img src="images/Loading_icon.gif" alt="Loading recipe image animation"  aria-hidden="true">
+															<img class="card-image" src="images/Loading_icon.gif" alt="Loading recipe image animation"  aria-hidden="true">
 															<h3>${result.recipeName}</h3>
 															<div class="result-info">
-																<p class="js-rating-container"></p>
+																<p class="js-rating-container">${starRating(result.rating)}</p>
 																<p class="clock">${cookingTime}</p>
 																<p class="ingredients">Ingredients:</p>
 																<ul class="ingredients-list">${ingredientsList(result.ingredients)}</ul>
@@ -990,12 +958,12 @@ function displayResults(data) {
 		setTimeout(function() {
 			for (let i = 0; i < recipes.length; i++) {
 				$('#js-results')
-					.find(`#${recipes[i].recipeData.id} img`)
+					.find(`#${recipes[i].recipeData.id} img.card-image`)
 					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl)
 					.attr('alt', recipes[i].recipeData.name);
-				$('#js-results')
-					.find(`#${recipes[i].recipeData.id} p#js-rating-container`)
-					.html(starRating(recipes[i].recipeData.rating));
+				// $('#js-results')
+				// 	.find(`#${recipes[i].recipeData.id} p#js-rating-container`)
+				// 	.html(starRating(recipes[i].recipeData.rating));
 			}
 		}, 2200);
 		// Open recipe in a lightbox after user click

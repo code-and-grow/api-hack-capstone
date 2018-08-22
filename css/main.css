@@ -30,7 +30,7 @@ main {
 header img,
 #result-head-img {
 	display: block;
-	margin: 20px auto;
+	margin: 20px auto 35px;
 	width: 170px;
 	-webkit-filter: drop-shadow(5px 5px 5px #222);
   filter: drop-shadow(5px 5px 5px #222);
@@ -56,7 +56,6 @@ input[type="submit"] {
 	margin: 5px 0 0;
 	padding: 0;
 	height: 50px;
-	width: 100%;
 	background-color: #19952e;
 	color: white;
 	border-radius: 4px;
@@ -71,7 +70,23 @@ input[type="submit"]:hover {
 	background-color: #74D585;
 	color: white;
 }
+#js-restart-button {
+	text-decoration: underline;
+	background: #3c3d86;
+	border: none;
+  display: inline-block;
+  padding: 4px;
+  height: 30px;
+  font-size: 1rem;
+}
 
+#js-restart-button:hover {
+	text-decoration: underline;
+}
+
+#js-user-submit {
+	width: 100%;
+}
 main {
 	width: 90%;
 }
@@ -93,6 +108,10 @@ main {
 	-ms-overflow-style: -ms-autohiding-scrollbar;
 	display: flex;
 	flex-direction: column;
+}
+
+#js-checkbox {
+	margin-top: 20px;
 }
 
 .message {
@@ -193,19 +212,23 @@ main {
 }
 
 #user-flow p {
-	padding: 5px;
-}
-
-#user-flow p::before {
-	content: 'Instructions: ';
 	font-weight: bold;
+	padding: 15px 5px 0px;
 }
 
-#user-flow-img {
+#user-flow-steps {
 	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+	font-weight: bold;
 	background-color: #74d585;
-	padding: 10px; 
+	color: #fff;
 	border-radius: .3em;
+}
+
+#user-flow-steps p {
+	padding: 5px; 
 }
 
 .tags-input {
@@ -249,6 +272,7 @@ main {
   border: 1px solid #333;
   padding: 0.6em 0.5em;
   width: 97%;
+  margin: 6px 0px;
 }
 
 .main-input:focus {
@@ -274,6 +298,7 @@ main {
 	color: white;
 }
 
+input.course,
 input.allergy,
 input.diet {
 	width: 18px;
@@ -298,7 +323,7 @@ input.diet {
 	text-align: center;
 	font-size: 1.4rem;
 	text-transform: uppercase;
-	padding-top: 20px;
+/*	padding-top: 20px;*/
 	padding-bottom: 0;
 	color: #FFF07C;
 }
@@ -555,7 +580,10 @@ footer p {
     width: 80%;
 	}
 	#user-flow p {
-		padding: 8px;
+		padding: 18px 8px 0;
+	}
+	#user-flow-steps p {
+		padding: 8px; 
 	}
 	.checkboxlist label,
 	#user-flow,
