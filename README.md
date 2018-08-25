@@ -47,5 +47,4 @@ If the Yummly has no recipes listed with defined preferences, the user is notifi
 ![Recipe finder no results view](https://getrecipe.paancrafts.com/readme-img/no-results.jpg)
 
 
-##### Technologies used:
-HTML5/CSS3/Javascript/jQuery
+##### Technologies used: HTML5/CSS3/Javascript/jQuery
