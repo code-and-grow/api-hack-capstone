@@ -3,7 +3,7 @@
 This is a chatbot that helps the user find recipes in the Yummly API database. The results are found using two different API calls made to Yummly. 
 User enters desired course, allergies, recipe name, allowed and excluded ingredients after which the bot returns a selection of recipes to choose from.
 
-[> Try out the Thinkful API Hack Capstone recipe finder here <](https://getrecipe.paancrafts.com/)
+[> Try out the recipe finder here <](https://getrecipe.paancrafts.com/)
 
 ## Overview
 Here's a short application user flow walkthrough. The screenshots present screens 320px wide, 768px wide and 1440px wide starting from left.
