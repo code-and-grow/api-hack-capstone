@@ -341,7 +341,7 @@ const botSays = {
 				 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 				 											</div>
 				 											<p class="bot-message">
-																Ok matey, define the four search preferences 
+																Ok matey, define the five search preferences 
 																that follow. Much obliged!
 														  </p>`,
 	  gotResultsNotification : `<div class='current-message message'>
@@ -352,7 +352,7 @@ const botSays = {
 																	Me started the search and results will appear below. 
 																	<br>If there's nothing ye fancy on the list just 
 																	<button id="js-restart-button" data-restart>
-																		START OVER.
+																		START OVER
 																	</button>
 																</p>
 															</div>`,
@@ -361,7 +361,7 @@ const botSays = {
 					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
 					 											</div>
 					 											<p class="bot-message">
-	     				  									Sorry Jack! I have no recipes that match the terms you entered! Try fever terms and  
+	     				  									Sorry Jack! I have no recipes that match the terms you entered!  
 						  										<button id="js-restart-button" data-restart>
 					  												START NEW SEARCH
 				  												</button>
