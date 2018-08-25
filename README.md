@@ -13,16 +13,25 @@ When the user arrives at the start page, the bot introduces itself and asks the 
 
 ### Step 2
 As the second step the user is asked to select allergie preferences. Again this is not mandatory and the user can skip this screen with 'Next'.
-![Recipe finder step 1](https://getrecipe.paancrafts.com/readme-img/step-2.jpg)
+![Recipe finder step 2](https://getrecipe.paancrafts.com/readme-img/step-2.jpg)
 
 ### Step 3
 As the third step the user is asked to define a recipe or meal name they are searching for. Again this is not mandatory and the user can skip this screen with 'Next'.
-![Recipe finder step 1](https://getrecipe.paancrafts.com/readme-img/step-3.jpg)
+![Recipe finder step 3](https://getrecipe.paancrafts.com/readme-img/step-3.jpg)
 
 ### Step 4
-As the fourth step the user is asked to define ingredients that are allowed in the recipe. Again this is not mandatory and the user can skip this screen with 'Next'.
-![Recipe finder step 1](https://getrecipe.paancrafts.com/readme-img/step-4.jpg)
+As the fourth step the user is asked to define ingredients that are allowed in the recipe.The user can add/remove tags for allowed ingredients. The tags will not be mutable after the user has moved on to the next step. Again this is not mandatory and the user can skip this screen with 'Next'.
+![Recipe finder step 4](https://getrecipe.paancrafts.com/readme-img/step-4.jpg)
 
 ### Step 5
-As the fifth step the user is asked to define ingredients that are to be excluded from the recipe. Again this is not mandatory and the user can skip this screen with 'Next'.
-![Recipe finder step 1](https://getrecipe.paancrafts.com/readme-img/step-5.jpg)
+As the fifth step the user is asked to define ingredients that are to be excluded from the recipe. The user can add/remove tags for excluded ingredients. The tags will not be mutable after the user has moved on to the next step. Again this is not mandatory and the user can skip this screen with 'Next'.
+![Recipe finder step 5](https://getrecipe.paancrafts.com/readme-img/step-5.jpg)
+
+### Step 6
+This step can return two different views.
+
+##### View 1 - the results page
+If Yummly API has recipes listed with terms matching the user's entered preferences, the user will see a list of recipes under the chatbox. Then the user can click/tap on any of the returned results and that opens a lightbox view of the recipe with more detailed results and references to the original recipe source and Yummly recipe page. User can also share the recipe on their Facebook feed.
+![Recipe finder results view](https://getrecipe.paancrafts.com/readme-img/results.jpg)
+![Recipe finder recipe details lightbox](https://getrecipe.paancrafts.com/readme-img/select-recipe.jpg)
+
