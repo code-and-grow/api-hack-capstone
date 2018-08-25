@@ -1,6 +1,6 @@
 # Thinkful API Hack Capstone - Captain Cook recipe finder
 
-This is a chatbot that helps the user find recipes in the Yummly API database. The results are found using two different API calls made to Yummly. 
+This is a bot that helps the user find recipes in the Yummly API database. The results are found using two different API calls made to Yummly. 
 User enters desired course, allergies, recipe name, allowed and excluded ingredients after which the bot returns a selection of recipes to choose from.
 
 [> Try out the recipe finder here <](https://getrecipe.paancrafts.com/)
