@@ -1,11 +1,11 @@
 html { 
 	background-color: #000;
-  background: url(../images/bg.jpg) no-repeat center; 
-  background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+	background: url(../images/bg.jpg) no-repeat center; 
+	background-attachment: fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -33,7 +33,7 @@ header img,
 	margin: 20px auto 35px;
 	width: 170px;
 	-webkit-filter: drop-shadow(5px 5px 5px #222);
-  filter: drop-shadow(5px 5px 5px #222);
+	filter: drop-shadow(5px 5px 5px #222);
 }
 
 #result-head-img {
@@ -43,8 +43,8 @@ header img,
 textarea {
 	resize: none;
 	width: 95.7%;
-  padding: 10px;
-  height: 17px;
+	padding: 10px;
+	height: 17px;
 	margin-top: 10px;
 	border: 1px solid grey;
 	border-radius: 4px;
@@ -75,10 +75,10 @@ input[type="submit"]:hover {
 	text-decoration: underline;
 	background: #3c3d86;
 	border: none;
-  display: inline-block;
-  padding: 4px;
-  height: 30px;
-  font-size: 0.9rem;
+	display: inline-block;
+	padding: 4px;
+	height: 30px;
+	font-size: 0.9rem;
 }
 
 #js-restart-button:hover {
@@ -99,12 +99,12 @@ main {
 	margin: 0 auto;
 	padding: 10px;
 	background-color: #000000;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
-  filter: alpha(opacity=90);
-  -moz-opacity: 0.9;
-  -khtml-opacity: 0.9;
-  opacity: 0.9;
-  border: 3px solid #74d585;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
+	filter: alpha(opacity=90);
+	-moz-opacity: 0.9;
+	-khtml-opacity: 0.9;
+	opacity: 0.9;
+	border: 3px solid #74d585;
 	border-radius: .4em;
 	overflow: auto;
 	-ms-overflow-style: -ms-autohiding-scrollbar;
@@ -210,7 +210,7 @@ main {
 	display: block;
 	margin: 0 auto;
 	width: 100%;
-  height: auto;
+	height: auto;
 }
 
 #user-flow p {
@@ -236,45 +236,45 @@ main {
 .tags-input {
 	width: 100%;
 	height: 40px;
-  display: inline-block;
+	display: inline-block;
 }
 
 .tag {
 	color: white;
-  font-size: 85%;
-  padding: 0.5em 0.75em;
-  margin: 0.5em 0.5em 0.75em 0;
-  display: inline-block;
-  background-color: #abbd81;
-  transition: all 0.1s linear;
-  border-radius: .4em;
-  cursor: pointer;
+	font-size: 85%;
+	padding: 0.5em 0.75em;
+	margin: 0.5em 0.5em 0.75em 0;
+	display: inline-block;
+	background-color: #abbd81;
+	transition: all 0.1s linear;
+	border-radius: .4em;
+	cursor: pointer;
 }
 
 .tag:hover {
-  background-color: #e15b64;
+	background-color: #e15b64;
 }
 
 .tag .close::after {
-    content: '×';
-    font-weight: bold;
-    display: inline-block;
-    transform: scale(1.4);
-    margin-left: 0.75em;
+	content: '×';
+	font-weight: bold;
+	display: inline-block;
+	transform: scale(1.4);
+	margin-left: 0.75em;
 }
 
 .tag .close:hover::after {
-    color: #f8b26a;
+	color: #f8b26a;
 }
 
 .main-input {
 	display: inline-block;
-  font-size: 1rem;
-  border-radius: 4px;
-  border: 1px solid #333;
-  padding: 0.6em 0.5em;
-  width: 97%;
-  margin: 6px 0px;
+	font-size: 1rem;
+	border-radius: 4px;
+	border: 1px solid #333;
+	padding: 0.6em 0.5em;
+	width: 97%;
+	margin: 6px 0px;
 }
 
 .main-input:focus {
@@ -285,14 +285,14 @@ main {
 
 .checkboxlist label {
 	display: inline-block;
-  text-indent: -5px;
-  white-space: nowrap;
-  background-color: white;
-  color: black;
-  border-radius: 4px;
-  margin: 1px;
-  padding: 4px 11px 5px;
-  font-size: 1rem;
+	text-indent: -5px;
+	white-space: nowrap;
+	background-color: white;
+	color: black;
+	border-radius: 4px;
+	margin: 1px;
+	padding: 4px 11px 5px;
+	font-size: 1rem;
 }
 
 .checkboxlist label:hover {
@@ -304,17 +304,17 @@ input.course,
 input.allergy,
 input.diet {
 	width: 18px;
-  height: 18px;
-  padding: 0px;
-  margin: 5px;
-  vertical-align: bottom;
-  top: 0px;
+	height: 18px;
+	padding: 0px;
+	margin: 5px;
+	vertical-align: bottom;
+	top: 0px;
 }
 
 .checkboxheader {
 	font-size: 1.2rem;
-  padding: 0.35em 0.25em;
-  width: 100%;
+	padding: 0.35em 0.25em;
+	width: 100%;
 }
 
 #results {
@@ -330,15 +330,15 @@ input.diet {
 }
 
 #js-results {
-  margin-bottom: 2em;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  grid-gap: 20px;
-  font-size: 1.0rem;
+	margin-bottom: 2em;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+	grid-gap: 20px;
+	font-size: 1.0rem;
 }
 
 .js-result {
-  padding: 15px;
+	padding: 15px;
 	cursor: pointer;
 	background-color: #fcf19f;
 	background-image: url(../images/paper-bg.jpg);
@@ -371,8 +371,8 @@ input.diet {
 
 .js-result img {
 	width: 100%;
-  height: auto;
-  border-radius: .3em;
+	height: auto;
+	border-radius: .3em;
 }
 
 .rating span {
@@ -383,8 +383,8 @@ input.diet {
 	position: relative;
 	content:url('../images/clock-23px.svg');
 	top: 5px;
-  margin-left: 2px;
-  margin-right: 10px;
+	margin-left: 2px;
+	margin-right: 10px;
 }
 
 .yield::before {
@@ -406,21 +406,21 @@ input.diet {
 }
 
 #lightbox {
-  position:fixed;
-  top:0; 
-  left:0; 
-  width:100%; 
-  height:100%; 
-  background: rgba(0,0,0,.7);
-  overflow: auto;
-  -ms-overflow-style: auto | none | scrollbar | -ms-autohiding-scrollbar
+	position:fixed;
+	top:0; 
+	left:0; 
+	width:100%; 
+	height:100%; 
+	background: rgba(0,0,0,.7);
+	overflow: auto;
+	-ms-overflow-style: auto | none | scrollbar | -ms-autohiding-scrollbar
 }
 
 #lightbox-content {
 	position: relative;
 	padding: 20px;
 	margin-left: auto;
-  margin-right: auto;
+	margin-right: auto;
 	width: 90%;
 	background: #fff;
 }
@@ -465,23 +465,23 @@ input.diet {
 #closeLightbox {
 	font-size: 1.9rem;
 	font-weight: bold;
-  text-align: right;
-  cursor: pointer;
-  position: fixed;
-  padding: 0px 20px;
-  left: 85%;
-  top: 7%;
-  transform: translate(-50%, -50%);
-  background-color: red;
-  color: white;
-  border: 2px solid white;
-  border-radius: 30%;
+	text-align: right;
+	cursor: pointer;
+	position: fixed;
+	padding: 0px 20px;
+	left: 85%;
+	top: 7%;
+	transform: translate(-50%, -50%);
+	background-color: red;
+	color: white;
+	border: 2px solid white;
+	border-radius: 30%;
 }
 
 .source {
 	margin-top: 10px;
 	font-weight: bold;
-  font-style: italic;
+	font-style: italic;
 }
 
 .source a {
@@ -530,13 +530,13 @@ footer {
 }
 
 footer p {
-  position: relative;
-  height: 26px;
-  text-align: center;
-  background-color: #040308;
-  color: #454545;
-  font-size: 0.525rem;
-  padding: 8px 2px;
+	position: relative;
+	height: 26px;
+	text-align: center;
+	background-color: #040308;
+	color: #454545;
+	font-size: 0.525rem;
+	padding: 8px 2px;
 }
 
 @media only screen and (min-width: 360px) {
@@ -557,7 +557,7 @@ footer p {
 
 @media only screen and (min-width: 375px) {
 	#js-restart-button {
-	  font-size: 1rem;
+		font-size: 1rem;
 	}
 }
 
@@ -579,7 +579,7 @@ footer p {
 
 @media only screen and (min-width: 720px) {
 	#user-flow img {
-    width: 80%;
+		width: 80%;
 	}
 	#user-flow p {
 		padding: 18px 8px 0;
@@ -600,7 +600,7 @@ footer p {
 	#lightbox-content {
 		padding: 20px;
 		margin-left: auto;
-	  margin-right: auto;
+		margin-right: auto;
 		width: 70%;
 	}
 	#lightbox-content h2 {
@@ -614,8 +614,8 @@ footer p {
 	}
 	#closeLightbox {
 		font-size: 2.2rem;
-	  left: 80%;
-	  top: 3.5%;
+		left: 80%;
+		top: 3.5%;
 	}	
 	img#yummly-logo {
 		width: 26% !important;
@@ -646,8 +646,8 @@ footer p {
 		font-size: 1.7rem;
 	}
 	#closeLightbox {
-	  left: 75%;
-	  top: 5%;
+		left: 75%;
+		top: 5%;
 	}	
 	header img {
 		width: 290px;
@@ -664,11 +664,11 @@ footer p {
 	#lightbox-content h2 {
 		font-size: 1.8rem;
 	}
-		.js-rating-container img.star {
+	.js-rating-container img.star {
 		width: 6.5%;
 	}
 	#closeLightbox {
-	  left: 71.5%;
+		left: 71.5%;
 	}	
 	header img {
 		width: 320px;
@@ -693,7 +693,7 @@ footer p {
 	}
 	#closeLightbox {
 		left: 67.75%;
-    top: 3.6%;
+		top: 3.6%;
 	}	
 	header img {
 		width: 380px;
