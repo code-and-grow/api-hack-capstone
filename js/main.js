@@ -254,60 +254,60 @@ const allergyList = [
   }
 ];
 const botSays = {
-										loader : `<div class='current-message message'>
-															 <div class="bot-icon">
-					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
-					 											</div>
-					 											<p class="bot-message">
-					 											  <img src="images/typing.svg" alt="Captain Cook is typing animation">
-					 											</p>
-															</div>`,
-					 firstBotMessage : `<div class="bot-icon">
-				 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
-				 											</div>
-				 											<p class="bot-message">
-																	Ahoy Jack!
-																	<br>Greetings from Captain Cook! 
-																	I'll help ye find some tasty recipes!
-													    </p>`,
-					secondBotMessage : `<div class="bot-icon">
-				 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
-				 											</div>
-				 											<p class="bot-message">
-																Ok matey, define the five search preferences 
-																that follow. Much obliged!
-														  </p>`,
-	  gotResultsNotification : `<div class='current-message message'>
-		  													<div class="bot-icon">
-					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
-					 											</div>
-					 											<p class="bot-message">
-																	Me started the search and results will appear below. 
-																	<br>If there's nothing ye fancy on the list just 
-																	<button id="js-restart-button" data-restart>
-																		START OVER
-																	</button>
-																</p>
-															</div>`,
-     noResultsNotification : `<div class='current-message message'>
-     														<div class="bot-icon">
-					 												<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
-					 											</div>
-					 											<p class="bot-message">
-	     				  									Sorry Jack! I have no recipes that match the terms you entered!  
-						  										<button id="js-restart-button" data-restart>
-					  												START NEW SEARCH
-				  												</button>
-	      												</p>
-	      											</div>`,
-						  restartGreet : `<div class='current-message message'>
-					 											<div class="bot-icon">
-					 												<img src='images/pirate.png' aria-hidden="true">
-					 											</div>
-					 											<p class="bot-message">
-																 Go on matey, I'm ready to take your order!
-															  </p>
-															</div>`
+loader : `<div class='current-message message'>
+            <div class="bot-icon">
+              <img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
+            </div>
+            <p class="bot-message">
+              <img src="images/typing.svg" alt="Captain Cook is typing animation">
+            </p>
+          </div>`,
+firstBotMessage : `<div class="bot-icon">
+<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
+</div>
+<p class="bot-message">
+Ahoy Jack!
+<br>Greetings from Captain Cook! 
+I'll help ye find some tasty recipes!
+</p>`,
+secondBotMessage : `<div class="bot-icon">
+<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
+</div>
+<p class="bot-message">
+Ok matey, define the five search preferences 
+that follow. Much obliged!
+</p>`,
+gotResultsNotification : `<div class='current-message message'>
+<div class="bot-icon">
+<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
+</div>
+<p class="bot-message">
+Me started the search and results will appear below. 
+<br>If there's nothing ye fancy on the list just 
+<button id="js-restart-button" data-restart>
+START OVER
+</button>
+</p>
+</div>`,
+noResultsNotification : `<div class='current-message message'>
+<div class="bot-icon">
+<img src='images/pirate.png' aria-hidden="true" alt="Captain Cook textbox icon">
+</div>
+<p class="bot-message">
+Sorry Jack! I have no recipes that match the terms you entered!  
+<button id="js-restart-button" data-restart>
+START NEW SEARCH
+</button>
+</p>
+</div>`,
+restartGreet : `<div class='current-message message'>
+<div class="bot-icon">
+<img src='images/pirate.png' aria-hidden="true">
+</div>
+<p class="bot-message">
+Go on matey, I'm ready to take your order!
+</p>
+</div>`
 }
 
 // Bot message rendering 
@@ -418,7 +418,7 @@ function checkForAllergies() {
 	if (courseVal.length > 0) {
 		userMessage(courseNames.join(', '));
 	} else {
-		userMessage('No course preferences.');
+		userMessage('No course preferences for this pirate.');
 	}
   // Show allergie options
 	$('#user-input').empty().html(`<div class="checkboxheader">
@@ -444,7 +444,7 @@ function getMeal() {
 	if (allergyVal.length > 0) {
 		userMessage(allergyNames.join(', '));
 	} else {
-		userMessage('No men blown down today.');
+		userMessage('No men blown down by allergies.');
 	}
   // Show recipe/meal input
 	$('#user-input').empty().html(`<form id="js-user-input">
