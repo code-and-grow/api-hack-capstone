@@ -2,8 +2,8 @@
 
 // API credentials
 const API_URL = 'https://api.yummly.com/v1';
-const APP_ID = '0163f367';
-const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
+const APP_ID = 'XXXXXXXX';
+const APP_KEY = 'XXXXXXXXXXXXXXXX';
 
 // Undefined startup variables
 let tags = [];
