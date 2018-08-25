@@ -45,3 +45,7 @@ If Yummly API has recipes listed with terms matching the user's entered preferen
 If the Yummly has no recipes listed with defined preferences, the user is notified and they can start a new search by clicking on the 'Start new search' link at the end of the bot's last message.
 
 ![Recipe finder no results view](https://getrecipe.paancrafts.com/readme-img/no-results.jpg)
+
+
+##### Technologies used:
+HTML5/CSS3/Javascript/jQuery
