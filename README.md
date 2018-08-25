@@ -38,7 +38,7 @@ This step can return two different views.
 ##### View 1 - the results page
 If Yummly API has recipes listed with terms matching the user's entered preferences, the user will see a list of recipes under the chatbox. Then the user can click/tap on any of the returned results and that opens a lightbox view of the recipe with more detailed results and references to the original recipe source and Yummly recipe page. User can also share the recipe on their Facebook feed.
 
-![Recipe finder results view](https://getrecipe.paancrafts.com/readme-img/results.jpg)
+![Recipe finder results view](https://getrecipe.paancrafts.com/readme-img/results-view.jpg)
 ![Recipe finder recipe details lightbox](https://getrecipe.paancrafts.com/readme-img/select-recipe.jpg)
 
 ##### View 2 - no results
