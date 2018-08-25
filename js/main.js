@@ -940,10 +940,10 @@ function showRecipeToUser() {
       //insert lightbox HTML into page
       $('body').append(lightbox);
     }
-		// Click anywhere on the page to get rid of lightbox window
-		$('#closeLightbox').on('click', function() {
-			$('#lightbox').hide();
-		});
+    // Click anywhere on the page to get rid of lightbox window
+    $('#closeLightbox').on('click', function() {
+      $('#lightbox').hide();
+    });
 	});
 }
 
