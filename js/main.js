@@ -944,7 +944,7 @@ function showRecipeToUser() {
     $('#closeLightbox').on('click', function() {
       $('#lightbox').hide();
     });
-	});
+  });
 }
 
 // Start your engines 
