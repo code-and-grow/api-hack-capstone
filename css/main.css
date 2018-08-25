@@ -70,6 +70,7 @@ input[type="submit"]:hover {
 	background-color: #74D585;
 	color: white;
 }
+
 #js-restart-button {
 	text-decoration: underline;
 	background: #3c3d86;
@@ -87,6 +88,7 @@ input[type="submit"]:hover {
 #js-user-submit {
 	width: 100%;
 }
+
 main {
 	width: 90%;
 }
@@ -323,7 +325,6 @@ input.diet {
 	text-align: center;
 	font-size: 1.4rem;
 	text-transform: uppercase;
-/*	padding-top: 20px;*/
 	padding-bottom: 0;
 	color: #FFF07C;
 }
@@ -437,6 +438,7 @@ input.diet {
 #lightbox-content p {
 	margin-bottom: 10px;
 }
+
 .courses,
 .yield,
 .clock, {
@@ -459,8 +461,6 @@ input.diet {
 .ingredients {
 	font-weight: bold;
 }
-
-
 
 #closeLightbox {
 	font-size: 1.9rem;

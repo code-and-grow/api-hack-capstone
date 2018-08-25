@@ -1,12 +1,25 @@
-
-
-// API credentials
+// Predefined variables list
 const API_URL = 'https://api.yummly.com/v1';
 const APP_ID = '0163f367';
 const APP_KEY = 'fe0abbd328e4ac7137fab9e9459fb9df';
-
-// Undefined startup variables
-let courseList = [
+let tags = [];
+let searchTerms = [];
+let courseVal = [];
+let allowedIng = [];
+let excludedIng = [];
+let allergyVal = [];
+let dietVal = [];
+let allergyNames = [];
+let courseNames = [];
+let dietNames = [];
+let recipes = [];
+let userInstructed = false;
+let readyForAllergies = false;
+let readyForDiet = false;
+let readyForCourse = false;
+let readyForAllowed = false;
+let searchHasBeenRun = false;
+const courseList = [
   {
     "id": "course-Main Dishes",
     "name": "Main Dishes",
@@ -138,7 +151,7 @@ let courseList = [
     ]
   }
 ];
-let allergyList = [
+const allergyList = [
   {
     "id": "393",
     "shortDescription": "Gluten-Free",
@@ -240,86 +253,6 @@ let allergyList = [
     ]
   }
 ];
-
-let dietList = [
-  {
-    "id": "388",
-    "shortDescription": "Lacto vegetarian",
-    "longDescription": "Lacto vegetarian",
-    "searchValue": "388^Lacto vegetarian",
-    "type": "diet",
-    "localesAvailableIn": [
-      "en-US"
-    ]
-  },
-  {
-    "id": "389",
-    "shortDescription": "Ovo vegetarian",
-    "longDescription": "Ovo vegetarian",
-    "searchValue": "389^Ovo vegetarian",
-    "type": "diet",
-    "localesAvailableIn": [
-      "en-US"
-    ]
-  },
-  {
-    "id": "390",
-    "shortDescription": "Pescetarian",
-    "longDescription": "Pescetarian",
-    "searchValue": "390^Pescetarian",
-    "type": "diet",
-    "localesAvailableIn": [
-      "en-US"
-    ]
-  },
-  {
-    "id": "386",
-    "shortDescription": "Vegan",
-    "longDescription": "Vegan",
-    "searchValue": "386^Vegan",
-    "type": "diet",
-    "localesAvailableIn": [
-      "en-US"
-    ]
-  },
-  {
-    "id": "387",
-    "shortDescription": "Lacto-ovo vegetarian",
-    "longDescription": "Vegetarian",
-    "searchValue": "387^Lacto-ovo vegetarian",
-    "type": "diet",
-    "localesAvailableIn": [
-      "en-US"
-    ]
-  },
-  {
-    "id": "403",
-    "shortDescription": "Paleo",
-    "longDescription": "Paleo",
-    "searchValue": "403^Paleo",
-    "type": "diet",
-    "localesAvailableIn": [
-      "en-US"
-    ]
-  }
-];
-let tags = [];
-let searchTerms = [];
-let courseVal = [];
-let allowedIng = [];
-let excludedIng = [];
-let allergyVal = [];
-let dietVal = [];
-let allergyNames = [];
-let courseNames = [];
-let dietNames = [];
-let recipes = [];
-let userInstructed = false;
-let readyForAllergies = false;
-let readyForDiet = false;
-let readyForCourse = false;
-let readyForAllowed = false;
-let searchHasBeenRun = false;
 const botSays = {
 										loader : `<div class='current-message message'>
 															 <div class="bot-icon">
@@ -377,16 +310,11 @@ const botSays = {
 															</div>`
 }
 
-
 // Bot message rendering 
 function botMessage(text1, text2, timeout) {
-	// Add bot message to conversation window
-	$('#js-conversation').append(text1)
-											// Scroll conversation window to see the last appended message
-											 .scrollTop(
-											 	$('#js-conversation').prop('scrollHeight')
-											 );
-	// Add a small delay before showing bot message	
+	// Show the bot is typing a message
+	$('#js-conversation').append(text1);
+	// Show bot message after a small delay
 	setTimeout(function(){ 									 
 		$('.current-message').html(text2);
 		$('.current-message').removeClass('current-message');
@@ -397,16 +325,9 @@ function botMessage(text1, text2, timeout) {
 function resultsMessage(html) {
 	// Add bot message to conversation window
 	$('#js-conversation').append(html)
-											// Scroll conversation window to see the last appended message
-											 .scrollTop(
-											 	$('#js-conversation').prop('scrollHeight')
-											 );
-	// Add a small delay before showing bot message										 
-	$('.current-message').hide();
-	$('.current-message').show();
-	$('.current-message').removeClass('current-message');
+											// Scroll down conversation window to see the last appended message
+											 .scrollTop($('#js-conversation').prop('scrollHeight'));
 }
-
 
 // User answer rendering
 function userMessage(input) {
@@ -423,8 +344,7 @@ function userMessage(input) {
 					.scrollTop($('#js-conversation').prop('scrollHeight'));
 }
 
-
-// Userflow icons and instructions rendering
+// User steps and instructions rendering
 function userFlow(step, instructions) {
 	$('#user-input').prepend(`<div id='user-flow'>
 													    <div id='user-flow-steps'>
@@ -436,25 +356,33 @@ function userFlow(step, instructions) {
 }
 
 // Return ingredients ul list items
-	function renderInputs(inputArr) {
-		let result = '';
-		  for (let i = 0; i < inputArr.length; i++) {
-		  	if (inputArr[i].type === 'course'){
-		  		result += `<label><input type="checkbox" value="${inputArr[i].searchValue}" name="${inputArr[i].description}" class="${inputArr[i].type}">${inputArr[i].description}</label>`;
-		  	} else if (inputArr[i].type === 'allergy' || inputArr[i].type === 'diet')
-		  	result += `<label><input type="checkbox" value="${inputArr[i].searchValue}" name="${inputArr[i].shortDescription}" class="${inputArr[i].type}">${inputArr[i].shortDescription}</label>`;
-		  }
-	  return result;
-	}
+function renderInputs(inputArr) {
+	let result = '';
+  for (let i = 0; i < inputArr.length; i++) {
+  	if (inputArr[i].type === 'course'){
+  		result += `<label>
+                  <input type="checkbox" value="${inputArr[i].searchValue}" name="${inputArr[i].description}" class="${inputArr[i].type}">
+                  ${inputArr[i].description}
+                </label>`;
+  	} else if (inputArr[i].type === 'allergy') {
+    	result += `<label>
+                  <input type="checkbox" value="${inputArr[i].searchValue}" name="${inputArr[i].shortDescription}" class="${inputArr[i].type}">
+                  ${inputArr[i].shortDescription}
+                </label>`;
+    }
+  }
+  return result;
+}
 
-
-// Greet user and ask what meal to search
+// Greet and instruct user
 function greetUser() {
+  // Render first bot messages
 	botMessage(botSays.loader, botSays.firstBotMessage, 3000);
 	setTimeout(function(){ 
 		botMessage(botSays.loader, botSays.secondBotMessage, 3200); 
 		userInstructed = true;
 	}, 3700);
+  // Render first input section
 	setTimeout(function(){ 
 		if (userInstructed) {
 			$('#user-input').css('display', 'block');
@@ -464,19 +392,18 @@ function greetUser() {
   }, 6800);
 }
 
-
-
-// Ask user about allergies 
+// Ask user course preferences 
 function checkForCourse() {
+  // Show course options
 	$('#user-input').empty().html(`<div class="checkboxheader">
-																<form id="js-user-input" class="checkboxlist">
-																  ${renderInputs(courseList)}
-															    <button id="js-user-submit" type="submit" class="courseButton">Next</button>
-														    </form>
+  																<form id="js-user-input" class="checkboxlist">
+  																  ${renderInputs(courseList)}
+  															    <button id="js-user-submit" type="submit" class="courseButton">Next</button>
+  														    </form>
 														    </div>`);
-	// $('#user-flow').remove();
 	userFlow('1', 'Hey matey, pick a course for ye liking. When done choosing or wanna skip press \'Next\'.');
 	if (readyForCourse) {
+    // Look for checked course values
 		getCheckedValues('.course', courseVal, false, checkForAllergies);
 		readyForAllergies = true;
 	} else {
@@ -485,23 +412,24 @@ function checkForCourse() {
 	readyForCourse = false;
 }
 
-
-// Ask user about allergies 
+// Ask user allergie preferences
 function checkForAllergies() {
+  // Has the user entered course preferences to render in the chatbox
 	if (courseVal.length > 0) {
 		userMessage(courseNames.join(', '));
 	} else {
-		userMessage('No preferences.');
+		userMessage('No course preferences.');
 	}
+  // Show allergie options
 	$('#user-input').empty().html(`<div class="checkboxheader">
-																<form id="js-user-input" class="checkboxlist">
-																  ${renderInputs(allergyList)}
-															    <button id="js-user-submit" type="submit" class="allergyButton">Next</button>
-														    </form>
+  																<form id="js-user-input" class="checkboxlist">
+  																  ${renderInputs(allergyList)}
+  															    <button id="js-user-submit" type="submit" class="allergyButton">Next</button>
+  														    </form>
 														    </div>`);
-	// $('#user-flow').remove();
 	userFlow('2', 'Avast matey, do you have allergies? When yer done choosing or no allergies apply press \'Next\'.');
 	if (readyForAllergies) {
+    // Look for checked allergie values
 		getCheckedValues('.allergy', allergyVal, true, getMeal);
 		readyForMeal = true;
 	} else {
@@ -510,81 +438,76 @@ function checkForAllergies() {
 	readyForAllergies = false;
 }
 
-
 // Get meal from user input
 function getMeal() {
+  // Has the user entered allergie preferences to render in the chatbox
 	if (allergyVal.length > 0) {
 		userMessage(allergyNames.join(', '));
 	} else {
 		userMessage('No men blown down today.');
 	}
+  // Show recipe/meal input
 	$('#user-input').empty().html(`<form id="js-user-input">
-																			<fieldset>
-																				<div class="tags-input" data-name="tags-input">
-																				</div>
-																				<br>
-																				<input id="js-checkbox" aria-label="Send with Enter checkbox" type="checkbox" name="checkbox" checked="">
-																				<label for="checkbox">
-																					Send message with Enter
-																				</label>
-																				<br>
-																				<button id="js-user-submit" type="submit">Next</button>
-																			</fieldset>
-																		</form>`);
-
+																	<fieldset>
+																		<div class="tags-input" data-name="tags-input">
+																		</div>
+																		<br>
+																		<input id="js-checkbox" aria-label="Send with Enter checkbox" type="checkbox" name="checkbox" checked="">
+																		<label for="checkbox">
+																			Send message with Enter
+																		</label>
+																		<br>
+																		<button id="js-user-submit" type="submit">Next</button>
+																	</fieldset>
+																</form>`);
 	$('#user-flow').remove();
 	userFlow('3', 'Type in desired meal below or skip with \'Next\'.');
-
+  // Create input
 	const tagsInput = document.getElementsByClassName('tags-input');
 	let mainInput = document.createElement('input');
-
   mainInput.setAttribute('type', 'text');
   mainInput.setAttribute('aria-label', 'Type in desired meal or skip with Enter')
   mainInput.classList.add('main-input');
-
 	$(tagsInput).append(mainInput);
 	$('.main-input').focus().attr('placeholder', 'e.g. vegan glazed carrots');
-	
-	// When user presses Enter or Comma during entering of the search details
+	// When user presses Enter
   $(mainInput).off('keydown').on('keydown', function (e) {
-      let keyCode = e.which || e.keyCode;
-      if (keyCode === 13) {
-      	e.preventDefault();
-      	$('#js-user-submit').click();
-      } 
-
+    let keyCode = e.which || e.keyCode;
+    if (keyCode === 13) {
+    	e.preventDefault();
+    	$('#js-user-submit').click();
+    } 
   });
-
   $('#js-user-submit').off('click')
 										  .on('click', (e) => {
 							        		e.preventDefault();
 							        		userEnteredMeal();
 							        	});
-
-	// What happens when user enters meal
+	// When user enters meal
   function userEnteredMeal() {
   	let emptyRegExp = /^ +$/;
   	let enteredMeal = mainInput.value;
   	if (userInstructed) {
+      // Only whitespace?
     	if (emptyRegExp.test(enteredMeal)) {
 			  mainInput.value = '';
+      // User entered recipe name
 			} else if ( enteredMeal.length > 0 ) {
       	searchTerms.push(enteredMeal);
       	mainInput.value = '';
       	getAllowedIng();
       	return tags;
+      // User skipped
       } else if ( enteredMeal.length < 1 ) {
       	getAllowedIng();
       }
     }
   }
-
 }
-
-
 
 // Ask what ingredients are allowed
 function getAllowedIng() {
+  // Has the user entered recipe name to render in the chatbox
 	if (searchTerms.length >= 1) {
 		searchTerms.join().replace(/\W+/g, '+');
 		let showSearchTerms = searchTerms;
@@ -598,15 +521,16 @@ function getAllowedIng() {
 	}
 	$('#user-flow').remove();
 	userFlow('4', 'Type allowed ingredients below or skip with \'Next\'.');
+  // Listen for entered terms and make them tags
 	getTags(getExcludedIng);
 	$('.main-input').focus()
 									.attr('placeholder', 'e.g. garlic, celeri, chicken ..')
 									.attr('aria-label', 'Type allowed ingredients here');
 }
 
-
 // Ask what ingredients are excluded
 function getExcludedIng() {
+  // Has the user entered allowed ingredients to render in the chatbox
 	if (tags.length >= 1) {
 		allowedIng = tags.map(item => item.text);
 		userMessage(allowedIng);
@@ -619,6 +543,7 @@ function getExcludedIng() {
 	}
 	$('#user-flow').remove();
 	userFlow('5', 'Type excluded ingredients below or skip with \'Next\'.');
+  // Listen for entered terms and make them tags
 	getTags(startingSearch);
 	$('.main-input').focus()
 									.attr('placeholder', 'e.g. chili, onions, meat ..')
@@ -628,6 +553,7 @@ function getExcludedIng() {
 
 // Notify the user that search has been started 
 function startingSearch() {
+  // Has the user entered excluded ingredients to render in the chatbox
 	if (tags.length >= 1) {
 		excludedIng = tags.map(item => item.text);
 		userMessage(excludedIng);
@@ -643,14 +569,12 @@ function startingSearch() {
 		$('#js-results').empty();
 		readyForAllergies = true;
 	}
+  // Make the Yummly search recipes API call
 	searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal);
-	
 	$('#user-input').css('display', 'none');
 	userRestart();
 	searchHasBeenRun = true;
 }
-
-
 
 // Clear conversation and restart app 
 function userRestart() {
@@ -663,7 +587,6 @@ function userRestart() {
       }
     });
 	document.addEventListener('click', function(e) {
-
     if (e.target.dataset.restart != undefined) { 
     	$('#results h2').remove();
     	$('#js-results').empty();
@@ -690,49 +613,83 @@ function userRestart() {
 	
 }
 
+// Get checked values 
+function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
+  if (readyForCourse || readyForAllergies || readyForDiet) {
+    // Declare variables to store checked item data
+    let targetChecked = targetClass + ':checked';
+    let checkedNamesArray = [];
+    let checkedArray = [];
+    // Set up event listeners
+    $(document).off().on('keypress',  function (e) {
+        let keyCode = e.which || e.keyCode;
+        if (keyCode === 13) {
+          e.preventDefault();
+          lookForCheckedValues();
+        } 
+    });
+    $('#js-user-submit').off('click')
+                        .on('click', (e) => {
+                            e.preventDefault();
+                            lookForCheckedValues();
+                          });
+    // Look for checked values
+    function lookForCheckedValues() {
+      // Loop through checked items and add them to array
+      $(targetChecked).each(function() {
+        checkedNamesArray.push($(this).attr('name'));
+        checkedArray.push($(this).val());
+      });
+      checkedNames = checkedNamesArray;
+      checkedValues = checkedArray;
+      if (isAllergy) {
+        allergyVal = checkedValues;
+        allergyNames = checkedNames;
+      } else {
+        courseVal = checkedValues;
+        courseNames = checkedNames;
+      }
+      callback();
+    }
+  }
+}
 
-// Get tags from user input
+// Generate tags from user input for allowed and excluded ingredients
 function getTags(callback) {
 	[].forEach.call(document.getElementsByClassName('tags-input'), function (el) {
+    // Prepare tag inputs
     let hiddenInput = document.createElement('input'),
         mainInput = document.createElement('input'),
         enteredTags = [];
-
     hiddenInput.setAttribute('type', 'hidden');
     hiddenInput.setAttribute('name', el.getAttribute('data-name'));
-
     mainInput.setAttribute('type', 'text');
     mainInput.classList.add('main-input');
-
-    // When user presses Backspace on their keyboard during entering of the search details
+    // Enable user to delete tags while entering
     mainInput.addEventListener('keydown', function (e) {
-        let keyCode = e.which || e.keyCode;
-        if (keyCode === 8 && mainInput.value.length === 0 && tags.length > 0) {
-            removeTag(tags.length - 1);
-        }
+      let keyCode = e.which || e.keyCode;
+      if (keyCode === 8 && mainInput.value.length === 0 && tags.length > 0) {
+          removeTag(tags.length - 1);
+      }
     });
-
-    // When user presses Enter or Comma during entering of the search details
+    // Enable user to enter tags with Comma or Enter keys
     mainInput.addEventListener('keydown', function (e) {
-        let keyCode = e.which || e.keyCode;
-        if (keyCode === 13 || keyCode === 188) {
-        	e.preventDefault();
-        	userEntered();
-        } 
-
+      let keyCode = e.which || e.keyCode;
+      if (keyCode === 13 || keyCode === 188) {
+      	e.preventDefault();
+      	userEntered();
+      } 
     });
-
+    // Click 'Next' event listener
     $('#js-user-submit').off('click')
 											  .on('click', (e) => {
 								        		e.preventDefault();
 								         		userEntered();
 								        	});
-
+    // Render inputs
     el.appendChild(mainInput);
     el.appendChild(hiddenInput);
-
-
-    // What happens when user enters text
+    // What happens when user enters text to mainInput
     function userEntered() {
     	let emptyRegExp = /^ +$/;
     	let enteredTag = mainInput.value;
@@ -749,30 +706,24 @@ function getTags(callback) {
 	      }
 	    }
     }
-    
-    // Add entered tag before the search input and append/remove it to/from tags array
+    // Add/remove entered tag above the search input and append/remove it to/from tags array
     function addTag (text) {
         let tag = {
             text: text,
             element: document.createElement('span'),
         };
-
         tag.element.classList.add('tag');
         tag.element.textContent = tag.text;
-
         let closeBtn = document.createElement('span');
         closeBtn.classList.add('close');
         closeBtn.addEventListener('click', function () {
             removeTag(tags.indexOf(tag));
         });
         tag.element.appendChild(closeBtn);
-
         tags.push(tag);
-
         el.insertBefore(tag.element, mainInput);
         refreshTags();
     }
-
     // Remove tag from tags array
     function removeTag (index) {
         let tag = tags[index];
@@ -780,7 +731,6 @@ function getTags(callback) {
         el.removeChild(tag.element);
         refreshTags();
     }
-
     // Refresh tags in tags array
     function refreshTags () {
         let tagsList = [];
@@ -789,7 +739,6 @@ function getTags(callback) {
         });
         hiddenInput.value = tagsList.join(',');
     }
-
     // Filter the entered tag
     function filterTag (tag) {
         return tag.replace(/[^\w -]/g, '').trim().replace(/\W+/g, ' ');
@@ -797,61 +746,7 @@ function getTags(callback) {
 	});
 }
 
-
-
-// Get checked values 
-function getCheckedValues (targetClass, checkedValues, isAllergy, callback) {
-	if (readyForCourse || readyForAllergies || readyForDiet) {
-		// Declare variables to store checked item data
-		let targetChecked = targetClass + ':checked';
-		let checkedNamesArray = [];
-		let checkedArray = [];
-		
-    $(document).off().on('keypress',  function (e) {
-        let keyCode = e.which || e.keyCode;
-        if (keyCode === 13) {
-        	e.preventDefault();
-        	lookForCheckedValues();
-        } 
-
-    });
-
-    $('#js-user-submit').off('click')
-											  .on('click', (e) => {
-											  		e.preventDefault();
-								         		lookForCheckedValues();
-								        	});
-
-
-
-		function lookForCheckedValues() {
-			// Loop through checked items and add them to array
-			$(targetChecked).each(function() {
-				checkedNamesArray.push($(this).attr('name'));
-				checkedArray.push($(this).val());
-			});
-			// Assign the array to function parameter
-			checkedNames = checkedNamesArray;
-			checkedValues = checkedArray;
-
-
-			// Assign the checked values to the parameter in question
-			if (isAllergy) {
-				allergyVal = checkedValues;
-				allergyNames = checkedNames;
-			} else {
-				courseVal = checkedValues;
-				courseNames = checkedNames;
-			}
-			
-			callback();
-		}
-	}
-}
-
-
-
-// Search API call 
+// Search recipes API call 
 function searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal) {
 	// Set up API call settings
   const settings = {
@@ -862,17 +757,13 @@ function searchAPI(searchTerms, courseVal, allowedIng, excludedIng, allergyVal) 
     	allowedIngredient: allowedIng,
     	excludedIngredient: excludedIng,
     	allowedAllergy: allergyVal
-    	// allowedDiet: dietVal
     },
     dataType: 'jsonp',
     type: 'GET',
     success: displayResults
   };
-  // Make the API call
   $.ajax(settings);
 }
-
-
 
 // Get recipe data from API 
 function getRecipeData(recipeId, callback) {
@@ -884,39 +775,15 @@ function getRecipeData(recipeId, callback) {
     type: 'GET',
     success: callback
   };
-  // Make the recipe API call
   $.ajax(settings);
 }
-
-
-// Get recipe data from API 
-function getMetaData(meta) {
-	// Set up recipe API call settings
-  const settings = {
-    url: API_URL + '/api/metadata/' + meta + '?_app_id=' + APP_ID + '&_app_key=' + APP_KEY,
-    allergies: [],
-    dataType: 'jsonp',
-    type: 'GET',
-    success: set_metadata
-  };
-  // Make the recipe API call
-  $.ajax(settings);
-}
-
-
-function set_metadata(meta, data) {
-	console.log(data);
-}
-
 
 // Add recipe data to array 
 function saveRecipe(recipeData) {
   recipes.push({recipeData});
 }
 
-
-
-// Render the result in html 
+// Create result item
 function renderResult(result) {
 	// Save recipe results to array
 	getRecipeData(result.id, saveRecipe);
@@ -941,42 +808,36 @@ function renderResult(result) {
 										 			 </a>`);
 }
 
-
-
 // Display the results to user 
 function displayResults(data) {
-	console.log(data);
+  // Do we have results?
 	if (data.matches.length > 0) {
 		resultsMessage(botSays.gotResultsNotification);
 		$('#results h2').remove();
-		$('#results').prepend(`<h2>
+		$('#results').attr('aria-hidden', 'false')
+                 .prepend(`<h2>
 														<img id='result-head-img' src='images/results301x185-300dpi.png' alt='Results image - source: https://www.freepik.com/free-vector/pirate-skull-and-a-map-on-the-wall_1296860.htm - Designed by Freepik'>
 													</h2>`);
 		// Loop through the results and render them 
 		data.matches.map( (item, index) => renderResult(item) );
-		// Add images from recipes array
+		// Add better resolution images from recipes array
 		setTimeout(function() {
 			for (let i = 0; i < recipes.length; i++) {
-				$('#js-results')
-					.find(`#${recipes[i].recipeData.id} img.card-image`)
-					.attr('src', recipes[i].recipeData.images[0].hostedLargeUrl)
-					.attr('alt', recipes[i].recipeData.name);
-				// $('#js-results')
-				// 	.find(`#${recipes[i].recipeData.id} p#js-rating-container`)
-				// 	.html(starRating(recipes[i].recipeData.rating));
+				$('#js-results').find(`#${recipes[i].recipeData.id} img.card-image`)
+					              .attr('src', recipes[i].recipeData.images[0].hostedLargeUrl)
+					              .attr('alt', recipes[i].recipeData.name);
 			}
 		}, 2200);
 		// Open recipe in a lightbox after user click
 		showRecipeToUser();
+  // No results from API
 	} else {
 		$('#results h2').remove();
 		resultsMessage(botSays.noResultsNotification);
-
 	}
-	console.log(courseVal + ' ' + searchTerms  + ' ' + allergyVal  + ' ' + dietVal  + ' ' + allowedIng  + ' ' + excludedIng);
 }
 
-// Return ingredients ul list items
+// Return ingredients list items
 function ingredientsList(ingredientArray) {
 	let resultIngList = '';
   for (let i = 0; i < ingredientArray.length; i++) {
@@ -1017,6 +878,7 @@ function showRecipeToUser() {
 													yummlyLogo: recipeClicked.recipeData.attribution.logo,
 													yummlyUrl: recipeClicked.recipeData.attribution.url
 												}
+    // Does the result have courses defined?
 		function checkCourse() {
 			if (recipeDetails.course) {
 				recipeDetailsData = recipeDetails.course.join(', ');
@@ -1025,6 +887,7 @@ function showRecipeToUser() {
 				return '-';
 			}
 		}
+    // Does the result have yield defined?
 		function checkYield() {
 			if (recipeDetails.servings) {
 				return recipeDetails.servings;
@@ -1085,14 +948,9 @@ function showRecipeToUser() {
 	});
 }
 
-
-
-
 // Start your engines 
 function initBot() {
-	//getMetaData('course');
 	greetUser();
 }
 
 $(initBot);
-
